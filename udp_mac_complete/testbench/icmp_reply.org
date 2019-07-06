@@ -1,0 +1,145 @@
+`timescale 1ns / 1ps
+
+module icmp_reply(
+    clk,
+    rst,
+    // ICMP frame output
+    m_icmp_ip_hdr_valid,
+    m_icmp_ip_hdr_ready,
+    m_icmp_ip_dscp,
+    m_icmp_ip_ecn,
+    m_icmp_ip_length,
+    m_icmp_ip_ttl,
+    m_icmp_ip_protocol,
+    m_icmp_source_ip,
+    m_icmp_dest_ip,
+    m_icmp_payload_axis_tdata,
+    m_icmp_payload_axis_tvalid,
+    m_icmp_payload_axis_tready,
+    m_icmp_payload_axis_tlast,
+    m_icmp_payload_axis_tuser,
+    // ICMP frame input
+    s_icmp_ip_hdr_valid,
+    s_icmp_ip_hdr_ready,
+    s_icmp_ip_length,
+    s_icmp_ip_protocol,
+    s_icmp_source_ip,
+    s_icmp_dest_ip,
+    s_icmp_payload_axis_tdata,
+    s_icmp_payload_axis_tvalid,
+    s_icmp_payload_axis_tready,
+    s_icmp_payload_axis_tlast,
+    local_ip
+);
+
+    input                   clk;
+    input                   rst;
+    // ICMP frame output
+    output reg              m_icmp_ip_hdr_valid;
+    input                   m_icmp_ip_hdr_ready;
+    output [5:0]            m_icmp_ip_dscp;
+    output [1:0]            m_icmp_ip_ecn;
+    output [15:0]           m_icmp_ip_length;
+    output [7:0]            m_icmp_ip_ttl;
+    output [7:0]            m_icmp_ip_protocol;
+    output [31:0]           m_icmp_source_ip;
+    output [31:0]           m_icmp_dest_ip;
+    output [7:0]            m_icmp_payload_axis_tdata;
+    output                  m_icmp_payload_axis_tvalid;
+    input                   m_icmp_payload_axis_tready;
+    output                  m_icmp_payload_axis_tlast;
+    output                  m_icmp_payload_axis_tuser;
+    // ICMP frame input
+    input                   s_icmp_ip_hdr_valid;
+    output reg              s_icmp_ip_hdr_ready;
+    input [15:0]            s_icmp_ip_length;
+    input [7:0]             s_icmp_ip_protocol;
+    input [31:0]            s_icmp_source_ip;
+    input [31:0]            s_icmp_dest_ip;
+    input [7:0]             s_icmp_payload_axis_tdata;
+    input                   s_icmp_payload_axis_tvalid;
+    output                  s_icmp_payload_axis_tready;
+    input                   s_icmp_payload_axis_tlast;
+    
+    //local ip
+    input [31:0]            local_ip;
+    wire                    need_reply;
+    
+    //internal reg & wire
+    reg [9:0]               frame_length;
+    reg                     payload_fwd;
+    reg                     payload_drop;
+    wire [8:0]              new_checksum;
+    reg                     new_checksum_carry;
+    
+    assign m_icmp_payload_axis_tuser = 1'b0;
+    assign m_icmp_ip_dscp = 1;
+    assign m_icmp_ip_ecn = 0;
+    assign m_icmp_ip_ttl = 55;
+    assign m_icmp_ip_protocol = 1; //ICMP
+    assign m_icmp_payload_axis_tvalid = s_icmp_payload_axis_tvalid & payload_fwd;
+    assign s_icmp_payload_axis_tready = m_icmp_payload_axis_tready & payload_fwd || payload_drop;
+    assign m_icmp_payload_axis_tlast = s_icmp_payload_axis_tlast & payload_fwd;
+    assign new_checksum = s_icmp_payload_axis_tdata + 8'd8;
+    assign m_icmp_payload_axis_tdata =  (frame_length==0) ? 8'd0 : 
+                                        ((frame_length==2) ? new_checksum :
+                                        ((frame_length==3) ? s_icmp_payload_axis_tdata + new_checksum_carry :
+                                        s_icmp_payload_axis_tdata));
+    
+    assign m_icmp_ip_length = s_icmp_ip_length;
+    assign m_icmp_source_ip = s_icmp_dest_ip;
+    assign m_icmp_dest_ip = s_icmp_source_ip;
+    assign need_reply = (s_icmp_payload_axis_tdata == 8 && local_ip == s_icmp_dest_ip);
+    
+    always
+    begin : icmp_echo
+        @(posedge clk);
+        frame_length <= #1 0;
+        while (!(s_icmp_ip_hdr_valid && s_icmp_ip_protocol == 1 && s_icmp_payload_axis_tvalid)) //dowhile
+            @(posedge clk);        
+        if (need_reply)
+            m_icmp_ip_hdr_valid <= #1 1;
+        else begin
+            payload_drop <= #1 1;
+            s_icmp_ip_hdr_ready <= #1 1;
+            while (!(s_icmp_payload_axis_tvalid && s_icmp_payload_axis_tlast)) //dowhile
+                @(posedge clk);
+            s_icmp_ip_hdr_ready <= #1 0;
+            payload_drop <= #1 0;
+            disable icmp_echo;
+        end
+        @(posedge clk);
+        while (!m_icmp_ip_hdr_ready)
+            @(posedge clk);
+        s_icmp_ip_hdr_ready <= #1 1;
+        m_icmp_ip_hdr_valid <= #1 0;
+        @(posedge clk);
+        s_icmp_ip_hdr_ready <= #1 0;    
+        payload_fwd <= #1 1;
+        while (!(m_icmp_payload_axis_tvalid && m_icmp_payload_axis_tready && m_icmp_payload_axis_tlast)) //dowhile
+        begin
+            @(posedge clk);
+            if (m_icmp_payload_axis_tvalid && m_icmp_payload_axis_tready)
+            begin
+                if (frame_length == 2)
+                    new_checksum_carry <= #1 new_checksum[8];
+                frame_length <= #1 frame_length + 1'b1;
+            end
+        end
+        payload_fwd <= #1 0;
+    end
+    
+    always
+    begin : SYNC_RESET
+        @(posedge clk);
+        if (rst)
+        begin
+            frame_length <= #1 0;
+            s_icmp_ip_hdr_ready <= #1 0;
+            m_icmp_ip_hdr_valid <= #1 0;
+            payload_fwd <= #1 0;
+            payload_drop <= #1 0;
+            disable icmp_echo;
+        end
+    end
+endmodule
