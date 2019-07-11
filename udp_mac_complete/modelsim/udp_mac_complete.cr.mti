@@ -82,19 +82,19 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	test_udp_mac_complete
 
-} {} {}} ../eth_axis_tx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/eth_axis_tx.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module eth_axis_tx
-
-Top level modules:
-	eth_axis_tx
-
 } {} {}} ../axis_fifo.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/axis_fifo.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module axis_fifo
 
 Top level modules:
 	axis_fifo
+
+} {} {}} ../eth_axis_tx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/eth_axis_tx.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module eth_axis_tx
+
+Top level modules:
+	eth_axis_tx
 
 } {} {}} ../udp_mac_complete.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/udp_mac_complete.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -103,19 +103,19 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	udp_mac_complete
 
-} {} {}} ../udp_complete.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/udp_complete.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module udp_complete
-
-Top level modules:
-	udp_complete
-
 } {} {}} ../ip_complete.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/ip_complete.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module ip_complete
 
 Top level modules:
 	ip_complete
+
+} {} {}} ../udp_complete.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/udp_complete.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module udp_complete
+
+Top level modules:
+	udp_complete
 
 } {} {}} ../udp_ip_rx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/udp_ip_rx.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -124,13 +124,6 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	udp_ip_rx
 
-} {} {}} ../mac_reset.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/mac_reset.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module mac_reset
-
-Top level modules:
-	mac_reset
-
 } {} {}} ../arp.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/arp.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module arp
@@ -138,19 +131,12 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	arp
 
-} {} {}} ../udp_ip_tx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/udp_ip_tx.v
+} {} {}} ../mac_reset.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/mac_reset.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module udp_ip_tx
+-- Compiling module mac_reset
 
 Top level modules:
-	udp_ip_tx
-
-} {} {}} ../udp_checksum_gen.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/udp_checksum_gen.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module udp_checksum_gen
-
-Top level modules:
-	udp_checksum_gen
+	mac_reset
 
 } {} {}} ../arp_eth_rx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/arp_eth_rx.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -159,12 +145,19 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	arp_eth_rx
 
-} {} {}} ../avalon2axi.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/avalon2axi.v
+} {} {}} ../udp_checksum_gen.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/udp_checksum_gen.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module avalon2axi
+-- Compiling module udp_checksum_gen
 
 Top level modules:
-	avalon2axi
+	udp_checksum_gen
+
+} {} {}} ../udp_ip_tx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/udp_ip_tx.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module udp_ip_tx
+
+Top level modules:
+	udp_ip_tx
 
 } {} {}} ../testbench/mdio_reg.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/testbench/mdio_reg.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -173,19 +166,12 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	mdio_reg_sim
 
-} {} {}} ../arp_cache.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/arp_cache.v
+} {} {}} ../avalon2axi.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/avalon2axi.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module arp_cache
+-- Compiling module avalon2axi
 
 Top level modules:
-	arp_cache
-
-} {} {}} ../arp_eth_tx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/arp_eth_tx.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module arp_eth_tx
-
-Top level modules:
-	arp_eth_tx
+	avalon2axi
 
 } {} {}} ../eth_arb_mux.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/eth_arb_mux.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -194,12 +180,19 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	eth_arb_mux
 
-} {} {}} ../lfsr.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/lfsr.v
+} {} {}} ../arp_eth_tx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/arp_eth_tx.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module lfsr
+-- Compiling module arp_eth_tx
 
 Top level modules:
-	lfsr
+	arp_eth_tx
+
+} {} {}} ../arp_cache.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/arp_cache.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module arp_cache
+
+Top level modules:
+	arp_cache
 
 } {} {}} ../testbench/ether1.vo {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/testbench/ether1.vo
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -207,5 +200,12 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 
 Top level modules:
 	ether1
+
+} {} {}} ../lfsr.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/lfsr.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module lfsr
+
+Top level modules:
+	lfsr
 
 } {} {}}

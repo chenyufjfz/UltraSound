@@ -7,6 +7,7 @@ parameter ETH_CLK_DELAY= (ETH_SPEED==1000) ? 4 : ((ETH_SPEED==100) ? 20 : 200);
 
     //clock
     reg             clk;
+    reg             clk_2;
     reg             rst;
 
     //mii
@@ -88,6 +89,7 @@ parameter ETH_CLK_DELAY= (ETH_SPEED==1000) ? 4 : ((ETH_SPEED==100) ? 20 : 200);
 udp_mac_complete dut1
 (
     .clk        (clk),
+    .clk_2      (clk_2),
     .rst        (rst),
 
     //config register
@@ -199,6 +201,7 @@ top_mdio_slave top_mdio_slave1
 udp_mac_complete dut2
 (
     .clk        (clk),
+    .clk_2      (clk_2),
     .rst        (rst),
 
     //config register
@@ -328,11 +331,19 @@ begin
     #5;
 end
 
+always
+begin
+    clk_2 <= 1'b 1;
+    #10;
+    clk_2 <= 1'b 0;
+    #10;
+end
+
 initial
 begin
     $readmemh("../testbench/ip_pkt.txt",ip_pkt);
     rst = 0;
-    @(posedge clk);
+    @(posedge clk_2);
     rst = 1;
     in_ip_hdr_valid1 <= 1'b0;
     in_ip_payload_axis_tvalid1 <= 1'b0;
@@ -360,21 +371,21 @@ begin
     rst = 0;
     #200;
     @(dut1.rst_finish);
-    @(posedge clk);
+    @(posedge clk_2);
 
     reg_wr1 <= #1 1'b 1;
     reg_rd1 <= #1 1'b 0;
     reg_addr1 <= #1 1;
     reg_writedata1 <= #1 32'h5A5A5A5A;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     reg_wr1 <= #1 1'b 0;
     reg_rd1 <= #1 1'b 1;
     reg_addr1 <= #1 1;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     if (reg_readdata1 != 32'h5A5A5A5A) begin
         $display("dut1 scratch reg read write error");
         $stop;
@@ -385,99 +396,99 @@ begin
     reg_rd1 <= #1 1'b 0;
     reg_addr1 <= #(1) 15;   
     reg_writedata1 <= #1 0;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     reg_addr1 <= #(1) 128;   
     reg_writedata1 <= #1 32'hAAAA5555;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     reg_wr1 <= #1 1'b 0;
     reg_rd1 <= #1 1'b 1;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     $display("MDIO reg0 = %x", reg_readdata1);*/
          
     reg_wr1 <= #1 1'b 0;
     reg_rd1 <= #1 1'b 1;
     reg_addr1 <= #1 8'hf0;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     $display("ip address = %x", reg_readdata1);
 
     reg_wr1 <= #1 1'b 0;
     reg_rd1 <= #1 1'b 1;
     reg_addr1 <= #1 8'hf1;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     $display("submask = %x", reg_readdata1);
 
     reg_wr1 <= #1 1'b 0;
     reg_rd1 <= #1 1'b 1;
     reg_addr1 <= #1 8'hf2;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     $display("gateway ip=%x", reg_readdata1);
 
     reg_wr1 <= #1 1'b 0;
     reg_rd1 <= #1 1'b 1;
     reg_addr1 <= #1 8'h2;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     $display("command=%x", reg_readdata1);
 
     reg_wr1 <= #1 1'b 0;
     reg_rd1 <= #1 1'b 1;
     reg_addr1 <= #1 8'h3;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     $display("mac hi=%x", reg_readdata1);
 
     reg_wr1 <= #1 1'b 0;
     reg_rd1 <= #1 1'b 1;
     reg_addr1 <= #1 8'h4;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     $display("mac lo=%x", reg_readdata1);
 
     reg_wr1 <= #1 1'b 0;
     reg_rd1 <= #1 1'b 1;
     reg_addr1 <= #1 8'h7;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     $display("rx section empty=%d", reg_readdata1);
 
     reg_wr1 <= #1 1'b 0;
     reg_rd1 <= #1 1'b 1;
     reg_addr1 <= #1 8'h8;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     $display("rx section full=%d", reg_readdata1);
 
     reg_wr1 <= #1 1'b 0;
     reg_rd1 <= #1 1'b 1;
     reg_addr1 <= #1 8'h9;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     $display("tx section empty=%d", reg_readdata1);
 
     reg_wr1 <= #1 1'b 0;
     reg_rd1 <= #1 1'b 1;
     reg_addr1 <= #1 8'ha;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy1);
-    @(posedge clk);
+    @(posedge clk_2);
     reg_rd1 <= #1 1'b0;
     $display("tx section full=%d", reg_readdata1);
 
@@ -485,15 +496,15 @@ begin
     reg_rd2 <= #1 1'b 0;
     reg_addr2 <= #1 1;
     reg_writedata2 <= #1 32'h5A5A5A5A;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy2);
-    @(posedge clk);
+    @(posedge clk_2);
     reg_wr2 <= #1 1'b 0;
     reg_rd2 <= #1 1'b 1;
     reg_addr2 <= #1 1;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy2);
-    @(posedge clk);
+    @(posedge clk_2);
     if (reg_readdata2 != 32'h5A5A5A5A) begin
         $display("dut2 scratch reg read write error");
         $stop;
@@ -505,15 +516,15 @@ begin
     reg_rd2 <= #1 1'b 0;
     reg_addr2 <= #1 8'h3;
     reg_writedata2 <= #1 32'h06231132;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy2);
-    @(posedge clk);
+    @(posedge clk_2);
     reg_wr2 <= #1 1'b 0;
     reg_rd2 <= #1 1'b 1;
     reg_addr2 <= #1 8'h3;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy2);
-    @(posedge clk);
+    @(posedge clk_2);
     if (reg_readdata2 != 32'h06231132) begin
         $display("dut2 mac reg read write error");
         $stop;
@@ -523,15 +534,15 @@ begin
     reg_rd2 <= #1 1'b 0;
     reg_addr2 <= #1 8'h4;
     reg_writedata2 <= #1 32'h2019;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy2);
-    @(posedge clk);
+    @(posedge clk_2);
     reg_wr2 <= #1 1'b 0;
     reg_rd2 <= #1 1'b 1;
     reg_addr2 <= #1 8'h4;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy2);
-    @(posedge clk);
+    @(posedge clk_2);
     if (reg_readdata2 != 32'h2019) begin
         $display("dut2 mac reg read write error");
         $stop;
@@ -541,15 +552,15 @@ begin
     reg_rd2 <= #1 1'b 0;
     reg_addr2 <= #1 8'hf0;
     reg_writedata2 <= #1 32'hc0a80102;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy2);
-    @(posedge clk);
+    @(posedge clk_2);
     reg_wr2 <= #1 1'b 0;
     reg_rd2 <= #1 1'b 1;
     reg_addr2 <= #1 8'hf0;
-    @(negedge clk);
+    @(negedge clk_2);
     @(!reg_busy2);
-    @(posedge clk);
+    @(posedge clk_2);
     if (reg_readdata2 != 32'hc0a80102) begin
         $display("dut2 ip reg read write error");
         $stop;
@@ -610,16 +621,16 @@ begin
     tx_udp_payload_axis_tlast1 <= 1'b0;
     $display("dut1 finish transmit UDP packet from dut1");
     #10000;
-    @(posedge clk);
+    @(posedge clk_2);
     reg_rd1 <= #1 1'b 1;
     reg_rd2 <= #1 1'b 1;
     for (i=32'h1A; i<=32'h38; i=i+1)
     begin
         reg_addr1 <= #1 i;
         reg_addr2 <= #1 i;
-        @(negedge clk);
+        @(negedge clk_2);
         @(!reg_busy2);
-        @(posedge clk);
+        @(posedge clk_2);
         case (i)
         32'h1a: $display("tx frame  ok  num, r0=%d, r1=%d",reg_readdata1, reg_readdata2);
         32'h1b: $display("rx frame  ok  num, r0=%d, r1=%d",reg_readdata1, reg_readdata2);

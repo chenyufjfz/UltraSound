@@ -2,6 +2,7 @@
 
 module ultrasound(
     CLOCK_50,
+    KEY,
 	//////// Ethernet 0 //////////
 	ENET0_GTX_CLK,
 	ENET0_INT_N,
@@ -21,11 +22,11 @@ module ultrasound(
 	ENET0_LINK100
 );
 parameter SIMULATION = 0;
-parameter RESET_CTR_WIDTH = SIMULATION ? 5 : 20;
+parameter RESET_CTR_WIDTH = SIMULATION ? 5 : 22;
 
     //clk
     input           CLOCK_50;
-    
+    input [3:0]     KEY;
     //Ethernet0
     output          ENET0_GTX_CLK;
     input           ENET0_INT_N;
@@ -77,6 +78,7 @@ parameter RESET_CTR_WIDTH = SIMULATION ? 5 : 20;
 
     //clk & reset
     wire            clk;
+    wire            clk_2;
     wire            rst;
     wire            tx_clk_mac;
     wire            tx_clk_phy;
@@ -84,13 +86,11 @@ parameter RESET_CTR_WIDTH = SIMULATION ? 5 : 20;
     //PLL
     wire            pll_lock;
     wire            pll_125m;
-    wire            pll_125m_deg90;
     wire            pll_25m;
-    wire            pll_25m_deg90;
     wire            eth_mode_tx_clk_mac_sync;
-    wire            eth_mode_tx_clk_phy_syn;
 
     //controller
+    wire            trigger_exec;
     wire [13:0]     reg_addr;
     wire            reg_rd_udp_mac;
     wire            reg_wr_udp_mac;
@@ -101,24 +101,29 @@ parameter RESET_CTR_WIDTH = SIMULATION ? 5 : 20;
     // ===== MDIO Tristate
     assign mdio_in = ENET0_MDIO;
     assign ENET0_MDIO   = mdio_oen ? 1'bz : mdio_out;
-    assign ENET0_GTX_CLK = tx_clk_phy;
     assign ENET0_TX_ER = 0;
     assign ENET0_RST_N = !rst;
-    
+
 enet_clk_pll enet_clk_pll_inst(
 	.inclk0                 (CLOCK_50),
-	.c0                     (pll_125m),
-	.c1                     (pll_125m_deg90),
-	.c2                     (pll_25m),
-	.c3                     (pll_25m_deg90),
-	.c4                     (clk),
+	.c0                     (clk_2),
+	.c1                     (clk),
+	.c2                     (pll_125m),
+	.c3                     (pll_25m),
 	.locked                 (pll_lock)
 );
 
 gen_reset #(.CTR_WIDTH(RESET_CTR_WIDTH)) gen_sys_reset(
-    .clk            (CLOCK_50),
-	.reset_n_in     (pll_lock),
-	.reset_out      (rst)
+    .clk                    (CLOCK_50),
+	.reset_n_in             (pll_lock & KEY[0]),
+	.reset_out              (rst)
+);
+
+gen_key_signal #(.CTR_WIDTH(RESET_CTR_WIDTH)) gen_key1_signal(
+		.clk            (clk),
+		.rst            (rst),
+		.key_in_n       (KEY[1]),
+		.key_out        (trigger_exec)
 );
 
 synchronizer synchronizer_mac(
@@ -135,22 +140,21 @@ clkctrl1 clkctrl1_mac(
 	.outclk                 (tx_clk_mac)
 );
 
-synchronizer synchronizer_phy(
-	.reset                  (rst),
-	.clk                    (tx_clk_phy),
-	.d                      (eth_mode),
-	.q                      (eth_mode_tx_clk_phy_syn)	
-);
 
-clkctrl1 clkctrl1_phy(
-	.clkselect              (eth_mode_tx_clk_phy_syn),
-	.inclk0x                (pll_125m_deg90),
-	.inclk1x                (pll_25m_deg90),
-	.outclk                 (tx_clk_phy)
-);
+assign #2 ENET0_GTX_CLK = tx_clk_phy;
+
+ddio_out1	ddio_out1_inst (
+	.aclr                   ( rst ),
+	.datain_h               ( 1'b1 ),
+	.datain_l               ( 1'b0 ),
+	.outclock               ( tx_clk_mac ),
+	.dataout                ( tx_clk_phy )
+	);
+
 
 udp_mac_complete udp_mac_complete_inst (
     .clk                    (clk),
+    .clk_2                  (clk_2),
     .rst                    (rst),
 
     //config register
@@ -243,8 +247,9 @@ udp_mac_complete udp_mac_complete_inst (
 controller #(.SIMULATION(SIMULATION)) controller_inst(
     //input
     .clk                                (clk),
+    .clk_2                              (clk_2),
     .rst                                (rst),
-
+    .trigger_exec                       (trigger_exec),
     //UDP frame input
     .ctrl_in_udp_hdr_valid              (rx_udp_hdr_valid),
     .ctrl_in_udp_hdr_ready              (rx_udp_hdr_ready),

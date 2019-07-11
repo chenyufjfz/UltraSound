@@ -4,6 +4,7 @@ module test_execcmd;
 parameter AW=10;
     //clock
     reg             clk;
+    reg             clk_2;
     reg             rst;
 
     //input command ram
@@ -32,6 +33,7 @@ parameter AW=10;
 execcmd #(.AW(AW)) execcmd_inst(
     //input
     .clk                (clk),
+    .clk_2              (clk_2),
     .rst                (rst),
 
     //input command ram
@@ -45,17 +47,18 @@ execcmd #(.AW(AW)) execcmd_inst(
     .outram_d           (outram_d),
 
     //AXI reg access
-    .reg_addr           (reg_addr),
-    .reg_rd             (reg_rd),
-    .reg_wr             (reg_wr),
-    .reg_ready          (!reg_busy),
-    .reg_writedata      (reg_writedata),
-    .reg_readdata       (reg_readdata),
+    .reg_addr_c2        (reg_addr),
+    .reg_rd_c2          (reg_rd),
+    .reg_wr_c2          (reg_wr),
+    .reg_ready_c2       (!reg_busy),
+    .reg_writedata_c2   (reg_writedata),
+    .reg_readdata_c2    (reg_readdata),
 
     //controller
     .start_exec         (start_exec),
     .busy               (busy),
-    .err                (err)
+    .err                (err),
+    .out_len            ()
 );
 
 ether1 ether1_inst (
@@ -83,7 +86,7 @@ ether1 ether1_inst (
     .writedata(reg_writedata),
     .write(reg_wr),
     .waitrequest(reg_busy),
-    .clk(clk),
+    .clk(clk_2),
     .reset(rst),
     .rgmii_in(),
     .rgmii_out(),
@@ -133,6 +136,13 @@ begin
     #5;
 end
 
+always
+begin
+    clk_2 <= 1'b 1;
+    #10;
+    clk_2 <= 1'b 0;
+    #10;
+end
 initial
 begin
     $readmemh("../testbench/inram.txt",inram.SIM_RAM.mem);

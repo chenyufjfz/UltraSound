@@ -15,8 +15,9 @@ Output Ram, e.g.
 */
 module execcmd(
     //input
-    clk,
-    rst,
+    clk,    
+    clk_2,
+    rst,    
 
     //input command ram
     inram_address,
@@ -29,12 +30,12 @@ module execcmd(
     outram_d,
 
     //AXI reg access
-    reg_addr,
-    reg_rd,
-    reg_wr,
-    reg_ready,
-    reg_writedata,
-    reg_readdata,
+    reg_addr_c2,
+    reg_rd_c2,
+    reg_wr_c2,
+    reg_ready_c2,
+    reg_writedata_c2,
+    reg_readdata_c2,
 
     //controller
     start_exec,
@@ -48,8 +49,9 @@ localparam CMD_READ = 2'b00;
 
     //input
     input           clk;
-    input           rst;
-
+    input           clk_2;
+    input           rst;    
+    
     //input command ram
     output reg [AW-1:0] inram_address;
     output reg          inram_re;
@@ -60,13 +62,13 @@ localparam CMD_READ = 2'b00;
     output reg          outram_we;
     output reg [15:0]   outram_d;
 
-    //AXI reg access
-    output reg [13:0]   reg_addr;
-    output reg          reg_rd;
-    output reg          reg_wr;
-    input               reg_ready;
-    output [31:0]       reg_writedata;
-    input [31:0]        reg_readdata;
+    //internal AXI reg access
+    output [13:0]       reg_addr_c2;
+    output              reg_rd_c2;
+    output              reg_wr_c2;
+    input               reg_ready_c2;
+    output [31:0]       reg_writedata_c2;
+    input [31:0]        reg_readdata_c2;
 
     //controller
     input               start_exec;
@@ -74,8 +76,15 @@ localparam CMD_READ = 2'b00;
     output reg          err;
     output reg [AW-1:0] out_len;
 
+    //internal AXI reg access
+    reg [13:0]          reg_addr;
+    reg                 reg_rd;
+    reg                 reg_wr;
+    wire                reg_ready;
+    wire [31:0]         reg_writedata;
+    wire [31:0]         reg_readdata;
+    
     //internal reg
-    reg [31:0]          reg_readdata_d;
     reg [1:0]           command;
     reg [15:0]          in_len;
     reg [15:0]          reg_writedata_h, reg_writedata_l;
@@ -84,9 +93,28 @@ localparam CMD_READ = 2'b00;
     assign check_length = (inram_address < in_len &&  outram_address < 800);
     assign reg_writedata = {reg_writedata_h, reg_writedata_l};
     
-    always @(posedge clk)
-    if (reg_rd & reg_ready)
-        reg_readdata_d <= #1 reg_readdata;
+    reg_dec_rate #(14) reg_dec_rate_inst(
+        //clock & reset
+        .clk                (clk),
+        .clk_2              (clk_2),
+        .rst                (rst),
+        
+        //slave, fast clock domain
+        .reg_s_addr         (reg_addr),
+        .reg_s_rd           (reg_rd),
+        .reg_s_wr           (reg_wr),
+        .reg_s_ready        (reg_ready),
+        .reg_s_writedata    (reg_writedata),
+        .reg_s_readdata     (reg_readdata),
+        
+        //master, slow clock domain
+        .reg_m_addr         (reg_addr_c2),
+        .reg_m_rd           (reg_rd_c2),
+        .reg_m_wr           (reg_wr_c2),
+        .reg_m_ready        (reg_ready_c2),
+        .reg_m_writedata    (reg_writedata_c2),
+        .reg_m_readdata     (reg_readdata_c2)
+    );
 
     always
     begin : cmd_process
@@ -122,12 +150,11 @@ localparam CMD_READ = 2'b00;
                 inram_address <= #1 inram_address + 1'b1;
                 @(posedge clk);
                 reg_writedata_h <= #1 inram_q;
-                inram_address <= #1 inram_address + 1'b1;
+                inram_address <= #1 inram_address + 1'b1;                
                 @(posedge clk);
-                reg_writedata_l <= #1 inram_q;
                 reg_wr <= #1 1;
-                @(posedge clk);
-                while (!reg_ready)
+                reg_writedata_l <= #1 inram_q;
+                while (!reg_ready) //dowhile
                     @(posedge clk);
                 reg_wr <= #1 0;
             end
@@ -135,15 +162,13 @@ localparam CMD_READ = 2'b00;
             if (command == CMD_READ)
             begin
                 reg_rd <= #1 1;
-                @(posedge clk);
-                while (!reg_ready)
+                while (!reg_ready) //dowhile
                     @(posedge clk);
                 reg_rd <= #1 0;
-                @(posedge clk);
-                outram_d <= #1 reg_readdata_d[31:16];
+                outram_d <= #1 reg_readdata[31:16];
                 outram_we <= 1;
                 @(posedge clk);
-                outram_d <= #1 reg_readdata_d[15:0];
+                outram_d <= #1 reg_readdata[15:0];
                 outram_address <= #1 outram_address + 1'b1;
                 @(posedge clk);
                 outram_address <= #1 outram_address + 1'b1;

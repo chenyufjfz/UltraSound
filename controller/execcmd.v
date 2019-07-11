@@ -1,8 +1,9 @@
 `timescale 1ns / 1ps
 module execcmd (
     //input
-    clk,
-    rst,
+    clk,    
+    clk_2,
+    rst,    
 
     //input command ram
     inram_address,
@@ -15,12 +16,12 @@ module execcmd (
     outram_d,
 
     //AXI reg access
-    reg_addr,
-    reg_rd,
-    reg_wr,
-    reg_ready,
-    reg_writedata,
-    reg_readdata,
+    reg_addr_c2,
+    reg_rd_c2,
+    reg_wr_c2,
+    reg_ready_c2,
+    reg_writedata_c2,
+    reg_readdata_c2,
 
     //controller
     start_exec,
@@ -32,6 +33,7 @@ module execcmd (
     localparam CMD_WRITE = 2'b10;
     localparam CMD_READ = 2'b00;
     input           clk;
+    input           clk_2;
     input           rst;
     output reg [AW-1:0] inram_address;
     output reg          inram_re;
@@ -39,26 +41,50 @@ module execcmd (
     output reg [AW-1:0] outram_address;
     output reg          outram_we;
     output reg [15:0]   outram_d;
-    output reg [13:0]   reg_addr;
-    output reg          reg_rd;
-    output reg          reg_wr;
-    input               reg_ready;
-    output [31:0]       reg_writedata;
-    input [31:0]        reg_readdata;
+    output [13:0]       reg_addr_c2;
+    output              reg_rd_c2;
+    output              reg_wr_c2;
+    input               reg_ready_c2;
+    output [31:0]       reg_writedata_c2;
+    input [31:0]        reg_readdata_c2;
     input               start_exec;
     output reg          busy;
     output reg          err;
     output reg [AW-1:0] out_len;
-    reg [31:0]          reg_readdata_d;
+    reg [13:0]          reg_addr;
+    reg                 reg_rd;
+    reg                 reg_wr;
+    wire                reg_ready;
+    wire [31:0]         reg_writedata;
+    wire [31:0]         reg_readdata;
     reg [1:0]           command;
     reg [15:0]          in_len;
     reg [15:0]          reg_writedata_h, reg_writedata_l;
     wire                check_length;
     assign check_length = (inram_address < in_len &&  outram_address < 800);
     assign reg_writedata = {reg_writedata_h, reg_writedata_l};
-    always @(posedge clk)
-    if (reg_rd & reg_ready)
-        reg_readdata_d <= #1 reg_readdata;
+    reg_dec_rate #(14) reg_dec_rate_inst(
+        //clock & reset
+        .clk                (clk),
+        .clk_2              (clk_2),
+        .rst                (rst),
+        
+        //slave, fast clock domain
+        .reg_s_addr         (reg_addr),
+        .reg_s_rd           (reg_rd),
+        .reg_s_wr           (reg_wr),
+        .reg_s_ready        (reg_ready),
+        .reg_s_writedata    (reg_writedata),
+        .reg_s_readdata     (reg_readdata),
+        
+        //master, slow clock domain
+        .reg_m_addr         (reg_addr_c2),
+        .reg_m_rd           (reg_rd_c2),
+        .reg_m_wr           (reg_wr_c2),
+        .reg_m_ready        (reg_ready_c2),
+        .reg_m_writedata    (reg_writedata_c2),
+        .reg_m_readdata     (reg_readdata_c2)
+    );
     //states for block cmd_process
     reg		cmd_process_00;
     reg		cmd_process_01;
@@ -74,9 +100,6 @@ module execcmd (
     reg		cmd_process_11;
     reg		cmd_process_12;
     reg		cmd_process_13;
-    reg		cmd_process_14;
-    reg		cmd_process_15;
-    reg		cmd_process_16;
 
 
 //state transition for block cmd_process
@@ -84,7 +107,7 @@ module execcmd (
     if (rst)
         cmd_process_00 <= #1 1;
     else
-        cmd_process_00 <= #1 cmd_process_16;
+        cmd_process_00 <= #1 cmd_process_13;
 
     always @(posedge clk)
     if (rst)
@@ -114,7 +137,7 @@ module execcmd (
     if (rst)
         cmd_process_05 <= #1 0;
     else
-        cmd_process_05 <= #1 cmd_process_06&&(command!=CMD_READ)&&(command!=CMD_WRITE)&&check_length || cmd_process_15&&check_length || cmd_process_10&&reg_ready&&check_length || cmd_process_09&&reg_ready&&check_length || cmd_process_04&&check_length;
+        cmd_process_05 <= #1 cmd_process_06&&(command!=CMD_READ)&&(command!=CMD_WRITE)&&check_length || cmd_process_12&&check_length || cmd_process_09&&reg_ready&&check_length || cmd_process_04&&check_length;
 
     always @(posedge clk)
     if (rst)
@@ -138,49 +161,31 @@ module execcmd (
     if (rst)
         cmd_process_09 <= #1 0;
     else
-        cmd_process_09 <= #1 cmd_process_08;
+        cmd_process_09 <= #1 cmd_process_09&&!reg_ready || cmd_process_08;
 
     always @(posedge clk)
     if (rst)
         cmd_process_10 <= #1 0;
     else
-        cmd_process_10 <= #1 cmd_process_10&&!reg_ready || cmd_process_09&&!reg_ready;
+        cmd_process_10 <= #1 cmd_process_06&&(command == CMD_READ)&&(command!=CMD_WRITE) || cmd_process_10&&!reg_ready;
 
     always @(posedge clk)
     if (rst)
         cmd_process_11 <= #1 0;
     else
-        cmd_process_11 <= #1 cmd_process_06&&(command == CMD_READ)&&(command!=CMD_WRITE);
+        cmd_process_11 <= #1 cmd_process_10&&reg_ready;
 
     always @(posedge clk)
     if (rst)
         cmd_process_12 <= #1 0;
     else
-        cmd_process_12 <= #1 cmd_process_12&&!reg_ready || cmd_process_11&&!reg_ready;
+        cmd_process_12 <= #1 cmd_process_11;
 
     always @(posedge clk)
     if (rst)
         cmd_process_13 <= #1 0;
     else
-        cmd_process_13 <= #1 cmd_process_12&&reg_ready || cmd_process_11&&reg_ready;
-
-    always @(posedge clk)
-    if (rst)
-        cmd_process_14 <= #1 0;
-    else
-        cmd_process_14 <= #1 cmd_process_13;
-
-    always @(posedge clk)
-    if (rst)
-        cmd_process_15 <= #1 0;
-    else
-        cmd_process_15 <= #1 cmd_process_14;
-
-    always @(posedge clk)
-    if (rst)
-        cmd_process_16 <= #1 0;
-    else
-        cmd_process_16 <= #1 cmd_process_06&&(command!=CMD_READ)&&(command!=CMD_WRITE)&&!check_length || cmd_process_15&&!check_length || cmd_process_10&&reg_ready&&!check_length || cmd_process_09&&reg_ready&&!check_length || cmd_process_04&&!check_length;
+        cmd_process_13 <= #1 cmd_process_06&&(command!=CMD_READ)&&(command!=CMD_WRITE)&&!check_length || cmd_process_12&&!check_length || cmd_process_09&&reg_ready&&!check_length || cmd_process_04&&!check_length;
 
 
     always @(posedge clk)
@@ -205,9 +210,9 @@ module execcmd (
             err <= #1 0;
         else
         begin
-            if (cmd_process_16&&(in_len == inram_address))
+            if (cmd_process_13&&(in_len == inram_address))
                 err <= #1 0;
-            if (cmd_process_16&&(in_len!=inram_address))
+            if (cmd_process_13&&(in_len!=inram_address))
                 err <= #1 1;
         end
 
@@ -243,9 +248,9 @@ module execcmd (
 
     always @(posedge clk)
     begin
-        if (cmd_process_16&&(in_len == inram_address))
+        if (cmd_process_13&&(in_len == inram_address))
             out_len <= #1 outram_address;
-        if (cmd_process_16&&(in_len!=inram_address))
+        if (cmd_process_13&&(in_len!=inram_address))
             out_len <= #1 0;
     end
 
@@ -255,9 +260,9 @@ module execcmd (
             outram_address <= #1 0;
         if (cmd_process_06)
             outram_address <= #1 outram_address + 1'b1;
-        if (cmd_process_14)
+        if (cmd_process_11)
             outram_address <= #1 outram_address + 1'b1;
-        if (cmd_process_15)
+        if (cmd_process_12)
             outram_address <= #1 outram_address + 1'b1;
     end
 
@@ -265,10 +270,10 @@ module execcmd (
     begin
         if (cmd_process_05)
             outram_d <= #1 inram_q;
-        if (cmd_process_13)
-            outram_d <= #1 reg_readdata_d[31:16];
-        if (cmd_process_14)
-            outram_d <= #1 reg_readdata_d[15:0];
+        if (cmd_process_10&&reg_ready)
+            outram_d <= #1 reg_readdata[31:16];
+        if (cmd_process_11)
+            outram_d <= #1 reg_readdata[15:0];
     end
 
     always @(posedge clk)
@@ -282,9 +287,9 @@ module execcmd (
                 outram_we <= #1 1;
             if (cmd_process_06)
                 outram_we <= #1 0;
-            if (cmd_process_13)
+            if (cmd_process_10&&reg_ready)
                 outram_we <= 1;
-            if (cmd_process_15)
+            if (cmd_process_12)
                 outram_we <= 0;
         end
 
@@ -301,7 +306,7 @@ module execcmd (
         begin
             if (cmd_process_06&&(command == CMD_READ)&&(command!=CMD_WRITE))
                 reg_rd <= #1 1;
-            if (cmd_process_12&&reg_ready || cmd_process_11&&reg_ready)
+            if (cmd_process_10&&reg_ready)
                 reg_rd <= #1 0;
         end
 
@@ -312,7 +317,7 @@ module execcmd (
         begin
             if (cmd_process_08)
                 reg_wr <= #1 1;
-            if (cmd_process_10&&reg_ready || cmd_process_09&&reg_ready)
+            if (cmd_process_09&&reg_ready)
                 reg_wr <= #1 0;
         end
 

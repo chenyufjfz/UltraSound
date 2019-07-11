@@ -4,6 +4,7 @@ module test_controller;
 parameter AW=10;
     //clock
     reg             clk;
+    reg             clk_2;
     reg             rst;
 
     //UDP interface
@@ -33,12 +34,13 @@ parameter AW=10;
     wire                reg_busy;
     wire [31:0]         reg_writedata;
     wire [31:0]         reg_readdata_udp_mac;
-    
+
 controller #(.SIMULATION(0), .AW(AW)) controller_inst(
     //input
     .clk                (clk),
+    .clk_2              (clk_2),
     .rst                (rst),
-
+    .trigger_exec                           (1'b0),
     //UDP frame input
     .ctrl_in_udp_hdr_valid                  (ctrl_in_udp_hdr_valid),
     .ctrl_in_udp_hdr_ready                  (ctrl_in_udp_hdr_ready),
@@ -101,7 +103,7 @@ ether1 ether1_inst (
     .writedata      (reg_writedata),
     .write          (reg_wr_udp_mac),
     .waitrequest    (reg_busy),
-    .clk(clk),
+    .clk(clk_2),
     .reset(rst),
     .rgmii_in(),
     .rgmii_out(),
@@ -133,6 +135,14 @@ begin
     #5;
 end
 
+always
+begin
+    clk_2 <= 1'b 1;
+    #10;
+    clk_2 <= 1'b 0;
+    #10;
+end
+
     reg [15:0]      udp_pkt[1023:0];
     reg [15:0]      udp_out[1023:0];
     integer i;
@@ -144,7 +154,7 @@ begin
     begin
         ctrl_in_udp_length = i * 2 + 8;
         i = 1025;
-    end    
+    end
     rst = 0;
     ctrl_in_udp_hdr_valid <= #1 0;
     ctrl_in_udp_payload_axis_tlast <= #1 0;
@@ -177,13 +187,13 @@ begin
             @(posedge clk);
     end
     ctrl_in_udp_payload_axis_tvalid <= #1 0;
-    ctrl_in_udp_payload_axis_tlast <= #1 0;    
+    ctrl_in_udp_payload_axis_tlast <= #1 0;
     ctrl_out_udp_hdr_ready <= #1 1;
     @(posedge clk);
     while (ctrl_out_udp_hdr_valid == 0)
         @(posedge clk);
     ctrl_out_udp_hdr_ready <= #1 0;
-    $display("ip_dest=%x,udp_dest=%x,udp_source=%x,udp_len=%d", ctrl_out_ip_dest_ip, 
+    $display("ip_dest=%x,udp_dest=%x,udp_source=%x,udp_len=%d", ctrl_out_ip_dest_ip,
             ctrl_out_udp_dest_port, ctrl_out_udp_source_port, ctrl_out_udp_length);
     ctrl_out_udp_payload_axis_tready <= #1 1;
     i=0;

@@ -10,6 +10,7 @@
 module udp_mac_complete
 (
     clk,
+    clk_2,
     rst,
 
     //config register
@@ -104,6 +105,7 @@ module udp_mac_complete
 
     //clock and reset
     input           clk;
+    input           clk_2;
     input           rst;
     //config register
     input [7:0]     reg_addr;
@@ -636,7 +638,7 @@ ether1 ether1_inst (
     .writedata(writedata),
     .write(write),
     .waitrequest(reg_busy),
-    .clk(clk),
+    .clk(clk_2),
     .reset(rst),
     .rgmii_in(rgmii_in),
     .rgmii_out(rgmii_out),
@@ -676,7 +678,7 @@ always @(posedge clk) begin
             rx_udp_err <= #1 rx_err[0];
 end
 
-always @(posedge clk) begin
+always @(posedge clk_2) begin
     if (rst)
         local_mac[31:0] <= #1 0;
     else
@@ -684,7 +686,7 @@ always @(posedge clk) begin
             local_mac[31:0] <= #1 writedata;
 end
 
-always @(posedge clk) begin
+always @(posedge clk_2) begin
     if (rst)
         local_mac[47:32] <= #1 0;
     else
@@ -692,7 +694,7 @@ always @(posedge clk) begin
             local_mac[47:32] <= #1 writedata[15:0];
 end
 
-always @(posedge clk) begin
+always @(posedge clk_2) begin
     if (rst)
         local_ip <= #1 32'hc0a80101;
     else
@@ -700,7 +702,7 @@ always @(posedge clk) begin
             local_ip <= #1 writedata;
 end
 
-always @(posedge clk) begin
+always @(posedge clk_2) begin
     if (rst)
         subnet_mask <= #1 32'hffffff00;
     else
@@ -708,7 +710,7 @@ always @(posedge clk) begin
             subnet_mask <= #1 writedata;
 end
 
-always @(posedge clk) begin
+always @(posedge clk_2) begin
     if (rst)
         gateway_ip <= #1 32'hc0a801fd;
     else
@@ -726,7 +728,7 @@ assign read = rst_finish ? reg_rd : rst_rd;
 assign write = rst_finish ? reg_wr : rst_wr;
 
 mac_reset mac_reset_inst (
-    .clk                (clk),
+    .clk                (clk_2),
     .rst                (rst),
     .rst_writedata      (rst_writedata),
     .rst_readdata       (rst_readdata),

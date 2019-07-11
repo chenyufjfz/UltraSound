@@ -2,7 +2,9 @@
 module controller (
     //input
     clk,
+    clk_2,
     rst,
+    trigger_exec,
 
     //UDP frame input
     ctrl_in_udp_hdr_valid,
@@ -45,7 +47,9 @@ module controller (
     localparam CTRL_UDP_PORT = 16'h6789;
     localparam MAGIC_WORD = 16'hCBAE;
     input           clk;
+    input           clk_2;
     input           rst;
+    input           trigger_exec;
     input           ctrl_in_udp_hdr_valid;
     output reg      ctrl_in_udp_hdr_ready;
     input [12:0]    ctrl_in_ip_fragment_offset;
@@ -107,13 +111,14 @@ module controller (
     reg [15:0]      good_pkt_cnt;
     assign reg_rd_udp_mac = (reg_rd && reg_addr[13:8] == 1);
     assign reg_wr_udp_mac = (reg_wr && reg_addr[13:8] == 1);
-    assign reg_readdata = (reg_addr[13:8] == 1) ? reg_readdata_udp_mac : 
+    assign reg_readdata = (reg_addr[13:8] == 1) ? reg_readdata_udp_mac :
                          ((reg_addr[13:0] == 14'hff) ? {bad_pkt_cnt, good_pkt_cnt} : 32'h0BAD0BAD);
     assign reg_ready = (reg_addr[13:8] == 1) ? reg_ready_udp_mac : 1'b1;
     assign ctrl_out_udp_length = (exec_out_len + 8'd4) << 1;
     execcmd #(AW) execcmd_inst(
     //input
     .clk                (clk),
+    .clk_2              (clk_2),
     .rst                (rst),
 
     //input command ram
@@ -127,15 +132,15 @@ module controller (
     .outram_d           (exec_outram_d),
 
     //AXI reg access
-    .reg_addr           (reg_addr),
-    .reg_rd             (reg_rd),
-    .reg_wr             (reg_wr),
-    .reg_ready          (reg_ready),
-    .reg_writedata      (reg_writedata),
-    .reg_readdata       (reg_readdata),
+    .reg_addr_c2        (reg_addr),
+    .reg_rd_c2          (reg_rd),
+    .reg_wr_c2          (reg_wr),
+    .reg_ready_c2       (reg_ready),
+    .reg_writedata_c2   (reg_writedata),
+    .reg_readdata_c2    (reg_readdata),
 
     //controller
-    .start_exec         (start_exec),
+    .start_exec         (start_exec | trigger_exec),
     .busy               (exec_busy),
     .err                (exec_err),
     .out_len            (exec_out_len)
@@ -200,7 +205,7 @@ endgenerate
     end
     always @(posedge clk)
     begin
-        if (rst || start_exec)
+        if (rst || start_exec || trigger_exec)
             ctrl_inram_address <= #1 (~0);
         else
             if (ctrl_inram_we)
@@ -228,11 +233,11 @@ endgenerate
     end
     always @(posedge clk)
     begin
-        if (rst || start_exec)
+        if (rst || start_exec || trigger_exec)
             ctrl_outram_address <= #1 0;
         else
             if (ctrl_outram_re)
-                ctrl_outram_address <= #1 ctrl_outram_address + 1;
+                ctrl_outram_address <= #1 ctrl_outram_address + 1'b1;
     end
     assign ctrl_out_udp_payload_axis_tdata = ctrl_out_udp_payload_lo ? ctrl_outram_q1[7:0] : ctrl_outram_q1[15:8];
     assign check_invalid = (ctrl_in_ip_dest_ip != local_ip && ctrl_in_ip_dest_ip != 32'hffffffff) || ctrl_in_udp_dest_port != CTRL_UDP_PORT || ctrl_in_udp_err || ctrl_in_udp_length <= 12 || ctrl_in_ip_fragment_offset !=0;
@@ -449,7 +454,7 @@ endgenerate
         else
         begin
             if (tx_udp_06&&ctrl_out_udp_payload_axis_tlast)
-                good_pkt_cnt <= #1 good_pkt_cnt + 1;
+                good_pkt_cnt <= #1 good_pkt_cnt + 1'b1;
         end
 
     always @(posedge clk)
