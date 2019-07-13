@@ -29,6 +29,11 @@ module icmp_reply(
     s_icmp_payload_axis_tvalid,
     s_icmp_payload_axis_tready,
     s_icmp_payload_axis_tlast,
+    // stat counter
+    unknow_rx_ip_counter,
+    icmp_counter,
+    clear_counter,
+    //ip
     local_ip
 );
 
@@ -60,7 +65,11 @@ module icmp_reply(
     input                   s_icmp_payload_axis_tvalid;
     output                  s_icmp_payload_axis_tready;
     input                   s_icmp_payload_axis_tlast;
-    
+    // stat counter
+    output reg [23:0]       unknow_rx_ip_counter;
+    output reg [15:0]       icmp_counter;
+    input                   clear_counter;
+
     //local ip
     input [31:0]            local_ip;
     wire                    need_reply;
@@ -90,6 +99,14 @@ module icmp_reply(
     assign m_icmp_source_ip = s_icmp_dest_ip;
     assign m_icmp_dest_ip = s_icmp_source_ip;
     assign need_reply = (s_icmp_payload_axis_tdata == 8 && local_ip == s_icmp_dest_ip);
+    always 
+    begin : clear_cnt
+        @(posedge clk);
+        while (!clear_counter) //dowhile
+            @(posedge clk);
+        icmp_counter <= #1 0;
+        unknow_rx_ip_counter <= #1 0;
+    end
     
     always
     begin : icmp_echo
@@ -98,9 +115,13 @@ module icmp_reply(
         while (!(s_icmp_ip_hdr_valid && s_icmp_ip_protocol == 1 && s_icmp_payload_axis_tvalid)) //dowhile
             @(posedge clk);        
         if (need_reply)
+        begin
             m_icmp_ip_hdr_valid <= #1 1;
+            icmp_counter <= #1 icmp_counter + 1;
+        end
         else begin
             payload_drop <= #1 1;
+            unknow_rx_ip_counter <= #1 unknow_rx_ip_counter + 1;
             s_icmp_ip_hdr_ready <= #1 1;
             while (!(s_icmp_payload_axis_tvalid && s_icmp_payload_axis_tlast)) //dowhile
                 @(posedge clk);
@@ -134,12 +155,15 @@ module icmp_reply(
         @(posedge clk);
         if (rst)
         begin
+            unknow_rx_ip_counter <= #1 0;
+            icmp_counter <= #1 0;
             frame_length <= #1 0;
             s_icmp_ip_hdr_ready <= #1 0;
             m_icmp_ip_hdr_valid <= #1 0;
             payload_fwd <= #1 0;
             payload_drop <= #1 0;
             disable icmp_echo;
+                disable clear_cnt;
         end
     end
 endmodule

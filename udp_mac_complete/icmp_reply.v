@@ -28,6 +28,11 @@ module icmp_reply (
     s_icmp_payload_axis_tvalid,
     s_icmp_payload_axis_tready,
     s_icmp_payload_axis_tlast,
+    // stat counter
+    unknow_rx_ip_counter,
+    icmp_counter,
+    clear_counter,
+    //ip
     local_ip
 );
     input                   clk;
@@ -56,6 +61,9 @@ module icmp_reply (
     input                   s_icmp_payload_axis_tvalid;
     output                  s_icmp_payload_axis_tready;
     input                   s_icmp_payload_axis_tlast;
+    output reg [23:0]       unknow_rx_ip_counter;
+    output reg [15:0]       icmp_counter;
+    input                   clear_counter;
     input [31:0]            local_ip;
     wire                    need_reply;
     reg [9:0]               frame_length;
@@ -80,6 +88,10 @@ module icmp_reply (
     assign m_icmp_source_ip = s_icmp_dest_ip;
     assign m_icmp_dest_ip = s_icmp_source_ip;
     assign need_reply = (s_icmp_payload_axis_tdata == 8 && local_ip == s_icmp_dest_ip);
+    //states for block clear_cnt
+    reg		clear_cnt_00;
+    reg		clear_cnt_01;
+
     //states for block icmp_echo
     reg		icmp_echo_00;
     reg		icmp_echo_01;
@@ -89,6 +101,19 @@ module icmp_reply (
     reg		icmp_echo_05;
     reg		icmp_echo_06;
 
+
+//state transition for block clear_cnt
+    always @(posedge clk)
+    if (rst)
+        clear_cnt_00 <= #1 1;
+    else
+        clear_cnt_00 <= #1 clear_cnt_01&&clear_counter;
+
+    always @(posedge clk)
+    if (rst)
+        clear_cnt_01 <= #1 0;
+    else
+        clear_cnt_01 <= #1 clear_cnt_01&&!clear_counter || clear_cnt_00;
 
 //state transition for block icmp_echo
     always @(posedge clk)
@@ -147,6 +172,17 @@ module icmp_reply (
 
     always @(posedge clk)
         if (rst)
+            icmp_counter <= #1 0;
+        else
+        begin
+            if (clear_cnt_01&&clear_counter)
+                icmp_counter <= #1 0;
+            if (icmp_echo_01&&(s_icmp_ip_hdr_valid && s_icmp_ip_protocol == 1 && s_icmp_payload_axis_tvalid)&&need_reply)
+                icmp_counter <= #1 icmp_counter + 1;
+        end
+
+    always @(posedge clk)
+        if (rst)
             m_icmp_ip_hdr_valid <= #1 0;
         else
         begin
@@ -197,6 +233,17 @@ module icmp_reply (
                 s_icmp_ip_hdr_ready <= #1 1;
             if (icmp_echo_05)
                 s_icmp_ip_hdr_ready <= #1 0;
+        end
+
+    always @(posedge clk)
+        if (rst)
+            unknow_rx_ip_counter <= #1 0;
+        else
+        begin
+            if (clear_cnt_01&&clear_counter)
+                unknow_rx_ip_counter <= #1 0;
+            if (icmp_echo_01&&(s_icmp_ip_hdr_valid && s_icmp_ip_protocol == 1 && s_icmp_payload_axis_tvalid)&&!need_reply)
+                unknow_rx_ip_counter <= #1 unknow_rx_ip_counter + 1;
         end
 
 endmodule

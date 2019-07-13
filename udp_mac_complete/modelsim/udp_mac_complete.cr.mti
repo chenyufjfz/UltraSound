@@ -40,19 +40,19 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	mdio_slave
 
-} {} {}} ../ip_eth_tx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/ip_eth_tx.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module ip_eth_tx
-
-Top level modules:
-	ip_eth_tx
-
 } {} {}} ../icmp_reply.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/icmp_reply.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module icmp_reply
 
 Top level modules:
 	icmp_reply
+
+} {} {}} ../ip_eth_tx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/ip_eth_tx.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module ip_eth_tx
+
+Top level modules:
+	ip_eth_tx
 
 } {} {}} ../testbench/top_mdio_slave.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/testbench/top_mdio_slave.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -74,13 +74,6 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 
 Top level modules:
 	eth_axis_rx
-
-} {} {}} ../testbench/test_udp_mac_complete.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/testbench/test_udp_mac_complete.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module test_udp_mac_complete
-
-Top level modules:
-	test_udp_mac_complete
 
 } {} {}} ../axis_fifo.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/axis_fifo.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -124,19 +117,19 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	udp_ip_rx
 
-} {} {}} ../arp.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/arp.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module arp
-
-Top level modules:
-	arp
-
 } {} {}} ../mac_reset.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/mac_reset.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module mac_reset
 
 Top level modules:
 	mac_reset
+
+} {} {}} ../arp.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/arp.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module arp
+
+Top level modules:
+	arp
 
 } {} {}} ../arp_eth_rx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/arp_eth_rx.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012

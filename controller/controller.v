@@ -107,12 +107,13 @@ module controller (
     reg             ctrl_in_valid;
     reg             ctrl_out_udp_payload_lo;
     wire            check_invalid;
-    reg [15:0]      bad_pkt_cnt;
-    reg [15:0]      good_pkt_cnt;
+    reg [23:0]      bad_pkt_cnt;
+    reg [23:0]      good_pkt_cnt;
     assign reg_rd_udp_mac = (reg_rd && reg_addr[13:8] == 1);
     assign reg_wr_udp_mac = (reg_wr && reg_addr[13:8] == 1);
-    assign reg_readdata = (reg_addr[13:8] == 1) ? reg_readdata_udp_mac :
-                         ((reg_addr[13:0] == 14'hff) ? {bad_pkt_cnt, good_pkt_cnt} : 32'h0BAD0BAD);
+    assign reg_readdata =   (reg_addr[13:0] == 14'h1fe) ? good_pkt_cnt: 
+                           ((reg_addr[13:0] == 14'h1ff) ? bad_pkt_cnt: 
+                           ((reg_addr[13:8] == 1) ? reg_readdata_udp_mac : 32'h0BAD0BAD));
     assign reg_ready = (reg_addr[13:8] == 1) ? reg_ready_udp_mac : 1'b1;
     assign ctrl_out_udp_length = (exec_out_len + 8'd4) << 1;
     execcmd #(AW) execcmd_inst(

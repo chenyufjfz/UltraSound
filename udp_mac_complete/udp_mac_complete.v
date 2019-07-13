@@ -102,6 +102,7 @@ module udp_mac_complete
     mdio_oen,
     mdio_out
 );
+parameter REAL_PHY = 0;
 
     //clock and reset
     input           clk;
@@ -282,6 +283,10 @@ module udp_mac_complete
     wire            s_ip_payload_axis_tlast;
     wire            s_ip_payload_axis_tuser;
 
+    //Counter
+    wire [23:0]     unknow_rx_ip_counter;
+    wire [15:0]     icmp_counter;
+    wire            clear_counter;
     
     //Avalon sop
     reg             ff_tx_sop_enable;
@@ -306,6 +311,12 @@ module udp_mac_complete
     wire            rst_wr;
     wire            reg_busy;
     wire            rst_finish;
+    wire            set_1000;
+
+    //internal reg counter
+    reg [31:0]      udp_tx_counter;
+    reg [31:0]      udp_rx_counter;
+    assign set_1000 = 1;
 
     
 udp_complete #(
@@ -472,6 +483,11 @@ icmp_reply icmp_reply_inst(
     .s_icmp_payload_axis_tvalid     (s_icmp_payload_axis_tvalid),
     .s_icmp_payload_axis_tready     (s_icmp_payload_axis_tready),
     .s_icmp_payload_axis_tlast      (s_icmp_payload_axis_tlast),
+    // stat counter
+    .unknow_rx_ip_counter           (unknow_rx_ip_counter),
+    .icmp_counter                   (icmp_counter),
+    .clear_counter                  (clear_counter),
+    // local ip
     .local_ip                       (local_ip)
 );
 
@@ -718,20 +734,44 @@ always @(posedge clk_2) begin
             gateway_ip <= #1 writedata;
 end
 
+always @(posedge clk) begin
+    if (rst || clear_counter)
+        udp_tx_counter <= #1 0;
+    else
+        if (tx_udp_payload_axis_tlast & tx_udp_payload_axis_tready & tx_udp_payload_axis_tvalid)
+            udp_tx_counter <= #1 udp_tx_counter + 1;
+end
+
+always @(posedge clk) begin
+    if (rst || clear_counter)
+        udp_rx_counter <= #1 0;
+    else
+        if (rx_udp_payload_axis_tlast & rx_udp_payload_axis_tready & rx_udp_payload_axis_tvalid)
+            udp_rx_counter <= #1 udp_rx_counter + 1;
+end
+
 assign reg_readdata = (reg_addr == 8'hf0) ? local_ip :
                      ((reg_addr == 8'hf1) ? subnet_mask :
-                     ((reg_addr == 8'hf2) ? gateway_ip :readdata));
+                     ((reg_addr == 8'hf2) ? gateway_ip :
+                     ((reg_addr == 8'hf3) ? unknow_rx_ip_counter :
+                     ((reg_addr == 8'hf4) ? icmp_counter : 
+                     ((reg_addr == 8'hf5) ? udp_tx_counter :
+                     ((reg_addr == 8'hf6) ? udp_rx_counter : readdata))))));
 
 assign writedata = rst_finish ? reg_writedata : rst_writedata;
 assign address = rst_finish ? reg_addr : rst_addr;
 assign read = rst_finish ? reg_rd : rst_rd;
 assign write = rst_finish ? reg_wr : rst_wr;
 
-mac_reset mac_reset_inst (
+assign clear_counter = (reg_addr == 2 && write && (writedata[31] || writedata[13]));
+
+mac_reset  #(.REAL_PHY(REAL_PHY))
+mac_reset_inst (
     .clk                (clk_2),
     .rst                (rst),
+    .set_1000           (set_1000),
     .rst_writedata      (rst_writedata),
-    .rst_readdata       (rst_readdata),
+    .rst_readdata       (readdata),
     .rst_addr           (rst_addr),
     .rst_rd             (rst_rd),
     .rst_wr             (rst_wr),

@@ -54,6 +54,7 @@ parameter QUEUE_IDX_LEN = 1;
     end
     
     always @(posedge clk)
+        if (dval)
         data_queue[queue_tail[QUEUE_IDX_LEN-1:0]] <= #1 data;
         
     always @(posedge clk) begin

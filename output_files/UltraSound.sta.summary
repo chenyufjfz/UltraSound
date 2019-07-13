@@ -11,15 +11,15 @@ Slack : 0.572
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Setup 'rgmii_rx_125M_clk'
-Slack : 0.964
+Slack : 0.963
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Setup 'clk'
-Slack : 1.713
+Slack : 1.533
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Setup 'clk_2'
-Slack : 5.975
+Slack : 3.627
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Setup 'rgmii_25_tx_clk'
@@ -27,11 +27,11 @@ Slack : 8.572
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Setup 'rgmii_rx_25M_clk'
-Slack : 8.964
+Slack : 8.963
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Setup 'CLOCK_50'
-Slack : 15.548
+Slack : 15.323
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Setup 'clk_25M_0deg'
@@ -39,35 +39,35 @@ Slack : 16.362
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Setup 'altera_reserved_tck'
-Slack : 43.524
+Slack : 43.491
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Hold 'clk_2'
-Slack : 0.327
+Slack : 0.330
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Hold 'clk'
-Slack : 0.328
+Slack : 0.335
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Hold 'rgmii_rx_125M_clk'
-Slack : 0.341
+Slack : 0.335
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Hold 'rgmii_rx_25M_clk'
-Slack : 0.341
+Slack : 0.335
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Hold 'clk_125M_0deg'
-Slack : 0.356
+Slack : 0.346
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Hold 'clk_25M_0deg'
-Slack : 0.356
+Slack : 0.346
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Hold 'altera_reserved_tck'
-Slack : 0.385
+Slack : 0.402
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Hold 'CLOCK_50'
@@ -83,59 +83,59 @@ Slack : 8.603
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Recovery 'clk_125M_0deg'
-Slack : 3.592
+Slack : 3.304
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Recovery 'rgmii_rx_125M_clk'
-Slack : 3.922
+Slack : 3.988
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Recovery 'clk'
-Slack : 5.737
+Slack : 5.783
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Recovery 'clk_2'
-Slack : 15.701
+Slack : 15.770
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Recovery 'clk_25M_0deg'
-Slack : 35.592
+Slack : 35.304
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Recovery 'rgmii_rx_25M_clk'
-Slack : 35.922
+Slack : 35.988
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Recovery 'altera_reserved_tck'
-Slack : 48.147
+Slack : 47.873
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Removal 'altera_reserved_tck'
-Slack : 1.163
-TNS   : 0.000
-
-Type  : Slow 1200mV 85C Model Removal 'clk_125M_0deg'
-Slack : 2.550
-TNS   : 0.000
-
-Type  : Slow 1200mV 85C Model Removal 'clk_25M_0deg'
-Slack : 2.550
+Slack : 1.195
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Removal 'rgmii_rx_125M_clk'
-Slack : 2.625
+Slack : 2.610
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Removal 'rgmii_rx_25M_clk'
-Slack : 2.625
+Slack : 2.610
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Removal 'clk'
-Slack : 2.744
+Slack : 2.630
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Removal 'clk_2'
-Slack : 2.813
+Slack : 2.792
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Removal 'clk_125M_0deg'
+Slack : 2.806
+TNS   : 0.000
+
+Type  : Slow 1200mV 85C Model Removal 'clk_25M_0deg'
+Slack : 2.806
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'rgmii_rx_125M_clk'
@@ -143,7 +143,7 @@ Slack : 3.635
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'clk_125M_0deg'
-Slack : 3.652
+Slack : 3.653
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'rgmii_125_tx_clk'
@@ -151,7 +151,7 @@ Slack : 3.790
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'clk'
-Slack : 4.702
+Slack : 4.694
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'CLOCK_50'
@@ -159,7 +159,7 @@ Slack : 9.683
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'clk_2'
-Slack : 9.702
+Slack : 9.694
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'rgmii_rx_25M_clk'
@@ -167,7 +167,7 @@ Slack : 19.635
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'clk_25M_0deg'
-Slack : 19.652
+Slack : 19.653
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'rgmii_25_tx_clk'
@@ -175,7 +175,7 @@ Slack : 35.790
 TNS   : 0.000
 
 Type  : Slow 1200mV 85C Model Minimum Pulse Width 'altera_reserved_tck'
-Slack : 49.565
+Slack : 49.575
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Setup 'rgmii_125_tx_clk'
@@ -187,15 +187,15 @@ Slack : 0.712
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Setup 'rgmii_rx_125M_clk'
-Slack : 1.095
+Slack : 1.093
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Setup 'clk'
-Slack : 2.468
+Slack : 2.315
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Setup 'clk_2'
-Slack : 6.338
+Slack : 4.091
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Setup 'rgmii_25_tx_clk'
@@ -203,11 +203,11 @@ Slack : 8.617
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Setup 'rgmii_rx_25M_clk'
-Slack : 9.095
+Slack : 9.093
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Setup 'CLOCK_50'
-Slack : 15.953
+Slack : 15.739
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Setup 'clk_25M_0deg'
@@ -215,39 +215,39 @@ Slack : 16.712
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Setup 'altera_reserved_tck'
-Slack : 44.068
+Slack : 44.141
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Hold 'clk_2'
-Slack : 0.337
+Slack : 0.333
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'rgmii_rx_125M_clk'
+Slack : 0.336
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Hold 'rgmii_rx_25M_clk'
+Slack : 0.336
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Hold 'clk'
 Slack : 0.338
 TNS   : 0.000
 
-Type  : Slow 1200mV 0C Model Hold 'rgmii_rx_125M_clk'
-Slack : 0.338
-TNS   : 0.000
-
-Type  : Slow 1200mV 0C Model Hold 'rgmii_rx_25M_clk'
-Slack : 0.338
-TNS   : 0.000
-
 Type  : Slow 1200mV 0C Model Hold 'clk_125M_0deg'
-Slack : 0.352
+Slack : 0.347
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Hold 'clk_25M_0deg'
-Slack : 0.352
+Slack : 0.347
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Hold 'altera_reserved_tck'
-Slack : 0.353
+Slack : 0.354
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Hold 'CLOCK_50'
-Slack : 0.366
+Slack : 0.367
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Hold 'rgmii_125_tx_clk'
@@ -259,59 +259,59 @@ Slack : 8.640
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Recovery 'clk_125M_0deg'
-Slack : 4.004
+Slack : 3.736
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Recovery 'rgmii_rx_125M_clk'
-Slack : 4.320
+Slack : 4.377
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Recovery 'clk'
-Slack : 6.170
+Slack : 6.180
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Recovery 'clk_2'
-Slack : 16.099
+Slack : 16.188
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Recovery 'clk_25M_0deg'
-Slack : 36.004
+Slack : 35.736
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Recovery 'rgmii_rx_25M_clk'
-Slack : 36.320
+Slack : 36.377
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Recovery 'altera_reserved_tck'
-Slack : 48.413
+Slack : 48.161
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Removal 'altera_reserved_tck'
-Slack : 1.064
-TNS   : 0.000
-
-Type  : Slow 1200mV 0C Model Removal 'clk_125M_0deg'
-Slack : 2.255
-TNS   : 0.000
-
-Type  : Slow 1200mV 0C Model Removal 'clk_25M_0deg'
-Slack : 2.255
+Slack : 1.094
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Removal 'rgmii_rx_125M_clk'
-Slack : 2.316
+Slack : 2.307
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Removal 'rgmii_rx_25M_clk'
-Slack : 2.316
+Slack : 2.307
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Removal 'clk'
-Slack : 2.435
+Slack : 2.325
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Removal 'clk_2'
-Slack : 2.489
+Slack : 2.482
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Removal 'clk_125M_0deg'
+Slack : 2.487
+TNS   : 0.000
+
+Type  : Slow 1200mV 0C Model Removal 'clk_25M_0deg'
+Slack : 2.487
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'clk_125M_0deg'
@@ -319,7 +319,7 @@ Slack : 3.624
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'rgmii_rx_125M_clk'
-Slack : 3.649
+Slack : 3.648
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'rgmii_125_tx_clk'
@@ -327,15 +327,15 @@ Slack : 3.790
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'clk'
-Slack : 4.691
+Slack : 4.687
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'CLOCK_50'
-Slack : 9.690
+Slack : 9.688
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'clk_2'
-Slack : 9.691
+Slack : 9.688
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'clk_25M_0deg'
@@ -343,7 +343,7 @@ Slack : 19.624
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'rgmii_rx_25M_clk'
-Slack : 19.649
+Slack : 19.648
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'rgmii_25_tx_clk'
@@ -351,7 +351,7 @@ Slack : 35.790
 TNS   : 0.000
 
 Type  : Slow 1200mV 0C Model Minimum Pulse Width 'altera_reserved_tck'
-Slack : 49.490
+Slack : 49.500
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Setup 'rgmii_125_tx_clk'
@@ -359,7 +359,7 @@ Slack : 0.710
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Setup 'rgmii_rx_125M_clk'
-Slack : 0.930
+Slack : 0.928
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Setup 'clk_125M_0deg'
@@ -367,11 +367,11 @@ Slack : 2.153
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Setup 'clk'
-Slack : 5.937
+Slack : 5.907
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Setup 'clk_2'
-Slack : 7.827
+Slack : 6.731
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Setup 'rgmii_25_tx_clk'
@@ -379,11 +379,11 @@ Slack : 8.710
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Setup 'rgmii_rx_25M_clk'
-Slack : 8.930
+Slack : 8.928
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Setup 'CLOCK_50'
-Slack : 17.810
+Slack : 17.687
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Setup 'clk_25M_0deg'
@@ -391,39 +391,39 @@ Slack : 18.153
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Setup 'altera_reserved_tck'
-Slack : 46.932
+Slack : 46.925
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Hold 'clk_2'
-Slack : 0.128
+Slack : 0.127
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Hold 'rgmii_rx_125M_clk'
-Slack : 0.133
+Slack : 0.130
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Hold 'rgmii_rx_25M_clk'
-Slack : 0.133
+Slack : 0.130
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Hold 'clk'
-Slack : 0.135
+Slack : 0.139
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Hold 'clk_125M_0deg'
-Slack : 0.136
+Slack : 0.141
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Hold 'clk_25M_0deg'
-Slack : 0.136
+Slack : 0.141
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Hold 'altera_reserved_tck'
-Slack : 0.161
+Slack : 0.181
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Hold 'CLOCK_50'
-Slack : 0.190
+Slack : 0.189
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Hold 'rgmii_125_tx_clk'
@@ -435,63 +435,63 @@ Slack : 8.803
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Recovery 'clk_125M_0deg'
-Slack : 5.725
+Slack : 5.576
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Recovery 'rgmii_rx_125M_clk'
-Slack : 5.820
+Slack : 5.861
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Recovery 'clk'
-Slack : 7.705
+Slack : 7.762
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Recovery 'clk_2'
-Slack : 17.713
+Slack : 17.733
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Recovery 'clk_25M_0deg'
-Slack : 37.725
+Slack : 37.576
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Recovery 'rgmii_rx_25M_clk'
-Slack : 37.820
+Slack : 37.861
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Recovery 'altera_reserved_tck'
-Slack : 49.272
+Slack : 49.135
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Removal 'altera_reserved_tck'
-Slack : 0.556
-TNS   : 0.000
-
-Type  : Fast 1200mV 0C Model Removal 'clk_125M_0deg'
-Slack : 1.345
-TNS   : 0.000
-
-Type  : Fast 1200mV 0C Model Removal 'clk_25M_0deg'
-Slack : 1.345
+Slack : 0.560
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Removal 'rgmii_rx_125M_clk'
-Slack : 1.375
+Slack : 1.372
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Removal 'rgmii_rx_25M_clk'
-Slack : 1.375
+Slack : 1.372
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Removal 'clk'
-Slack : 1.445
+Slack : 1.390
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Removal 'clk_2'
+Slack : 1.467
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Removal 'clk_125M_0deg'
+Slack : 1.475
+TNS   : 0.000
+
+Type  : Fast 1200mV 0C Model Removal 'clk_25M_0deg'
 Slack : 1.475
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Minimum Pulse Width 'rgmii_rx_125M_clk'
-Slack : 3.378
+Slack : 3.379
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Minimum Pulse Width 'clk_125M_0deg'
@@ -503,19 +503,19 @@ Slack : 4.000
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Minimum Pulse Width 'clk'
-Slack : 4.750
+Slack : 4.752
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Minimum Pulse Width 'CLOCK_50'
-Slack : 9.265
+Slack : 9.266
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Minimum Pulse Width 'clk_2'
-Slack : 9.751
+Slack : 9.753
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Minimum Pulse Width 'rgmii_rx_25M_clk'
-Slack : 19.378
+Slack : 19.379
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Minimum Pulse Width 'clk_25M_0deg'
@@ -527,7 +527,7 @@ Slack : 36.000
 TNS   : 0.000
 
 Type  : Fast 1200mV 0C Model Minimum Pulse Width 'altera_reserved_tck'
-Slack : 49.455
+Slack : 49.458
 TNS   : 0.000
 
 ------------------------------------------------------------

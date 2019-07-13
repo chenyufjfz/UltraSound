@@ -171,6 +171,7 @@ udp_mac_complete dut1
     .rx_udp_payload_axis_tuser      (rx_udp_payload_axis_tuser1),
     .rx_udp_err                     (rx_udp_err1),
     .local_ip                       (),
+    .eth_mode                       (),
     //MDIO interface
     .mdc                            (mdc1),
 	.mdio_in                        (mdio_in1),
@@ -616,16 +617,19 @@ begin
             @(posedge clk);
     end
     tx_udp_payload_axis_tdata1 <= #1 0;
-    tx_udp_payload_axis_tlast1 <= 1'b1;
+    tx_udp_payload_axis_tlast1 <= #1 1'b1;
     @(posedge clk);
-    tx_udp_payload_axis_tlast1 <= 1'b0;
+    tx_udp_payload_axis_tlast1 <= #1 1'b0;
+    tx_udp_payload_axis_tvalid1 <= #1 1'b0; 
     $display("dut1 finish transmit UDP packet from dut1");
     #10000;
     @(posedge clk_2);
     reg_rd1 <= #1 1'b 1;
     reg_rd2 <= #1 1'b 1;
-    for (i=32'h1A; i<=32'h38; i=i+1)
+    for (i=32'h1A; i<=32'hf6; i=i+1)
     begin
+        if (i==32'h39)
+            i = 32'hf3;
         reg_addr1 <= #1 i;
         reg_addr2 <= #1 i;
         @(negedge clk_2);
@@ -648,6 +652,10 @@ begin
         32'h2f: $display("rx frame too long, r0=%d, r1=%d",reg_readdata1, reg_readdata2);
         32'h37: $display("rx long & bad-crc, r0=%d, r1=%d",reg_readdata1, reg_readdata2);
         32'h38: $display("rx short &bad-crc, r0=%d, r1=%d",reg_readdata1, reg_readdata2);
+        32'hf3: $display("rx unknow_ip_fram, r0=%d, r1=%d",reg_readdata1, reg_readdata2);
+        32'hf4: $display("rx-tx  icmp frame, r0=%d, r1=%d",reg_readdata1, reg_readdata2);
+        32'hf5: $display("tx     udp  frame, r0=%d, r1=%d",reg_readdata1, reg_readdata2);
+        32'hf6: $display("rx     udp  frame, r0=%d, r1=%d",reg_readdata1, reg_readdata2);
         default: $display("addr[%d], r0=%d, r1=%d", i, reg_readdata1, reg_readdata2);
         endcase  
     end

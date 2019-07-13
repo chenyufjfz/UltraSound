@@ -19,10 +19,16 @@ module ultrasound(
 	ENET0_TX_DATA,
 	ENET0_TX_EN,
 	ENET0_TX_ER,
-	ENET0_LINK100
+	ENET0_LINK100,
+
+	//status led
+	TX_ERR,
+	RX_ERR
 );
 parameter SIMULATION = 0;
 parameter RESET_CTR_WIDTH = SIMULATION ? 5 : 22;
+parameter ENET0_RST_CTR_WIDTH = 21;
+parameter REAL_PHY = 32'h1111;
 
     //clk
     input           CLOCK_50;
@@ -44,6 +50,10 @@ parameter RESET_CTR_WIDTH = SIMULATION ? 5 : 22;
     output          ENET0_TX_EN;
     output          ENET0_TX_ER;
     input           ENET0_LINK100;
+
+    //status led
+    output          TX_ERR;
+	output          RX_ERR;
 
     // udp_mac_complete tx & rx UDP
     wire            tx_udp_hdr_valid;
@@ -80,6 +90,7 @@ parameter RESET_CTR_WIDTH = SIMULATION ? 5 : 22;
     wire            clk;
     wire            clk_2;
     wire            rst;
+    wire            enet0_rst;
     wire            tx_clk_mac;
     wire            tx_clk_phy;
 
@@ -102,7 +113,7 @@ parameter RESET_CTR_WIDTH = SIMULATION ? 5 : 22;
     assign mdio_in = ENET0_MDIO;
     assign ENET0_MDIO   = mdio_oen ? 1'bz : mdio_out;
     assign ENET0_TX_ER = 0;
-    assign ENET0_RST_N = !rst;
+    assign ENET0_RST_N = !enet0_rst;
 
 enet_clk_pll enet_clk_pll_inst(
 	.inclk0                 (CLOCK_50),
@@ -119,11 +130,31 @@ gen_reset #(.CTR_WIDTH(RESET_CTR_WIDTH)) gen_sys_reset(
 	.reset_out              (rst)
 );
 
+gen_reset #(.CTR_WIDTH(ENET0_RST_CTR_WIDTH)) gen_enet_reset(
+    .clk                    (CLOCK_50),
+	.reset_n_in             (pll_lock & KEY[0]),
+	.reset_out              (enet0_rst)
+);
+
 gen_key_signal #(.CTR_WIDTH(RESET_CTR_WIDTH)) gen_key1_signal(
 		.clk            (clk),
 		.rst            (rst),
 		.key_in_n       (KEY[1]),
 		.key_out        (trigger_exec)
+);
+
+glitch_remove glitch_remove_tx_pending(
+        .clk            (clk_2),
+		.rst            (rst),
+		.glitch_in      (tx_udp_payload_axis_tvalid & !tx_udp_payload_axis_tready),
+		.glitch_free_out(TX_ERR)
+);
+
+glitch_remove glitch_remove_rx_pending(
+        .clk            (clk_2),
+		.rst            (rst),
+		.glitch_in      (rx_udp_payload_axis_tvalid & !rx_udp_payload_axis_tready),
+		.glitch_free_out(RX_ERR)
 );
 
 synchronizer synchronizer_mac(
@@ -135,8 +166,8 @@ synchronizer synchronizer_mac(
 
 clkctrl1 clkctrl1_mac(
 	.clkselect              (eth_mode_tx_clk_mac_sync),
-	.inclk0x                (pll_125m),
-	.inclk1x                (pll_25m),
+	.inclk0x                (pll_25m),
+	.inclk1x                (pll_125m),
 	.outclk                 (tx_clk_mac)
 );
 
@@ -152,7 +183,8 @@ ddio_out1	ddio_out1_inst (
 	);
 
 
-udp_mac_complete udp_mac_complete_inst (
+udp_mac_complete #(.REAL_PHY(REAL_PHY))
+udp_mac_complete_inst (
     .clk                    (clk),
     .clk_2                  (clk_2),
     .rst                    (rst),

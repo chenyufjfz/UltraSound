@@ -11,7 +11,7 @@ module test_ultrasound;
     reg [3:0]           key;
     integer             i, j;
     
-ultrasound #(.SIMULATION(1)) ultrasound0(
+ultrasound #(.SIMULATION(1), .REAL_PHY(0)) ultrasound0(
     .CLOCK_50           (CLOCK_50),
     .KEY                (key),
 	//////// Ethernet 0 //////////
@@ -30,10 +30,13 @@ ultrasound #(.SIMULATION(1)) ultrasound0(
 	.ENET0_TX_DATA      (US0_ENET0_TX_DATA),
 	.ENET0_TX_EN        (US0_ENET0_TX_EN),
 	.ENET0_TX_ER        (),
-	.ENET0_LINK100      ()
+	.ENET0_LINK100      (),
+	//status led
+	.TX_ERR             (TX_ERR),
+	.RX_ERR             (RX_ERR)
 );
 
-ultrasound #(.SIMULATION(0), .RESET_CTR_WIDTH(5)) ultrasound1(
+ultrasound #(.SIMULATION(0), .RESET_CTR_WIDTH(5), .REAL_PHY(0)) ultrasound1(
     .CLOCK_50           (CLOCK_50),
     .KEY                (4'hf),
 	//////// Ethernet 0 //////////
@@ -52,7 +55,10 @@ ultrasound #(.SIMULATION(0), .RESET_CTR_WIDTH(5)) ultrasound1(
 	.ENET0_TX_DATA      (US0_ENET0_RX_DATA),
 	.ENET0_TX_EN        (US0_ENET0_RX_DV),
 	.ENET0_TX_ER        (),
-	.ENET0_LINK100      ()
+	.ENET0_LINK100      (),
+	//status led
+	.TX_ERR             (TX_ERR),
+	.RX_ERR             (RX_ERR)
 );
 
 always
