@@ -88,6 +88,7 @@ begin
     force ultrasound0.controller_inst.ctrl_out_udp_dest_port = ultrasound0.controller_inst.CTRL_UDP_PORT;
     force ultrasound0.controller_inst.ctrl_out_udp_source_port = 16'h3456;
     force ultrasound0.controller_inst.ctrl_out_ip_dest_ip = 32'hffffffff;
+    force ultrasound0.controller_inst.seq = 16'h0123;
     force ultrasound0.controller_inst.exec_err = 0;
     force ultrasound0.udp_mac_complete_inst.local_ip = 32'hc0a80102;
     force ultrasound0.udp_mac_complete_inst.local_mac = 48'h201906151130;
@@ -113,11 +114,11 @@ begin
     ultrasound0.controller_inst.SIM.inram.SIM_RAM.mem[0] = 0;
     $readmemh("../testbench/inram.txt",ultrasound0.controller_inst.SIM.outram.SIM_RAM.mem);
     
-    @(posedge ultrasound0.clk);
+    @(negedge ultrasound0.clk);
     force ultrasound0.controller_inst.start_exec = 0;
-    @(posedge ultrasound0.clk);
+    @(negedge ultrasound0.clk);
     force ultrasound0.controller_inst.start_exec = 1; //trigger ultrasound0 send UDP packet
-    @(posedge ultrasound0.clk);
+    @(negedge ultrasound0.clk);
     force ultrasound0.controller_inst.start_exec = 0;
     @(ultrasound0.controller_inst.ctrl_out_udp_payload_axis_tvalid);
     $display("ultrasound0 start transmit command packet");

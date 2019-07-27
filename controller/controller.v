@@ -109,13 +109,14 @@ module controller (
     wire            check_invalid;
     reg [23:0]      bad_pkt_cnt;
     reg [23:0]      good_pkt_cnt;
+    reg [15:0]      seq;
     assign reg_rd_udp_mac = (reg_rd && reg_addr[13:8] == 1);
     assign reg_wr_udp_mac = (reg_wr && reg_addr[13:8] == 1);
     assign reg_readdata =   (reg_addr[13:0] == 14'h1fe) ? good_pkt_cnt: 
                            ((reg_addr[13:0] == 14'h1ff) ? bad_pkt_cnt: 
                            ((reg_addr[13:8] == 1) ? reg_readdata_udp_mac : 32'h0BAD0BAD));
     assign reg_ready = (reg_addr[13:8] == 1) ? reg_ready_udp_mac : 1'b1;
-    assign ctrl_out_udp_length = (exec_out_len + 8'd4) << 1;
+    assign ctrl_out_udp_length = (exec_out_len + 8'd5) << 1;
     execcmd #(AW) execcmd_inst(
     //input
     .clk                (clk),
@@ -190,7 +191,7 @@ endgenerate
     assign ctrl_inram_we = ctrl_in_udp_payload_axis_tvalid && ctrl_in_udp_payload_axis_tready && !ctrl_in_udp_payload_lo;
     always @(posedge clk)
     begin
-        if (rst)
+        if (rst || ctrl_in_udp_hdr_ready)
             ctrl_in_udp_payload_lo <= #1 0;
         else
             if (ctrl_in_udp_payload_axis_tvalid && ctrl_in_udp_payload_axis_tready)
@@ -206,11 +207,16 @@ endgenerate
     end
     always @(posedge clk)
     begin
-        if (rst || start_exec || trigger_exec)
-            ctrl_inram_address <= #1 (~0);
+        if (rst || start_exec || trigger_exec || ctrl_in_udp_hdr_ready)
+            ctrl_inram_address <= #1 {AW{1'b1}} - 1;
         else
             if (ctrl_inram_we)
                 ctrl_inram_address <= #1 ctrl_inram_address + 1'b1;
+    end
+    always @(posedge clk)
+    begin
+        if (ctrl_inram_address == {AW{1'b1}} && ctrl_inram_we)
+            seq <= #1 ctrl_inram_d;
     end
     always @(posedge clk)
     begin
@@ -221,7 +227,7 @@ endgenerate
     assign ctrl_out_udp_payload_axis_tlast = (ctrl_outram_address == exec_out_len) && ctrl_outram_re;
     always @(posedge clk)
     begin
-        if (rst)
+        if (rst || start_exec)
             ctrl_out_udp_payload_lo <= #1 0;
         else
             if (ctrl_out_udp_payload_axis_tvalid && ctrl_out_udp_payload_axis_tready)
@@ -230,18 +236,18 @@ endgenerate
     always @(posedge clk)
     begin
         if (ctrl_outram_re)
-            ctrl_outram_q1 <= #1 ctrl_outram_q;
+            ctrl_outram_q1 <= #1 (ctrl_outram_address == {AW{1'b1}}) ? seq : ctrl_outram_q;
     end
     always @(posedge clk)
     begin
         if (rst || start_exec || trigger_exec)
-            ctrl_outram_address <= #1 0;
+            ctrl_outram_address <= #1 {AW{1'b1}};
         else
             if (ctrl_outram_re)
                 ctrl_outram_address <= #1 ctrl_outram_address + 1'b1;
     end
     assign ctrl_out_udp_payload_axis_tdata = ctrl_out_udp_payload_lo ? ctrl_outram_q1[7:0] : ctrl_outram_q1[15:8];
-    assign check_invalid = (ctrl_in_ip_dest_ip != local_ip && ctrl_in_ip_dest_ip != 32'hffffffff) || ctrl_in_udp_dest_port != CTRL_UDP_PORT || ctrl_in_udp_err || ctrl_in_udp_length <= 12 || ctrl_in_ip_fragment_offset !=0;
+    assign check_invalid = (ctrl_in_ip_dest_ip != local_ip && ctrl_in_ip_dest_ip != 32'hffffffff) || ctrl_in_udp_dest_port != CTRL_UDP_PORT || ctrl_in_udp_err || ctrl_in_udp_length <= 14 || ctrl_in_ip_fragment_offset !=0;
     //states for block rec_udp
     reg		rec_udp_00;
     reg		rec_udp_01;
@@ -476,6 +482,8 @@ endgenerate
         begin
             if (tx_udp_01&&start_exec)
                 udp_hdr_tx_finish <= #1 0;
+            if (tx_udp_03&&!exec_busy&&exec_err)
+                udp_hdr_tx_finish <= #1 1;
             if (tx_udp_06&&ctrl_out_udp_payload_axis_tlast)
                 udp_hdr_tx_finish <= #1 1;
         end

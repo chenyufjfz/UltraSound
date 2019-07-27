@@ -1,14 +1,14 @@
-Analysis & Synthesis Status : Successful - Sat Jul 13 16:08:54 2019
+Analysis & Synthesis Status : Successful - Thu Jul 18 16:30:42 2019
 Quartus II 32-bit Version : 12.1 Build 243 01/31/2013 SP 1 SJ Full Version
 Revision Name : UltraSound
 Top-level Entity Name : ultrasound
 Family : Cyclone IV E
-Total logic elements : 12,113
-    Total combinational functions : 7,107
-    Dedicated logic registers : 8,188
-Total registers : 8200
+Total logic elements : 11,860
+    Total combinational functions : 7,064
+    Dedicated logic registers : 7,944
+Total registers : 7956
 Total pins : 29
 Total virtual pins : 0
-Total memory bits : 173,040
+Total memory bits : 107,504
 Embedded Multiplier 9-bit elements : 0
 Total PLLs : 1

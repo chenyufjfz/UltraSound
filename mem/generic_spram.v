@@ -26,19 +26,23 @@ parameter wsize = 1<<aw;        // number of words in memory
         input           we; //write enable
         input [aw-1:0]  addr; //address
         input [dw-1:0]  data; //input data
-        output reg [dw-1:0] q;   //output data
+        output [dw-1:0] q;   //output data
         
         
 generate
 if (SIMULATION) begin : SIM_RAM
         reg [dw-1:0]    mem [wsize -1:0]; // instantiate memory
+        reg [dw-1:0]    subwire;
+        
         always @(posedge clk)
         if (re)
-           q <= #1 mem[addr];
+           subwire <= #1 mem[addr];
 
         always @(posedge clk)
         if (we)
            mem[addr] <= #1  data;
+           
+        assign q = subwire;
 end
 else begin
 	altsyncram	altsyncram_component (

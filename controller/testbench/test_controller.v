@@ -152,9 +152,12 @@ begin
     for (i=0; i<1024; i=i+1)
     if (udp_pkt[i] === 16'hxxxx)
     begin
-        ctrl_in_udp_length = i * 2 + 8;
+        ctrl_in_udp_length = i * 2 + 10;
         i = 1025;
     end
+    for (i=1022; i>=0; i=i-1)
+        udp_pkt[i+1] = udp_pkt[i];
+    udp_pkt[0] = 16'h0123;
     rst = 0;
     ctrl_in_udp_hdr_valid <= #1 0;
     ctrl_in_udp_payload_axis_tlast <= #1 0;

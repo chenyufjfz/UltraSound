@@ -54,13 +54,6 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	arp
 
-} {} {}} ../controller/execcmd.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/controller/execcmd.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module execcmd
-
-Top level modules:
-	execcmd
-
 } {} {}} ../udp_mac_complete/udp_ip_tx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/udp_ip_tx.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module udp_ip_tx
@@ -75,6 +68,13 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	udp_checksum_gen
 
+} {} {}} ../controller/execcmd.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/controller/execcmd.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module execcmd
+
+Top level modules:
+	execcmd
+
 } {} {}} ../util/gen_key_signal.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/util/gen_key_signal.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module gen_key_signal
@@ -88,6 +88,13 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 
 Top level modules:
 	arp_eth_rx
+
+} {} {}} ../util/glitch_remove.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/util/glitch_remove.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module glitch_remove
+
+Top level modules:
+	glitch_remove
 
 } {} {}} ../udp_mac_complete/avalon2axi.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/avalon2axi.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -123,6 +130,20 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 
 Top level modules:
 	lfsr
+
+} {} {}} ../testbench/test_ultrasound.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/testbench/test_ultrasound.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module test_ultrasound
+
+Top level modules:
+	test_ultrasound
+
+} {} {}} ../ultrasound.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/ultrasound.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module ultrasound
+
+Top level modules:
+	ultrasound
 
 } {} {}} ../util/reg_dec_rate.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/util/reg_dec_rate.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012

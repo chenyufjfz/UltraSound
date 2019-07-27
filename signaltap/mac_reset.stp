@@ -1,10 +1,13 @@
-<session jtag_chain="USB-Blaster [USB-0]" jtag_device="@1: EP3C120/EP4CE115 (0x020F70DD)" sof_file="../output_files/UltraSound.sof">
+<session jtag_chain="Disabled" jtag_device="" sof_file="../output_files/UltraSound.sof">
   <display_tree gui_logging_enabled="0">
     <display_branch instance="auto_signaltap_0" signal_set="USE_GLOBAL_TEMP" trigger="USE_GLOBAL_TEMP"/>
   </display_tree>
   <instance entity_name="sld_signaltap" is_auto_node="yes" is_expanded="true" name="auto_signaltap_0" source_file="sld_signaltap.vhd">
     <node_ip_info instance_id="0" mfg_id="110" node_id="0" version="6"/>
-    <signal_set global_temp="1" is_expanded="true" name="signal_set: 2019/07/10 20:20:44  #0">
+    <position_info>
+      <single attribute="active tab" value="1"/>
+    </position_info>
+    <signal_set global_temp="1" name="signal_set: 2019/07/14 15:02:50  #0">
       <clock name="controller:controller_inst|clk_2" polarity="posedge" tap_mode="classic"/>
       <config ram_type="M4K" reserved_data_nodes="0" reserved_storage_qualifier_nodes="0" reserved_trigger_nodes="0" sample_depth="2048" trigger_in_enable="no" trigger_out_enable="no"/>
       <top_entity/>
@@ -250,7 +253,7 @@
           <net is_signal_inverted="no" name="udp_mac_complete:udp_mac_complete_inst|mac_reset:mac_reset_inst|rst"/>
         </setup_view>
       </presentation>
-      <trigger attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2019/07/13 10:03:38  #0" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="512" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="false" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="dont_care" trigger_out="active high" trigger_type="circular">
+      <trigger attribute_mem_mode="false" gap_record="true" global_temp="1" name="trigger: 2019/07/14 15:02:50  #1" position="pre" power_up_trigger_mode="false" record_data_gap="true" segment_size="512" storage_mode="off" storage_qualifier_disabled="no" storage_qualifier_port_is_pin="true" storage_qualifier_port_name="auto_stp_external_storage_qualifier" storage_qualifier_port_tap_mode="classic" trigger_in="dont_care" trigger_out="active high" trigger_type="circular">
         <power_up_trigger position="pre" storage_qualifier_disabled="no" trigger_in="dont_care" trigger_out="active high"/>
         <events use_custom_flow_control="no">
           <level enabled="yes" name="condition1" type="basic">'udp_mac_complete:udp_mac_complete_inst|mac_reset:mac_reset_inst|rst' == falling edge
@@ -283,25 +286,8 @@
         </storage_qualifier_events>
       </trigger>
     </signal_set>
-    <position_info>
-      <single attribute="active tab" value="1"/>
-    </position_info>
   </instance>
   <mnemonics/>
-  <global_info>
-    <single attribute="active instance" value="0"/>
-    <single attribute="advanced trigger node widget height" value="227"/>
-    <single attribute="advanced trigger node widget width" value="410"/>
-    <single attribute="config widget visible" value="1"/>
-    <single attribute="data log widget visible" value="1"/>
-    <single attribute="hierarchy widget visible" value="1"/>
-    <single attribute="instance widget visible" value="1"/>
-    <single attribute="jtag widget visible" value="1"/>
-    <multi attribute="column width" size="23" value="34,34,556,74,68,70,88,88,98,98,88,88,110,101,101,101,101,101,101,101,101,107,78"/>
-    <multi attribute="frame size" size="2" value="1920,1001"/>
-    <multi attribute="jtag widget size" size="2" value="351,139"/>
-    <single attribute="sof manager visible" value="0"/>
-  </global_info>
   <embedded_sof_files>
     <embedded_sof_file id_crc_pairs="30006E00,6AE76622" name="UltraSound.sof" size="3543452">eJzsnQuAHEWd/6t7ZzeTZZFJssZFo1RCxA0SXEAkInKVEDBwIOEp8kdp3g9R
 V16ColYQFYS7i+ADfNytEE+PQ40P4nno3aCgiP4RnwSP49bDBz4vej5y4v/4
@@ -4976,6 +4962,21 @@ Lx/G9cjfh/1eSV+4cK5X5f1ei36biP/6T6b799bfd//2vyzwWlTyJ/Eg/08b
 q0/+awcj/Esd+v/+w3/8n6z+9P5//cNPnz794Z9++vRf/OG//qf/6A9/+Af/
 4LdJ8//1//z/U3Tf/Q==
 
+    
     </embedded_sof_file>
   </embedded_sof_files>
+  <global_info>
+    <single attribute="active instance" value="0"/>
+    <single attribute="advanced trigger node widget height" value="227"/>
+    <single attribute="advanced trigger node widget width" value="410"/>
+    <single attribute="config widget visible" value="1"/>
+    <single attribute="data log widget visible" value="1"/>
+    <single attribute="hierarchy widget visible" value="1"/>
+    <single attribute="instance widget visible" value="1"/>
+    <single attribute="jtag widget visible" value="1"/>
+    <single attribute="sof manager visible" value="0"/>
+    <multi attribute="column width" size="23" value="34,34,140,74,52,109,119,88,98,98,88,88,110,101,101,101,101,101,101,101,101,107,78"/>
+    <multi attribute="frame size" size="2" value="1920,1001"/>
+    <multi attribute="jtag widget size" size="2" value="351,139"/>
+  </global_info>
 </session>

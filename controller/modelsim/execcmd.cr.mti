@@ -1,16 +1,16 @@
-../execcmd.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/controller/execcmd.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module execcmd
-
-Top level modules:
-	execcmd
-
-} {} {}} ../outputram.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/controller/outputram.v
+../outputram.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/controller/outputram.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module outputram
 
 Top level modules:
 	outputram
+
+} {} {}} ../execcmd.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/controller/execcmd.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module execcmd
+
+Top level modules:
+	execcmd
 
 } {} {}} ../testbench/test_controller.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/test_controller.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -19,6 +19,13 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	test_controller
 
+} {} {}} ../testbench/ether1.vo {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/ether1.vo
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module ether1
+
+Top level modules:
+	ether1
+
 } {} {}} ../testbench/test_execcmd.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/test_execcmd.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module test_execcmd
@@ -26,12 +33,12 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	test_execcmd
 
-} {} {}} ../testbench/ether1.vo {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/ether1.vo
+} {} {}} ../../util/reg_dec_rate.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/util/reg_dec_rate.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module ether1
+-- Compiling module reg_dec_rate
 
 Top level modules:
-	ether1
+	reg_dec_rate
 
 } {} {}} ../controller.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/controller/controller.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -40,13 +47,6 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	controller
 
-} {} {}} ../../mem/generic_spram.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/mem/generic_spram.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module generic_spram
-
-Top level modules:
-	generic_spram
-
 } {} {}} ../inputram.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/controller/inputram.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module inputram
@@ -54,11 +54,11 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	inputram
 
-} {} {}} ../../util/reg_dec_rate.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/util/reg_dec_rate.v
+} {} {}} ../../mem/generic_spram.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/mem/generic_spram.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module reg_dec_rate
+-- Compiling module generic_spram
 
 Top level modules:
-	reg_dec_rate
+	generic_spram
 
 } {} {}}

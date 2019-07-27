@@ -38,8 +38,7 @@ set CLK_125M_PERIOD	8
 set CLK_25M_PERIOD	40
 
 # Default Main Frequency: 100MHz Default Control Frequency: 50MHz
-set CLK1_PERIOD			10
-set CLK2_PERIOD         20
+
 	
 set	clk_in				"CLOCK_50"
 

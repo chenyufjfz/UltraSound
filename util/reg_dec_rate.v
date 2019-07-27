@@ -6,7 +6,7 @@ module reg_dec_rate(
     clk_2,
     rst,
 
-    //slave, fast clock domain
+    //AXI slave, fast clock domain
     reg_s_addr,
     reg_s_rd,
     reg_s_wr,
@@ -14,7 +14,7 @@ module reg_dec_rate(
     reg_s_writedata,
     reg_s_readdata,
 
-    //master, slow clock domain
+    //AXI master, slow clock domain
     reg_m_addr,
     reg_m_rd,
     reg_m_wr,
