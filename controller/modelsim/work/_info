@@ -1,0 +1,176 @@
+m255
+K3
+13
+cModel Technology
+Z0 dC:\chenyu\RTL_work\RTL_work\UltraSound\udp_mac_complete\modelsim
+vcontroller
+Z1 IR4IGXQefJD8N1@6>z4=NS0
+Z2 V5Hf=9o=5aea6U@1zM[NFM2
+Z3 dC:\chenyu\RTL_work\RTL_work\UltraSound\controller\modelsim
+Z4 w1566614470
+Z5 8C:/chenyu/RTL_work/RTL_work/UltraSound/controller/controller.v
+Z6 FC:/chenyu/RTL_work/RTL_work/UltraSound/controller/controller.v
+L0 2
+Z7 OV;L;10.1b;51
+r1
+31
+Z8 !s90 -reportprogress|300|-work|work|C:/chenyu/RTL_work/RTL_work/UltraSound/controller/controller.v|
+Z9 o-work work -O0
+Z10 !s100 j3IS5C0`G]M7g9ZlZD?B:1
+Z11 !s108 1566614489.365000
+Z12 !s107 C:/chenyu/RTL_work/RTL_work/UltraSound/controller/controller.v|
+!i10b 1
+!s85 0
+!s101 -O0
+vether1
+Z13 !s100 OQ5DFDl^Q0gCi[D4I:5>91
+Z14 I?Qe7A^:F0:ehoPE87iPE[1
+Z15 Vc9T7SZiVHQGhKVPSi_z8V0
+R3
+Z16 w1561776718
+Z17 8C:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/ether1.vo
+Z18 FC:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/ether1.vo
+L0 31
+R7
+r1
+31
+Z19 !s90 -reportprogress|300|-work|work|C:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/ether1.vo|
+R9
+Z20 !s108 1566614488.311000
+Z21 !s107 C:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/ether1.vo|
+!i10b 1
+!s85 0
+!s101 -O0
+vexeccmd
+Z22 !s100 LK4A;[lWS[NO8GWSLKNCA1
+Z23 Ia1MQe`0PlSe4g74nINnFQ0
+Z24 Vai<Mi>=oO4HRi4DTb^A<B1
+R3
+Z25 w1566614469
+Z26 8C:/chenyu/RTL_work/RTL_work/UltraSound/controller/execcmd.v
+Z27 FC:/chenyu/RTL_work/RTL_work/UltraSound/controller/execcmd.v
+L0 2
+R7
+r1
+31
+Z28 !s90 -reportprogress|300|-work|work|C:/chenyu/RTL_work/RTL_work/UltraSound/controller/execcmd.v|
+R9
+Z29 !s108 1566614488.102000
+Z30 !s107 C:/chenyu/RTL_work/RTL_work/UltraSound/controller/execcmd.v|
+!i10b 1
+!s85 0
+!s101 -O0
+vgeneric_spram
+Z31 I[1mCV4?4<0g_SARFl1F9l2
+Z32 V<[kGh8@Z`mal2MN<zSiG^0
+R3
+Z33 w1564016739
+Z34 8C:/chenyu/RTL_work/RTL_work/UltraSound/mem/generic_spram.v
+Z35 FC:/chenyu/RTL_work/RTL_work/UltraSound/mem/generic_spram.v
+L0 11
+R7
+r1
+31
+Z36 !s90 -reportprogress|300|-work|work|C:/chenyu/RTL_work/RTL_work/UltraSound/mem/generic_spram.v|
+R9
+Z37 !s100 4A?6@HHimOAa9_fJ7D;eg1
+Z38 !s108 1566614489.215000
+Z39 !s107 C:/chenyu/RTL_work/RTL_work/UltraSound/mem/generic_spram.v|
+!i10b 1
+!s85 0
+!s101 -O0
+vinputram
+Z40 !s100 9CHJ=JT_GN<TgmG`ToWWg2
+Z41 Ij?8G`CliUNmM3dmb^9M:g3
+Z42 VncL??R<MKFa=]PZRN[LI]3
+R3
+Z43 w1561877322
+Z44 8C:/chenyu/RTL_work/RTL_work/UltraSound/controller/inputram.v
+Z45 FC:/chenyu/RTL_work/RTL_work/UltraSound/controller/inputram.v
+L0 39
+R7
+r1
+31
+Z46 !s90 -reportprogress|300|-work|work|C:/chenyu/RTL_work/RTL_work/UltraSound/controller/inputram.v|
+R9
+Z47 !s108 1566614489.682000
+Z48 !s107 C:/chenyu/RTL_work/RTL_work/UltraSound/controller/inputram.v|
+!i10b 1
+!s85 0
+!s101 -O0
+voutputram
+Z49 !s100 R4ilmhohbBda7c45D?aL?2
+Z50 I[FJ;S2^:HO[>?BG]4@^Hf2
+Z51 VkgZSfB0:hzFDo2JN=G9^71
+R3
+Z52 w1561877391
+Z53 8C:/chenyu/RTL_work/RTL_work/UltraSound/controller/outputram.v
+Z54 FC:/chenyu/RTL_work/RTL_work/UltraSound/controller/outputram.v
+L0 39
+R7
+r1
+31
+Z55 !s90 -reportprogress|300|-work|work|C:/chenyu/RTL_work/RTL_work/UltraSound/controller/outputram.v|
+R9
+!i10b 1
+!s85 0
+Z56 !s108 1566614489.834000
+Z57 !s107 C:/chenyu/RTL_work/RTL_work/UltraSound/controller/outputram.v|
+!s101 -O0
+vreg_dec_rate
+!i10b 1
+Z58 !s100 o6S?Bbla<N>YTRF<k@]Yk0
+Z59 Iz:=L^YL5IF?>[cP^IJRSR0
+Z60 VHX8b78LNgnfM0Kjz]=@T]3
+R3
+w1563934496
+Z61 8C:/chenyu/RTL_work/RTL_work/UltraSound/util/reg_dec_rate.v
+Z62 FC:/chenyu/RTL_work/RTL_work/UltraSound/util/reg_dec_rate.v
+L0 3
+R7
+r1
+!s85 0
+31
+!s108 1566614489.987000
+!s107 C:/chenyu/RTL_work/RTL_work/UltraSound/util/reg_dec_rate.v|
+Z63 !s90 -reportprogress|300|-work|work|C:/chenyu/RTL_work/RTL_work/UltraSound/util/reg_dec_rate.v|
+!s101 -O0
+R9
+vtest_controller
+Z64 !s100 oeVP77e]0V7ScaKZTR`fF0
+Z65 Izbi?1>O[]A?b=az9YNJ;F3
+Z66 V5O_O?hPH2HEK=LbcfKml42
+R3
+Z67 w1563070924
+Z68 8C:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/test_controller.v
+Z69 FC:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/test_controller.v
+L0 3
+R7
+r1
+31
+Z70 !s90 -reportprogress|300|-work|work|C:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/test_controller.v|
+R9
+Z71 !s108 1566614489.532000
+Z72 !s107 C:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/test_controller.v|
+!i10b 1
+!s85 0
+!s101 -O0
+vtest_execcmd
+Z73 !s100 J`9_lX`WI0ZfnlS8L8V=K0
+Z74 I[[NzT_4n0=HR=@=YAR?nL3
+Z75 V]V@?b5dD`bAS>bU^`58j72
+R3
+Z76 w1562490270
+Z77 8C:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/test_execcmd.v
+Z78 FC:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/test_execcmd.v
+L0 3
+R7
+r1
+31
+Z79 !s90 -reportprogress|300|-work|work|C:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/test_execcmd.v|
+R9
+Z80 !s108 1566614489.064000
+Z81 !s107 C:/chenyu/RTL_work/RTL_work/UltraSound/controller/testbench/test_execcmd.v|
+!i10b 1
+!s85 0
+!s101 -O0

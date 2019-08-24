@@ -34,17 +34,41 @@ module controller (
     ctrl_out_udp_payload_axis_tlast,
     local_ip,
 
+    //pcm2udp reg control
+    pcm_udp_tx_left,
+    pcm_udp_tx_start,
+    pcm_udp_tx_total,
+    pcm_udp_tx_th,
+    pcm_udp_channel_choose,
+    pcm_udp_capture_sep,
+    pcm_udp_remote_ip,
+    pcm_udp_remote_port,
+    pcm_udp_source_port,
+
+    //dac reg control
+    dac_signal_len,
+    dac_cic_rate,
+    dac_run,
+
     //AXI reg access
     reg_addr,
+    reg_writedata,
     reg_rd_udp_mac,
     reg_wr_udp_mac,
+    reg_rd_dac,
+    reg_wr_dac,
     reg_ready_udp_mac,
-    reg_writedata,
-    reg_readdata_udp_mac
+    reg_ready_dac,
+    reg_readdata_udp_mac,
+    reg_readdata_dac
 );
     parameter SIMULATION = 0;
     parameter AW=10;
+    parameter DAC_CHANNEL = 3;
+    parameter dac_pcmaw=10;
+    parameter COMMAND_PACKET_TYPE = 8'he1;
     localparam CTRL_UDP_PORT = 16'h6789;
+    localparam PCM_UDP_PORT = 16'h6789;
     localparam MAGIC_WORD = 16'hCBAE;
     input           clk;
     input           clk_2;
@@ -74,12 +98,28 @@ module controller (
     input               ctrl_out_udp_payload_axis_tready;
     output              ctrl_out_udp_payload_axis_tlast;
     input [31:0]        local_ip;
-    output [13:0]   reg_addr;
+    input [23:0]        pcm_udp_tx_left;
+    output              pcm_udp_tx_start;
+    output reg [23:0]   pcm_udp_tx_total;
+    output reg [7:0]    pcm_udp_tx_th;
+    output reg [7:0]    pcm_udp_channel_choose;
+    output reg [7:0]    pcm_udp_capture_sep;
+    output reg [31:0]   pcm_udp_remote_ip;
+    output reg [15:0]   pcm_udp_remote_port;
+    output [15:0]       pcm_udp_source_port;
+    output [DAC_CHANNEL*dac_pcmaw-1:0] dac_signal_len;
+    output [DAC_CHANNEL*4-1:0]  dac_cic_rate;
+    output reg                  dac_run;
+    output [28:0]   reg_addr;
+    output [31:0]   reg_writedata;
     output          reg_rd_udp_mac;
     output          reg_wr_udp_mac;
+    output          reg_rd_dac;
+    output          reg_wr_dac;
     input           reg_ready_udp_mac;
-    output [31:0]   reg_writedata;
+    input           reg_ready_dac;
     input [31:0]    reg_readdata_udp_mac;
+    input [31:0]    reg_readdata_dac;
     wire            exec_inram_re;
     wire [15:0]     exec_inram_q;
     wire [AW-1:0]   exec_inram_address;
@@ -110,13 +150,102 @@ module controller (
     reg [23:0]      bad_pkt_cnt;
     reg [23:0]      good_pkt_cnt;
     reg [15:0]      seq;
-    assign reg_rd_udp_mac = (reg_rd && reg_addr[13:8] == 1);
-    assign reg_wr_udp_mac = (reg_wr && reg_addr[13:8] == 1);
-    assign reg_readdata =   (reg_addr[13:0] == 14'h1fe) ? good_pkt_cnt: 
-                           ((reg_addr[13:0] == 14'h1ff) ? bad_pkt_cnt: 
-                           ((reg_addr[13:8] == 1) ? reg_readdata_udp_mac : 32'h0BAD0BAD));
-    assign reg_ready = (reg_addr[13:8] == 1) ? reg_ready_udp_mac : 1'b1;
-    assign ctrl_out_udp_length = (exec_out_len + 8'd5) << 1;
+    reg [15:0]      addr_high;
+    wire [13:0]     reg_addr_c2;
+    reg [15:0]      dac_signal_len_reg[DAC_CHANNEL-1:0];
+    reg [3:0]       dac_cic_rate_reg[DAC_CHANNEL-1:0];
+    reg [2:0]       cmd_udp_tx_idx;
+    assign reg_addr = reg_addr_c2[13] ? {addr_high, reg_addr_c2[12:0]} : {16'h0, reg_addr_c2[12:0]};
+    assign reg_rd_udp_mac = (reg_rd && reg_addr[28:8] == 1);
+    assign reg_wr_udp_mac = (reg_wr && reg_addr[28:8] == 1);
+    assign reg_rd_dac = (reg_rd && reg_addr[28:16] == 1);
+    assign reg_wr_dac = (reg_wr && reg_addr[28:16] == 1);
+    assign reg_readdata =   (reg_addr[28:0] == 29'h1fe) ? good_pkt_cnt:
+                           ((reg_addr[28:0] == 29'h1ff) ? bad_pkt_cnt:
+                           ((reg_addr[28:0] == 29'h0200) ? pcm_udp_tx_total :
+                           ((reg_addr[28:0] == 29'h0201) ? pcm_udp_tx_th :
+                           ((reg_addr[28:0] == 29'h0202) ? {pcm_udp_capture_sep, pcm_udp_channel_choose} :
+                           ((reg_addr[28:0] == 29'h0204) ? pcm_udp_remote_ip :
+                           ((reg_addr[28:0] == 29'h0205) ? {pcm_udp_source_port, pcm_udp_remote_port} :
+                           ((reg_addr[28:0] == 29'h0206) ? pcm_udp_tx_left :
+                           ((reg_addr[28:4] == 25'h0030) ? {dac_cic_rate_reg[reg_addr[3:0]], dac_signal_len_reg[reg_addr[3:0]]} :
+                           ((reg_addr[28:0] == 29'h00310) ? dac_run :
+                           ((reg_addr[28:0] == 29'h0f03) ? {addr_high, addr_high} :
+                           ((reg_addr[28:8] == 1) ? reg_readdata_udp_mac :
+                           ((reg_addr[28:16]== 1) ? reg_readdata_dac : 32'h0BAD0BAD))))))))))));
+    assign reg_ready = (reg_addr[28:8] == 1) ? reg_ready_udp_mac :
+                      ((reg_addr[28:16]== 1) ? reg_ready_dac : 1'b1);
+    assign ctrl_out_udp_length = ((exec_out_len + 8'd6) << 1) - cmd_udp_tx_idx;
+    always @(posedge clk_2)
+    if (rst)
+        addr_high <= #1 0;
+    else
+        if (reg_addr[28:0] == 29'h0f03 && reg_wr && reg_writedata[15:0] == reg_writedata[31:16])
+            addr_high <= #1 reg_writedata[15:0];
+    always @(posedge clk_2)
+    if (rst)
+        pcm_udp_tx_total <= #1 0;
+    else
+        if (reg_addr[28:0] == 29'h0200 && reg_wr)
+            pcm_udp_tx_total <= #1 reg_writedata[23:0];
+    always @(posedge clk_2)
+    if (rst)
+        pcm_udp_tx_th <= #1 8'd32;
+    else
+        if (reg_addr[28:0] == 29'h0201 && reg_wr)
+            pcm_udp_tx_th <= #1 reg_writedata[7:0];
+    always @(posedge clk_2)
+    if (rst)
+    begin
+        pcm_udp_channel_choose <= #1 0;
+        pcm_udp_capture_sep <= #1 0;
+    end
+    else
+        if (reg_addr[28:0] == 29'h0202 && reg_wr)
+        begin
+            pcm_udp_channel_choose <= #1 reg_writedata[7:0];
+            pcm_udp_capture_sep <= #1 reg_writedata[15:8];
+        end
+    assign pcm_udp_tx_start = (reg_addr[28:0] == 29'h0203 && reg_wr && reg_writedata[0]);
+    assign pcm_udp_source_port = PCM_UDP_PORT;
+    always @(posedge clk_2)
+    if (rst)
+        pcm_udp_remote_ip <= #1 0;
+    else
+        if (reg_addr[28:0] == 29'h0204 && reg_wr)
+            pcm_udp_remote_ip <= #1 ctrl_out_ip_dest_ip;
+    always @(posedge clk_2)
+    if (rst)
+        pcm_udp_remote_port <= #1 0;
+    else
+        if (reg_addr[28:0] == 29'h0205 && reg_wr)
+            pcm_udp_remote_port <= #1 reg_writedata[15:0];
+    generate
+genvar k;
+    for (k=0; k<DAC_CHANNEL; k=k+1)
+    begin : dac_regs
+        always @(posedge clk_2)
+        if (rst)
+        begin
+            dac_signal_len_reg[k] <= #1 0;
+            dac_cic_rate_reg[k] <= #1 0;
+        end
+        else
+            if (reg_addr[28:4] == 25'h0030 && reg_wr && reg_addr[3:0] == k)
+            begin
+                dac_signal_len_reg[k] <= #1 reg_writedata[15:0];
+                dac_cic_rate_reg[k] <= #1 reg_writedata[23:16];
+            end
+        assign dac_signal_len[dac_pcmaw*k+dac_pcmaw-1:dac_pcmaw*k] = dac_signal_len_reg[k][dac_pcmaw-1:0];
+        assign dac_cic_rate[4*k+3:4*k] = dac_cic_rate_reg[k];
+    end
+endgenerate
+    always @(posedge clk_2)
+    if (rst)
+        dac_run <= #1 1'b0;
+    else
+        if (reg_addr[28:0] == 29'h0310 && reg_wr)
+            dac_run <= #1 reg_writedata[0];
     execcmd #(AW) execcmd_inst(
     //input
     .clk                (clk),
@@ -134,7 +263,7 @@ module controller (
     .outram_d           (exec_outram_d),
 
     //AXI reg access
-    .reg_addr_c2        (reg_addr),
+    .reg_addr_c2        (reg_addr_c2),
     .reg_rd_c2          (reg_rd),
     .reg_wr_c2          (reg_wr),
     .reg_ready_c2       (reg_ready),
@@ -236,17 +365,21 @@ endgenerate
     always @(posedge clk)
     begin
         if (ctrl_outram_re)
-            ctrl_outram_q1 <= #1 (ctrl_outram_address == {AW{1'b1}}) ? seq : ctrl_outram_q;
+            ctrl_outram_q1 <= #1 ctrl_outram_q;
     end
     always @(posedge clk)
     begin
         if (rst || start_exec || trigger_exec)
-            ctrl_outram_address <= #1 {AW{1'b1}};
+            ctrl_outram_address <= #1 (cmd_udp_tx_idx==0) ?  {AW{1'b1}} - 1'b1 : {AW{1'b1}}; //hack this code for test_ultrasound.v (cmd_udp_tx_idx==2), in actual hardware cmd_udp_tx_idx shuold be 0 
         else
             if (ctrl_outram_re)
                 ctrl_outram_address <= #1 ctrl_outram_address + 1'b1;
     end
-    assign ctrl_out_udp_payload_axis_tdata = ctrl_out_udp_payload_lo ? ctrl_outram_q1[7:0] : ctrl_outram_q1[15:8];
+    assign ctrl_out_udp_payload_axis_tdata = (cmd_udp_tx_idx==0) ?  8'b0 :
+                                            ((cmd_udp_tx_idx==1) ?  COMMAND_PACKET_TYPE : 
+                                            ((cmd_udp_tx_idx==2) ?  seq[15:8] :
+                                            ((cmd_udp_tx_idx==3) ?  seq[7:0] :
+                                             (ctrl_out_udp_payload_lo ? ctrl_outram_q1[7:0] : ctrl_outram_q1[15:8]))));
     assign check_invalid = (ctrl_in_ip_dest_ip != local_ip && ctrl_in_ip_dest_ip != 32'hffffffff) || ctrl_in_udp_dest_port != CTRL_UDP_PORT || ctrl_in_udp_err || ctrl_in_udp_length <= 14 || ctrl_in_ip_fragment_offset !=0;
     //states for block rec_udp
     reg		rec_udp_00;
@@ -266,6 +399,8 @@ endgenerate
     reg		tx_udp_04;
     reg		tx_udp_05;
     reg		tx_udp_06;
+    reg		tx_udp_07;
+    reg		tx_udp_08;
 
 
 //state transition for block rec_udp
@@ -322,7 +457,7 @@ endgenerate
     if (rst)
         tx_udp_00 <= #1 1;
     else
-        tx_udp_00 <= #1 tx_udp_06&&ctrl_out_udp_payload_axis_tlast || tx_udp_03&&!exec_busy&&exec_err;
+        tx_udp_00 <= #1 tx_udp_08&&ctrl_out_udp_payload_axis_tlast || tx_udp_03&&!exec_busy&&exec_err;
 
     always @(posedge clk)
     if (rst)
@@ -358,7 +493,19 @@ endgenerate
     if (rst)
         tx_udp_06 <= #1 0;
     else
-        tx_udp_06 <= #1 tx_udp_06&&!ctrl_out_udp_payload_axis_tlast || tx_udp_05&&ctrl_out_udp_hdr_ready || tx_udp_04&&ctrl_out_udp_hdr_ready;
+        tx_udp_06 <= #1 tx_udp_05&&ctrl_out_udp_hdr_ready || tx_udp_04&&ctrl_out_udp_hdr_ready;
+
+    always @(posedge clk)
+    if (rst)
+        tx_udp_07 <= #1 0;
+    else
+        tx_udp_07 <= #1 tx_udp_07&&(cmd_udp_tx_idx != 4) || tx_udp_06;
+
+    always @(posedge clk)
+    if (rst)
+        tx_udp_08 <= #1 0;
+    else
+        tx_udp_08 <= #1 tx_udp_08&&!ctrl_out_udp_payload_axis_tlast || tx_udp_07&&(cmd_udp_tx_idx==4);
 
 
     always @(posedge clk)
@@ -372,6 +519,17 @@ endgenerate
                 bad_pkt_cnt <= #1 bad_pkt_cnt + 1'b1;
             if (tx_udp_03&&!exec_busy&&exec_err)
                 bad_pkt_cnt <= #1 bad_pkt_cnt + 1'b1;
+        end
+
+    always @(posedge clk)
+        if (rst)
+            cmd_udp_tx_idx <= #1 0;
+        else
+        begin
+            if (ctrl_out_udp_payload_axis_tready&&tx_udp_07&&(cmd_udp_tx_idx != 4) || tx_udp_06&&ctrl_out_udp_payload_axis_tready)
+                cmd_udp_tx_idx <= #1 cmd_udp_tx_idx + 1'b1;
+            if (tx_udp_08&&ctrl_out_udp_payload_axis_tlast)
+                cmd_udp_tx_idx <= #1 0;
         end
 
     always @(posedge clk)
@@ -445,7 +603,7 @@ endgenerate
         begin
             if (tx_udp_05&&ctrl_out_udp_hdr_ready || tx_udp_04&&ctrl_out_udp_hdr_ready)
                 ctrl_out_udp_payload_axis_tvalid <= #1 1;
-            if (tx_udp_06&&ctrl_out_udp_payload_axis_tlast)
+            if (tx_udp_08&&ctrl_out_udp_payload_axis_tlast)
                 ctrl_out_udp_payload_axis_tvalid <= #1 0;
         end
 
@@ -460,7 +618,7 @@ endgenerate
             good_pkt_cnt <= #1 0;
         else
         begin
-            if (tx_udp_06&&ctrl_out_udp_payload_axis_tlast)
+            if (tx_udp_08&&ctrl_out_udp_payload_axis_tlast)
                 good_pkt_cnt <= #1 good_pkt_cnt + 1'b1;
         end
 
@@ -484,7 +642,7 @@ endgenerate
                 udp_hdr_tx_finish <= #1 0;
             if (tx_udp_03&&!exec_busy&&exec_err)
                 udp_hdr_tx_finish <= #1 1;
-            if (tx_udp_06&&ctrl_out_udp_payload_axis_tlast)
+            if (tx_udp_08&&ctrl_out_udp_payload_axis_tlast)
                 udp_hdr_tx_finish <= #1 1;
         end
 

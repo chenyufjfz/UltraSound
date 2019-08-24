@@ -26,7 +26,7 @@
 # This script should be sourced from the Quartus II TCL console prior to 
 # simulating using NativeLink 
 #
-# Generated on Sat Jun 29 13:24:59 CST 2019
+# Generated on Sun Aug 18 23:12:32 CST 2019
 #
 #####################################################################################
 

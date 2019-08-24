@@ -39,25 +39,29 @@
 module rowo_dpram (
 	data,
 	rdaddress,
+	rden,
 	rdclock,
 	wraddress,
 	wrclock,
 	wren,
 	q);
 
-parameter dw = 32; // number of bits in address-bus
-parameter aw = 8;  // number of bits in data-bus
-parameter wsize = 1<<aw;        // number of words in memory
+parameter rdw = 32; // number of bits in read address-bus
+parameter raw = 8;  // number of bits in read data-bus
+parameter wdw = 32; // number of bits in read data-bus
+parameter wsize = 1<<raw;        // number of words in memory
 parameter pipeline=1;           //output register, pipeline=2
-parameter SIMULATION = 1;
+//parameter SIMULATION = 1;
+localparam waw = (wdw > rdw) ? raw - $clog2(wdw/rdw) : raw + $clog2(rdw/wdw);
 
-	input	[dw-1:0]  data;
-	input	[aw-1:0]  rdaddress;
+	input	[wdw-1:0]  data;
+	input	[raw-1:0]  rdaddress;
+	input   rden;
 	input	  rdclock;
-	input	[aw-1:0]  wraddress;
+	input	[waw-1:0]  wraddress;
 	input	  wrclock;
 	input	  wren;
-	output	[dw-1:0]  q;
+	output	[rdw-1:0]  q;
 `ifndef ALTERA_RESERVED_QIS
 // synopsys translate_off
 `endif
@@ -67,13 +71,14 @@ parameter SIMULATION = 1;
 // synopsys translate_on
 `endif
 
-	wire [dw-1:0] sub_wire0;
-	wire [dw-1:0] q = sub_wire0[dw-1:0];
+	wire [rdw-1:0] sub_wire0;
+	wire [rdw-1:0] q = sub_wire0[rdw-1:0];
 
 generate
+/*
 if (SIMULATION) begin : SIM_RAM
-    reg [dw-1:0] mem [wsize -1:0]; // instantiate memory
-	reg [aw-1:0] ra;                 // register read address
+    reg [rdw-1:0] mem [wsize -1:0]; // instantiate memory
+	reg [raw-1:0] ra;                 // register read address
 
 	// read operation
 	always @(posedge rdclock)
@@ -90,7 +95,7 @@ if (SIMULATION) begin : SIM_RAM
 
 assign sub_wire0 = (pipeline==2) ? sub_wire1 : mem[ra];
 end
-else
+else*/
 if (pipeline==2)
 begin
 	altsyncram	altsyncram_component (
@@ -104,14 +109,14 @@ begin
 				.aclr0 (1'b0),
 				.aclr1 (1'b0),
 				.addressstall_a (1'b0),
-				.addressstall_b (1'b0),
+				.addressstall_b (!rden),
 				.byteena_a (1'b1),
 				.byteena_b (1'b1),
 				.clocken0 (1'b1),
 				.clocken1 (1'b1),
 				.clocken2 (1'b1),
 				.clocken3 (1'b1),
-				.data_b ({32{1'b1}}),
+				.data_b ({rdw{1'b1}}),
 				.eccstatus (),
 				.q_a (),
 				.rden_a (1'b1),
@@ -125,16 +130,16 @@ begin
 		altsyncram_component.clock_enable_output_b = "BYPASS",
 		altsyncram_component.intended_device_family = "Cyclone IV E",
 		altsyncram_component.lpm_type = "altsyncram",
-		altsyncram_component.numwords_a = wsize,
-		altsyncram_component.numwords_b = wsize,
+		altsyncram_component.numwords_a = 1 << waw,
+		altsyncram_component.numwords_b = 1 << raw,
 		altsyncram_component.operation_mode = "DUAL_PORT",
 		altsyncram_component.outdata_aclr_b = "NONE",
 		altsyncram_component.outdata_reg_b = "CLOCK1",
 		altsyncram_component.power_up_uninitialized = "FALSE",
-		altsyncram_component.widthad_a = aw,
-		altsyncram_component.widthad_b = aw,
-		altsyncram_component.width_a = dw,
-		altsyncram_component.width_b = dw,
+		altsyncram_component.widthad_a = waw,
+		altsyncram_component.widthad_b = raw,
+		altsyncram_component.width_a = wdw,
+		altsyncram_component.width_b = rdw,
 		altsyncram_component.width_byteena_a = 1;
 end
 else begin
@@ -149,14 +154,14 @@ else begin
 				.aclr0 (1'b0),
 				.aclr1 (1'b0),
 				.addressstall_a (1'b0),
-				.addressstall_b (1'b0),
+				.addressstall_b (!rden),
 				.byteena_a (1'b1),
 				.byteena_b (1'b1),
 				.clocken0 (1'b1),
 				.clocken1 (1'b1),
 				.clocken2 (1'b1),
 				.clocken3 (1'b1),
-				.data_b ({32{1'b1}}),
+				.data_b ({rdw{1'b1}}),
 				.eccstatus (),
 				.q_a (),
 				.rden_a (1'b1),
@@ -170,16 +175,16 @@ else begin
 		altsyncram_component.clock_enable_output_b = "BYPASS",
 		altsyncram_component.intended_device_family = "Cyclone IV E",
 		altsyncram_component.lpm_type = "altsyncram",
-		altsyncram_component.numwords_a = wsize,
-		altsyncram_component.numwords_b = wsize,
+		altsyncram_component.numwords_a = 1 << waw,
+		altsyncram_component.numwords_b = 1 << raw,
 		altsyncram_component.operation_mode = "DUAL_PORT",
 		altsyncram_component.outdata_aclr_b = "NONE",
 		altsyncram_component.outdata_reg_b = "UNREGISTERED",
 		altsyncram_component.power_up_uninitialized = "FALSE",
-		altsyncram_component.widthad_a = aw,
-		altsyncram_component.widthad_b = aw,
-		altsyncram_component.width_a = dw,
-		altsyncram_component.width_b = dw,
+		altsyncram_component.widthad_a = waw,
+		altsyncram_component.widthad_b = raw,
+		altsyncram_component.width_a = wdw,
+		altsyncram_component.width_b = rdw,
 		altsyncram_component.width_byteena_a = 1;
 end
 endgenerate

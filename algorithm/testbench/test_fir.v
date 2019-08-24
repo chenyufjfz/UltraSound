@@ -3,8 +3,12 @@
 module test_fir;
 parameter CHANNEL = 3;
 parameter FIR_LANE = 16;
-parameter acw = 30;
-parameter SIMULATION = 0;
+parameter acw = 31;
+parameter pcmaw = 10;
+parameter mul_num = 2;
+parameter PARAM_SHADOW_RAM = 1;
+localparam paw = (mul_num==2) ? pcmaw-1 : ((mul_num==1) ? pcmaw : 0);
+localparam pqw = (mul_num==2) ? 32 : 16;
 
     reg                     clk;
     reg                     clk1;
@@ -16,7 +20,7 @@ parameter SIMULATION = 0;
     wire [16*CHANNEL-1:0]   pcm_out;
     
     reg                     clk_2;
-    reg [7:0]               reg_addr;
+    reg [11:0]              reg_addr;
     reg                     reg_rd;
     reg                     reg_wr;
     wire                    reg_ready;
@@ -25,7 +29,7 @@ parameter SIMULATION = 0;
     
     //internal reg
     reg [15:0]              pcm_in_d;
-    reg [7:0]               tap_len;
+    reg [11:0]              tap_len;
     integer                 i;
     reg [31:0]              param[255:0];
     reg [16*CHANNEL-1:0]    result[1023: 0];
@@ -67,7 +71,8 @@ fir_mc #(
     .CHANNEL        (CHANNEL),
     .FIR_LANE       (FIR_LANE),
     .acw            (acw),
-    .SIMULATION     (SIMULATION)
+    .pcmaw          (pcmaw),
+    .mul_num        (mul_num)
 )   fir_mc_inst
 (
     //clock and reset
@@ -80,7 +85,7 @@ fir_mc #(
     .pcm_in_ready   (),
     .pcm_in         (pcm_in),
     .pcm_out_valid  (pcm_out_valid),
-    .pcm_out_ready  (~0),
+    .pcm_out_ready  ({CHANNEL{1'b1}}),
     .pcm_out        (pcm_out),
 
     //register access
@@ -90,7 +95,11 @@ fir_mc #(
     .reg_wr         (reg_wr),
     .reg_ready      (reg_ready),
     .reg_writedata  (reg_writedata),
-    .reg_readdata   (reg_readdata)
+    .reg_readdata   (reg_readdata),
+    .pcm_out_shift  (4'd13),
+    .bypass         (1'b0),
+    .down_sample    (12'd1),
+    .tap_len        (tap_len)
 );
 
 
@@ -108,7 +117,7 @@ task automatic generate_pcm_in;
             pcm_in_valid <= #1 1;
             @(posedge clk);
             pcm_in_valid <= #1 0;
-            pcm_in_d <= #1 (pcm_in_d + 1 < tap_len * 2) ? pcm_in_d + 1 : 0;
+            pcm_in_d <= #1 (pcm_in_d + 1 < tap_len * mul_num) ? pcm_in_d + 1 : 0;
         end
     end
 endtask
@@ -143,14 +152,15 @@ begin
         while (!reg_ready)
             @(posedge clk_2);
     end
+    /*
     reg_addr <= #1 ~0;
-    reg_writedata <= #1 {1'b0, 4'd13, tap_len, 8'd1};
+    reg_writedata <= #1 {1'b0, 4'd13, tap_len, 12'd1};
     @(posedge clk_2);
     while (!reg_ready)
-        @(posedge clk_2);
+        @(posedge clk_2);*/
     reg_wr <= #1 0;
     
-    generate_pcm_in(100, 1);
+    generate_pcm_in(1000, 1);
     result_idx = 0;
     generate_pcm_in(50, 1);
     $writememh("../testbench/fir_mc_out.txt", result);

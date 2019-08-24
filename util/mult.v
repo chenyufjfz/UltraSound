@@ -43,16 +43,16 @@ module mult (
 	result);
 parameter di1=16;
 parameter di2=16;
-parameter do=32;
+parameter dow=32;
 parameter pipeline=2;
 
 	input	  clock;
 	input	[di1-1:0]  dataa;
 	input	[di2-1:0]  datab;
-	output	[do-1:0]  result;
+	output	[dow-1:0]  result;
 
-	wire [do-1:0] sub_wire0;
-	wire [do-1:0] result = sub_wire0[do-1:0];
+	wire [dow-1:0] sub_wire0;
+	wire [dow-1:0] result = sub_wire0[dow-1:0];
 
 	lpm_mult	lpm_mult_component (
 				.clock (clock),
@@ -69,7 +69,7 @@ parameter pipeline=2;
 		lpm_mult_component.lpm_type = "LPM_MULT",
 		lpm_mult_component.lpm_widtha = di1,
 		lpm_mult_component.lpm_widthb = di2,
-		lpm_mult_component.lpm_widthp = do;
+		lpm_mult_component.lpm_widthp = dow;
 
 
 endmodule

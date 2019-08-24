@@ -11,7 +11,11 @@ module test_ultrasound;
     reg [3:0]           key;
     integer             i, j;
     
-ultrasound #(.SIMULATION(1), .REAL_PHY(0)) ultrasound0(
+ultrasound #(
+    .SIMULATION(1), 
+    .DAC_CHANNEL(2),
+    .REAL_PHY(0)
+) ultrasound0(
     .CLOCK_50           (CLOCK_50),
     .KEY                (key),
 	//////// Ethernet 0 //////////
@@ -36,7 +40,12 @@ ultrasound #(.SIMULATION(1), .REAL_PHY(0)) ultrasound0(
 	.RX_ERR             (RX_ERR)
 );
 
-ultrasound #(.SIMULATION(0), .RESET_CTR_WIDTH(5), .REAL_PHY(0)) ultrasound1(
+ultrasound #(
+    .SIMULATION(0), 
+    .RESET_CTR_WIDTH(5), 
+    .DAC_CHANNEL(2),
+    .REAL_PHY(0)
+) ultrasound1(
     .CLOCK_50           (CLOCK_50),
     .KEY                (4'hf),
 	//////// Ethernet 0 //////////
@@ -76,14 +85,13 @@ begin
     release ultrasound0.pll_lock;
     force ultrasound1.pll_lock = 1;
     release ultrasound1.pll_lock;
-    $readmemh("../testbench/inram.txt",ultrasound0.controller_inst.SIM.inram.SIM_RAM.mem);
+    $readmemh("../testbench/mac_read.txt",ultrasound0.controller_inst.SIM.inram.SIM_RAM.mem);
     for (i=0; i<1024; i=i+1)
     if (ultrasound0.controller_inst.SIM.inram.SIM_RAM.mem[i] === 16'hxxxx)
     begin
         j = i;
         i = 1025;
     end     
-    force ultrasound0.controller_inst.exec_out_len = j;
     force ultrasound0.controller_inst.exec_in_len = 0;
     force ultrasound0.controller_inst.ctrl_out_udp_dest_port = ultrasound0.controller_inst.CTRL_UDP_PORT;
     force ultrasound0.controller_inst.ctrl_out_udp_source_port = 16'h3456;
@@ -99,9 +107,10 @@ begin
     @(posedge ultrasound0.clk);
     $display("finish reset");
     
+    
     key[1] <= 1'b0;
     @(posedge ultrasound0.clk);
-    key[1] <= 1'b1;
+    key[1] <= 1'b1; //trigger controller exec
     @(posedge ultrasound0.clk);
     #10000;
     $writememh("../testbench/outram0.txt",ultrasound0.controller_inst.SIM.outram.SIM_RAM.mem);
@@ -112,10 +121,12 @@ begin
         ultrasound0.controller_inst.SIM.outram.SIM_RAM.mem[i] = 16'hxxxx;
     end
     ultrasound0.controller_inst.SIM.inram.SIM_RAM.mem[0] = 0;
-    $readmemh("../testbench/inram.txt",ultrasound0.controller_inst.SIM.outram.SIM_RAM.mem);
-    
+    $readmemh("../testbench/mac_read.txt",ultrasound0.controller_inst.SIM.outram.SIM_RAM.mem);
+    force ultrasound0.controller_inst.exec_out_len = ultrasound0.controller_inst.SIM.outram.SIM_RAM.mem[0] +1;
     @(negedge ultrasound0.clk);
     force ultrasound0.controller_inst.start_exec = 0;
+    force ultrasound0.controller_inst.cmd_udp_tx_idx = 2;
+    release ultrasound0.controller_inst.cmd_udp_tx_idx;
     @(negedge ultrasound0.clk);
     force ultrasound0.controller_inst.start_exec = 1; //trigger ultrasound0 send UDP packet
     @(negedge ultrasound0.clk);
@@ -129,7 +140,36 @@ begin
     @(ultrasound0.controller_inst.ctrl_in_udp_hdr_valid);
     $display("ultrasound0 receive reply packet");
     #10000;
-    $writememh("../testbench/outram.txt",ultrasound0.controller_inst.SIM.inram.SIM_RAM.mem);
+    $writememh("../testbench/inram0.txt",ultrasound0.controller_inst.SIM.inram.SIM_RAM.mem);
+
+   
+    for (i=0; i<1024; i=i+1)
+    begin
+        ultrasound0.controller_inst.SIM.inram.SIM_RAM.mem[i] = 16'hxxxx;
+        ultrasound0.controller_inst.SIM.outram.SIM_RAM.mem[i] = 16'hxxxx;
+    end
+    ultrasound0.controller_inst.SIM.inram.SIM_RAM.mem[0] = 0;
+    $readmemh("../testbench/dac_test.txt",ultrasound0.controller_inst.SIM.outram.SIM_RAM.mem);
+    force ultrasound0.controller_inst.exec_out_len = ultrasound0.controller_inst.SIM.outram.SIM_RAM.mem[0] +1;
+    
+    @(negedge ultrasound0.clk);
+    force ultrasound0.controller_inst.start_exec = 0;
+    force ultrasound0.controller_inst.cmd_udp_tx_idx = 2;
+    release ultrasound0.controller_inst.cmd_udp_tx_idx;
+    @(negedge ultrasound0.clk);
+    force ultrasound0.controller_inst.start_exec = 1; //trigger ultrasound0 send UDP packet
+    @(negedge ultrasound0.clk);
+    force ultrasound0.controller_inst.start_exec = 0;
+    @(ultrasound0.controller_inst.ctrl_out_udp_payload_axis_tvalid);
+    $display("ultrasound0 start transmit command packet");
+    @(ultrasound1.udp_mac_complete_inst.rx_eth_hdr_ready);
+    $display("ultrasound1 receive command packet");
+    @(ultrasound1.tx_udp_hdr_valid);
+    $display("ultrasound1 start transmit reply packet");
+    @(ultrasound0.controller_inst.ctrl_in_udp_hdr_valid);
+    $display("ultrasound0 receive reply packet");
+    #10000;
+    $writememh("../testbench/inram1.txt",ultrasound0.controller_inst.SIM.inram.SIM_RAM.mem);    
     $stop;
     end
 endmodule

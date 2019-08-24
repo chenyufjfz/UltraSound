@@ -28,7 +28,7 @@
 # command in the Quartus II TCL console:
 # set_global_assignment -name SDC_FILE "ether1"_constraints.sdc
 #
-# Generated on Sat Jun 29 13:24:32 CST 2019
+# Generated on Sun Aug 18 23:11:26 CST 2019
 #
 #####################################################################################
 

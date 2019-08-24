@@ -27,7 +27,11 @@ module fir
 );
 parameter FIR_LANE = 4; //compute clock = down_sampe * FIR_LANE * (clk1 / sample)
 parameter gen_param_addr = 1;
-parameter acw = 30;
+parameter acw = 31;
+parameter pcmaw = 9;
+parameter mul_num = 2;
+localparam paw = (mul_num==2) ? pcmaw-1 : ((mul_num==1) ? pcmaw : 0);
+localparam pqw = (mul_num==2) ? 32 : 16;
 
     //clock and reset
     input                           pcm_clk;
@@ -43,20 +47,20 @@ parameter acw = 30;
     output reg [15:0]               pcm_out;
 
     //fir parameter input
-    input [FIR_LANE * 32 - 1:0]     param_q;
-    output [FIR_LANE * 8 - 1:0]     param_addr;
+    input [FIR_LANE * pqw - 1:0]    param_q;
+    output [FIR_LANE * paw - 1:0]   param_addr;
 
     //control
     input [3:0]                     pcm_out_shift;
     input                           bypass;
-    input [7:0]                     down_sample;
-    input [7:0]                     tap_len;
+    input [11:0]                    down_sample;
+    input [11:0]                    tap_len;
 
     //internal reg
-    reg [8:0]                       pcm_in_address;
+    reg [pcmaw-1:0]                 pcm_in_address;
     wire [15:0]                     pcm_out_lane[FIR_LANE-1 : 0];
     wire [FIR_LANE-1 : 0]           fir_start;
-    reg [7:0]                       sample_num;
+    reg [11:0]                      sample_num;
     reg [4:0]                       lane_idx;
     wire [4:0]                      lane_idx_next;
     
@@ -68,7 +72,10 @@ parameter acw = 30;
         begin : fir_lane_create
             fir_lane #(
             .gen_param_addr (gen_param_addr),
-            .acw            (acw)) 
+            .acw            (acw),
+            .pcmaw          (pcmaw),
+            .mul_num        (mul_num)
+            )
             fir_lane_inst(
             //reset and clock
             .rst            (rst),
@@ -82,8 +89,8 @@ parameter acw = 30;
             .pcm_out        (pcm_out_lane[k]),
         
             //param input which is clk1 domain
-            .param_q        (param_q[32*k+31:32*k]),
-            .param_addr     (param_addr[8*k+7:8*k]),
+            .param_q        (param_q[pqw*k+pqw-1:pqw*k]),
+            .param_addr     (param_addr[paw*k+paw-1:paw*k]),
         
             //control which is pcm_clk domain
             .pcm_out_shift  (pcm_out_shift),

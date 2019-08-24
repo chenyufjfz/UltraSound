@@ -200,8 +200,8 @@ module ether1 (
 		altera_tse_mac_inst.ENABLE_MAC_RX_VLAN = 0,
 		altera_tse_mac_inst.ENABLE_MAC_TX_VLAN = 0,
 		altera_tse_mac_inst.SYNCHRONIZER_DEPTH = 3,
-		altera_tse_mac_inst.EG_FIFO = 1024,
-		altera_tse_mac_inst.EG_ADDR = 10,
+		altera_tse_mac_inst.EG_FIFO = 4096,
+		altera_tse_mac_inst.EG_ADDR = 12,
 		altera_tse_mac_inst.ING_FIFO = 4096,
 		altera_tse_mac_inst.ENABLE_ENA = 8,
 		altera_tse_mac_inst.ING_ADDR = 12,
@@ -242,8 +242,8 @@ endmodule
 // Retrieval info:      <PRIVATE name = "dev_version" value="3073"  type="STRING"  enable="1" />
 // Retrieval info:      <PRIVATE name = "deviceFamily" value="CYCLONEIVE"  type="STRING"  enable="1" />
 // Retrieval info:      <PRIVATE name = "deviceFamilyName" value="Cyclone IV E"  type="STRING"  enable="1" />
-// Retrieval info:      <PRIVATE name = "eg_addr" value="10"  type="INTEGER"  enable="1" />
-// Retrieval info:      <PRIVATE name = "eg_fifo" value="1024"  type="INTEGER"  enable="1" />
+// Retrieval info:      <PRIVATE name = "eg_addr" value="12"  type="INTEGER"  enable="1" />
+// Retrieval info:      <PRIVATE name = "eg_fifo" value="4096"  type="INTEGER"  enable="1" />
 // Retrieval info:      <PRIVATE name = "ena_hash" value="0"  type="BOOLEAN"  enable="1" />
 // Retrieval info:      <PRIVATE name = "enable_alt_reconfig" value="0"  type="BOOLEAN"  enable="1" />
 // Retrieval info:      <PRIVATE name = "enable_clk_sharing" value="0"  type="BOOLEAN"  enable="1" />
@@ -287,7 +287,7 @@ endmodule
 // Retrieval info:      <PRIVATE name = "toolContext" value="STANDALONE"  type="STRING"  enable="1" />
 // Retrieval info:      <PRIVATE name = "transceiver_type" value="GXB"  type="STRING"  enable="1" />
 // Retrieval info:      <PRIVATE name = "tstamp_fp_width" value="4"  type="INTEGER"  enable="1" />
-// Retrieval info:      <PRIVATE name = "uiEgFIFOSize" value="1024 x 8 Bits"  type="STRING"  enable="1" />
+// Retrieval info:      <PRIVATE name = "uiEgFIFOSize" value="4096 x 8 Bits"  type="STRING"  enable="1" />
 // Retrieval info:      <PRIVATE name = "uiHostClockFrequency" value="0"  type="INTEGER"  enable="1" />
 // Retrieval info:      <PRIVATE name = "uiIngFIFOSize" value="4096 x 8 Bits"  type="STRING"  enable="1" />
 // Retrieval info:      <PRIVATE name = "uiMACFIFO" value="0"  type="BOOLEAN"  enable="1" />

@@ -1,5 +1,11 @@
 `timescale 1ns / 1ps
 module test_fir_lane;
+parameter acw = 30; //affect accuracy
+parameter pcmaw = 8;
+parameter mul_num = 2;
+localparam paw = (mul_num==2) ? pcmaw-1 : ((mul_num==1) ? pcmaw : 0);
+localparam pqw = (mul_num==2) ? 32 : 16;
+
     //reset and clock
     reg             rst;
     reg             clk1;
@@ -8,21 +14,25 @@ module test_fir_lane;
     //pcm inout which is pcm_clk domain
     reg             pcm_in_wr;
     reg [15:0]      pcm_in;
-    reg [8:0]       pcm_in_address;
+    reg [pcmaw-1:0] pcm_in_address;
     wire [15:0]     pcm_out;
 
     //param input which is clk1 domain
-    wire [31:0]     param_q;
-    wire [7:0]      param_addr;
+    wire [pqw-1:0]  param_q;
+    wire [paw-1:0]  param_addr;
 
     //control which is pcm_clk domain
     reg [3:0]       pcm_out_shift;
     reg             fir_start;
-    reg [7:0]       tap_len;
+    reg [11:0]      tap_len;
     reg [15:0]      result[1023: 0];
     integer         result_idx;
     
-fir_lane fir_lane_inst(
+fir_lane #(
+    .acw            (acw),
+    .pcmaw          (pcmaw),
+    .mul_num        (mul_num)
+) fir_lane_inst(
     //reset and clock
     .rst            (rst),
     .clk1           (clk1),
@@ -44,7 +54,11 @@ fir_lane fir_lane_inst(
     .tap_len        (tap_len)
 );
 
-generic_spram #(.aw(8)) param_ram 
+generic_spram #(
+    .aw             (paw),
+    .dw             (pqw)
+) 
+param_ram 
 (
     .clk            (clk1),
     .re             (1'b1),
@@ -95,7 +109,7 @@ task automatic generate_pcm_in;
             @(posedge pcm_clk);
             pcm_in_wr <= #1 0;
             fir_start <= #1 0;
-            pcm_in <= #1 (pcm_in + 1 < tap_len * 2) ? pcm_in + 1 : 0;
+            pcm_in <= #1 (pcm_in + 1 < tap_len * mul_num) ? pcm_in + 1 : 0;
             pcm_in_address <= #1 pcm_in_address + 1;
             if (k==0 && record_result)
             begin
@@ -109,7 +123,10 @@ endtask
 initial
 begin
     rst = 0;
-    $readmemh("../testbench/param.txt",param_ram.SIM_RAM.mem);
+    if (mul_num==2)
+        $readmemh("../testbench/param.txt",param_ram.SIM_RAM.mem);
+    else
+        $readmemh("../testbench/param1.txt",param_ram.SIM_RAM.mem);
     @(posedge clk1);
     rst = 1;
     pcm_in_address = 0;

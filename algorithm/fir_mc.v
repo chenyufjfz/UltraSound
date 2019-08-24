@@ -22,12 +22,21 @@ module fir_mc
     reg_wr,
     reg_ready,
     reg_writedata,
-    reg_readdata
+    reg_readdata,
+    pcm_out_shift,
+    bypass,
+    down_sample,
+    tap_len
 );
 parameter CHANNEL = 8;
 parameter FIR_LANE = 4;
-parameter acw = 30;
-parameter SIMULATION = 1;
+parameter acw = 31;
+parameter pcmaw = 9;
+parameter mul_num = 2;
+parameter PARAM_SHADOW_RAM = 1;
+localparam paw = (mul_num==2) ? pcmaw-1 : ((mul_num==1) ? pcmaw : 0);
+localparam pqw = (mul_num==2) ? 32 : 16;
+localparam paww = (mul_num==2) ? paw : paw - 1;
 
     input                           pcm_clk;
     input                           clk1;
@@ -43,26 +52,29 @@ parameter SIMULATION = 1;
 
     //register access
     input                           clk_2;
-    input [7:0]                     reg_addr;
+    input [11:0]                    reg_addr;
     input                           reg_rd;
     input                           reg_wr;
     output reg                      reg_ready;
     input [31:0]                    reg_writedata;
     output [31:0]                   reg_readdata;
-
+    input [3:0]                     pcm_out_shift;
+    input                           bypass;
+    input [11:0]                    down_sample;
+    input [11:0]                    tap_len;
+    
     //internal signal
-    wire [FIR_LANE * 32 - 1:0]      param_q;
-    wire [FIR_LANE * 8 - 1:0]       param_addr;
+    wire [FIR_LANE * pqw - 1:0]     param_q;
+    wire [FIR_LANE * paw - 1:0]     param_addr;
     wire [31:0]                     param_readdata;
-    reg [3:0]                       pcm_out_shift;
-    reg                             bypass;
-    reg [7:0]                       down_sample;
-    reg [7:0]                       tap_len;
+
 
     fir #(
     .FIR_LANE           (FIR_LANE),
     .gen_param_addr     (1),
-    .acw                (acw)
+    .acw                (acw),
+    .pcmaw              (pcmaw),
+    .mul_num            (mul_num)
     ) fir_inst (
     //clock and reset
     .pcm_clk            (pcm_clk),
@@ -87,14 +99,17 @@ parameter SIMULATION = 1;
     .down_sample        (down_sample),
     .tap_len            (tap_len)
     );
+    
 generate
     genvar k;
-    for (k=0; k<CHANNEL; k=k+1)
+    for (k=1; k<CHANNEL; k=k+1)
     begin : fir_create
     fir #(
     .FIR_LANE           (FIR_LANE),
     .gen_param_addr     (0),
-    .acw                (acw)
+    .acw                (acw),
+    .pcmaw              (pcmaw),
+    .mul_num            (mul_num)
     ) fir_inst (
     //clock and reset
     .pcm_clk            (pcm_clk),
@@ -127,18 +142,19 @@ generate
     for (i=0; i<FIR_LANE; i=i+1)
     begin : param_ram_create
         rowo_dpram #(
-        .dw             (32),
-        .aw             (8),
-        .pipeline       (2),
-        .SIMULATION     (SIMULATION)
+        .rdw            (pqw),
+        .raw            (paw),
+        .wdw            (32),
+        .pipeline       (2)
         ) param_ram(
         .data           (reg_writedata),	    
-	    .wraddress      (reg_addr[7:0]),
+	    .wraddress      (reg_addr[paww-1:0]),
 	    .wrclock        (clk_2),
+	    .rden           (1'b1),
 	    .wren           (reg_wr),
-	    .rdaddress      (param_addr[8*i+7:8*i]),
+	    .rdaddress      (param_addr[paw*i+paw-1:paw*i]),
 	    .rdclock        (clk1),
-	    .q              (param_q[32*i+31:32*i])
+	    .q              (param_q[pqw*i+pqw-1:pqw*i])
         );
     end
 endgenerate
@@ -149,31 +165,44 @@ endgenerate
     else
         if (reg_wr | reg_rd)
             reg_ready <= #1 !reg_ready;
-    
+
+/*    
     always @(posedge clk_2)
     if (rst)
     begin
         bypass <= #1 1;
         down_sample <= #1 1;
         tap_len <= #1 0;
-        pcm_out_shift <= #1 9;
+        pcm_out_shift <= #1 12;
     end
     else
-        if (reg_wr && reg_addr == 8'hff)
-            {bypass, pcm_out_shift, tap_len, down_sample} <= #1 reg_writedata[20:0];
+        if (reg_wr && reg_addr == 12'hfff)
+            {bypass, pcm_out_shift, tap_len, down_sample} <= #1 reg_writedata[28:0];
             
-    assign reg_readdata = (reg_addr == 8'hff) ? {bypass, pcm_out_shift, tap_len, down_sample} : param_readdata;
-    
+    assign reg_readdata = (reg_addr == 12'hfff) ? {bypass, pcm_out_shift, tap_len, down_sample} :
+                          (reg_addr == 12'hffe) ? {FIR_LANE[4:0], mul_num[1], acw[5:0], paw[3:0], pcmaw[3:0], CHANNEL[3:0]} :   
+                          param_readdata;*/
+                          
+    assign reg_readdata = param_readdata;
+
+generate
+if (PARAM_SHADOW_RAM)    
+begin
     generic_spram #(
         .dw             (32),
-        .aw             (8),
-        .SIMULATION     (SIMULATION)
+        .aw             (paww)
     )  param_backup(
         .clk            (clk_2),
         .re             (reg_rd),
         .we             (reg_wr),
-        .addr           (reg_addr),
+        .addr           (reg_addr[paww-1:0]),
         .q              (param_readdata),
         .data           (reg_writedata)
     );
+end    
+else
+begin
+    assign param_readdata = 0;
+end
+endgenerate    
 endmodule

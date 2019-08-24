@@ -1,172 +1,168 @@
-//////////////////////////////////////////////////////////////////////
-////                                                              ////
-////  Generic Dual-Port Synchronous RAM                           ////
-////                                                              ////
-////  This file is part of memory library available from          ////
-////  http://www.opencores.org/cvsweb.shtml/generic_memories/     ////
-////                                                              ////
-////  Description                                                 ////
-////  This block is a wrapper with common dual-port               ////
-////  synchronous memory interface for different                  ////
-////  types of ASIC and FPGA RAMs. Beside universal memory        ////
-////  interface it also provides behavioral model of generic      ////
-////  dual-port synchronous RAM.                                  ////
-////  It also contains a fully synthesizeable model for FPGAs.    ////
-////  It should be used in all OPENCORES designs that want to be  ////
-////  portable accross different target technologies and          ////
-////  independent of target memory.                               ////
+//
+// This block is a wrapper with common dual-port synchronous memory interface for different
+// types FPGA RAMs. It is fully synthesizeable model for FPGAs. It can not be used for ASIC.
+//
+// Author:       Chen Yu
+// Revision:    0.1 - Initial Release
+//
+`timescale 1ns / 1ps
 
-////  Supported FPGA RAMs are:                                    ////
-////  - Generic FPGA (VENDOR_FPGA)                                ////
-////    Tested RAMs: Altera, Xilinx                               ////
-////    Synthesis tools: LeonardoSpectrum, Synplicity             ////
-////  - Xilinx (VENDOR_XILINX)                                    ////
-////  - Altera (VENDOR_ALTERA)                                    ////
-////                                                              ////
-////  To Do:                                                      ////
-////   - fix Avant!                                               ////
-////   - add additional RAMs (VS etc)                             ////
-////                                                              ////
-////  Author(s):                                                  ////
-////      - Richard Herveille, richard@asics.ws                   ////
-////      - Damjan Lampret, lampret@opencores.org                 ////
-////                                                              ////
-//////////////////////////////////////////////////////////////////////
-////                                                              ////
-//// Copyright (C) 2000 Authors and OPENCORES.ORG                 ////
-////                                                              ////
-//// This source file may be used and distributed without         ////
-//// restriction provided that this copyright statement is not    ////
-//// removed from the file and that any derivative work contains  ////
-//// the original copyright notice and the associated disclaimer. ////
-////                                                              ////
-//// This source file is free software; you can redistribute it   ////
-//// and/or modify it under the terms of the GNU Lesser General   ////
-//// Public License as published by the Free Software Foundation; ////
-//// either version 2.1 of the License, or (at your option) any   ////
-//// later version.                                               ////
-////                                                              ////
-//// This source is distributed in the hope that it will be       ////
-//// useful, but WITHOUT ANY WARRANTY; without even the implied   ////
-//// warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR      ////
-//// PURPOSE.  See the GNU Lesser General Public License for more ////
-//// details.                                                     ////
-////                                                              ////
-//// You should have received a copy of the GNU Lesser General    ////
-//// Public License along with this source; if not, download it   ////
-//// from http://www.opencores.org/lgpl.shtml                     ////
-////                                                              ////
-//////////////////////////////////////////////////////////////////////
+module generic_dpram (
+	address_a,
+	address_b,
+	clock_a,
+	clock_b,
+	data_a,
+	data_b,
+	rden_a,
+	rden_b,
+	wren_a,
+	wren_b,
+	q_a,
+	q_b);
 
-`include "./include/timescale.v"
+parameter adw = 16; // number of bits in a data-bus
+parameter aaw = 9;  // number of bits in a address-bus
+parameter bdw = 32; // number of bits in b data-bus
+parameter pipeline=1;           //output register, pipeline=2
+//parameter SIMULATION = 1;
+localparam baw = (bdw > adw) ? aaw - $clog2(bdw/adw) : aaw + $clog2(adw/bdw);
 
-module generic_dpram(
-	// Generic synchronous dual-port RAM interface
-	rclk, 	
-	rce, 
-	raddr, 
-	do,
-	wclk, 	
-	wce, 
-	we, 
-	waddr, 
-	di
-);
+	input	[aaw-1:0]  address_a;
+	input	[baw-1:0]  address_b;
+	input	  clock_a;
+	input	  clock_b;
+	input	[adw-1:0]  data_a;
+	input	[bdw-1:0]  data_b;
+    input     rden_a;
+	input     rden_b;
+	input	  wren_a;
+	input	  wren_b;
+	output	[adw-1:0]  q_a;
+	output	[bdw-1:0]  q_b;
+`ifndef ALTERA_RESERVED_QIS
+// synopsys translate_off
+`endif
+	tri1	  clock_a;
+	tri0	  wren_a;
+	tri0	  wren_b;
+`ifndef ALTERA_RESERVED_QIS
+// synopsys translate_on
+`endif
 
-	//
-	// Default address and data buses width
-	//
-	parameter aw = 5;  // number of bits in address-bus
-	parameter dw = 16; // number of bits in data-bus
-	parameter wsize = 1<<aw;        // number of words in memory
-	//
-	// Generic synchronous double-port RAM interface
-	//
-	// read port
-	input           rclk;  // read clock, rising edge trigger
-	input           rce;   // read port chip enable, active high
-	input  [aw-1:0] raddr; // read address
-	output [dw-1:0] do;    // data output
+	wire [adw-1:0] sub_wire0;
+	wire [bdw-1:0] sub_wire1;
+	wire [adw-1:0] q_a = sub_wire0[adw-1:0];
+	wire [bdw-1:0] q_b = sub_wire1[bdw-1:0];
 
-	// write port
-	input          wclk;  // write clock, rising edge trigger
-	input          wce;   // write port chip enable, active high
-	input          we;    // write enable, active high
-	input [aw-1:0] waddr; // write address
-	input [dw-1:0] di;    // data input
-
-	//
-	// Module body
-	//
-
-`ifdef SIM
-	//
-	// Instantiation synthesizeable FPGA memory
-	//
-	// This code has been tested using LeonardoSpectrum and Synplicity.
-	// The code correctly instantiates Altera EABs and Xilinx BlockRAMs.
-	//
-	reg [dw-1:0] mem [wsize -1:0]; // instantiate memory
-	reg [aw-1:0] ra;                 // register read address
-
-	// read operation
-	always @(posedge rclk)
-	  if (rce)
-	    ra <= #1 raddr;
-
-	assign do = mem[ra];
-
-	// write operation
-	always@(posedge wclk)
-		if (we && wce)
-			mem[waddr] <= #1 di;
-
-`else
-	altsyncram	dpram (
-				.wren_a (we & wce),
-				.clock0 (wclk),
-				.address_a (waddr),
-				.address_b (raddr),
-				.data_a (di),
-				.q_b (do),
+generate
+if (pipeline==2)
+begin
+	altsyncram	altsyncram_component (
+				.clock0 (clock_a),
+				.wren_a (wren_a),
+				.address_b (address_b),
+				.clock1 (clock_b),
+				.data_b (data_b),
+				.wren_b (wren_b),
+				.address_a (address_a),
+				.data_a (data_a),
+				.q_a (sub_wire0),
+				.q_b (sub_wire1),
 				.aclr0 (1'b0),
 				.aclr1 (1'b0),
-				.addressstall_a (1'b0),
-				.addressstall_b (1'b0),
+				.addressstall_a (!(rden_a | wren_a)),
+				.addressstall_b (!(rden_b | wren_b)),
 				.byteena_a (1'b1),
 				.byteena_b (1'b1),
-				.clock1 (1'b1),
 				.clocken0 (1'b1),
 				.clocken1 (1'b1),
 				.clocken2 (1'b1),
 				.clocken3 (1'b1),
-				.data_b ({dw{1'b1}}),
 				.eccstatus (),
-				.q_a (),
 				.rden_a (1'b1),
-				.rden_b (1'b1),
-				.wren_b (1'b0));
+				.rden_b (1'b1));
 	defparam
-		dpram.address_aclr_b = "NONE",
-		dpram.address_reg_b = "CLOCK0",
-		dpram.clock_enable_input_a = "BYPASS",
-		dpram.clock_enable_input_b = "BYPASS",
-		dpram.clock_enable_output_b = "BYPASS",
-		dpram.intended_device_family = "Stratix IV",
-		dpram.lpm_type = "altsyncram",
-		dpram.numwords_a = wsize,
-		dpram.numwords_b = wsize,
-		dpram.operation_mode = "DUAL_PORT",
-		dpram.outdata_aclr_b = "NONE",
-		dpram.outdata_reg_b = "UNREGISTERED",
-		dpram.power_up_uninitialized = "FALSE",
-		dpram.ram_block_type = "M9K",
-		dpram.read_during_write_mode_mixed_ports = "DONT_CARE",
-		dpram.widthad_a = aw,
-		dpram.widthad_b = aw,
-		dpram.width_a = dw,
-		dpram.width_b = dw,
-		dpram.width_byteena_a = 1;
-`endif
-
+		altsyncram_component.address_reg_b = "CLOCK1",
+		altsyncram_component.clock_enable_input_a = "BYPASS",
+		altsyncram_component.clock_enable_input_b = "BYPASS",
+		altsyncram_component.clock_enable_output_a = "BYPASS",
+		altsyncram_component.clock_enable_output_b = "BYPASS",
+		altsyncram_component.indata_reg_b = "CLOCK1",
+		altsyncram_component.intended_device_family = "Cyclone IV E",
+		altsyncram_component.lpm_type = "altsyncram",
+		altsyncram_component.numwords_a = 1<<aaw,
+		altsyncram_component.numwords_b = 1<<baw,
+		altsyncram_component.operation_mode = "BIDIR_DUAL_PORT",
+		altsyncram_component.outdata_aclr_a = "NONE",
+		altsyncram_component.outdata_aclr_b = "NONE",
+		altsyncram_component.outdata_reg_a = "CLOCK0",
+		altsyncram_component.outdata_reg_b = "CLOCK1",
+		altsyncram_component.power_up_uninitialized = "FALSE",
+		altsyncram_component.ram_block_type = "M9K",
+		altsyncram_component.read_during_write_mode_port_a = "NEW_DATA_NO_NBE_READ",
+		altsyncram_component.read_during_write_mode_port_b = "NEW_DATA_NO_NBE_READ",
+		altsyncram_component.widthad_a = aaw,
+		altsyncram_component.widthad_b = baw,
+		altsyncram_component.width_a = adw,
+		altsyncram_component.width_b = bdw,
+		altsyncram_component.width_byteena_a = 1,
+		altsyncram_component.width_byteena_b = 1,
+		altsyncram_component.wrcontrol_wraddress_reg_b = "CLOCK1";
+end
+else
+begin
+altsyncram	altsyncram_component (
+				.clock0 (clock_a),
+				.wren_a (wren_a),
+				.address_b (address_b),
+				.clock1 (clock_b),
+				.data_b (data_b),
+				.wren_b (wren_b),
+				.address_a (address_a),
+				.data_a (data_a),
+				.q_a (sub_wire0),
+				.q_b (sub_wire1),
+				.aclr0 (1'b0),
+				.aclr1 (1'b0),
+				.addressstall_a (!(rden_a | wren_a)),
+				.addressstall_b (!(rden_b | wren_b)),
+				.byteena_a (1'b1),
+				.byteena_b (1'b1),
+				.clocken0 (1'b1),
+				.clocken1 (1'b1),
+				.clocken2 (1'b1),
+				.clocken3 (1'b1),
+				.eccstatus (),
+				.rden_a (1'b1),
+				.rden_b (1'b1));
+	defparam
+		altsyncram_component.address_reg_b = "CLOCK1",
+		altsyncram_component.clock_enable_input_a = "BYPASS",
+		altsyncram_component.clock_enable_input_b = "BYPASS",
+		altsyncram_component.clock_enable_output_a = "BYPASS",
+		altsyncram_component.clock_enable_output_b = "BYPASS",
+		altsyncram_component.indata_reg_b = "CLOCK1",
+		altsyncram_component.intended_device_family = "Cyclone IV E",
+		altsyncram_component.lpm_type = "altsyncram",
+		altsyncram_component.numwords_a = 1<<aaw,
+		altsyncram_component.numwords_b = 1<<baw,
+		altsyncram_component.operation_mode = "BIDIR_DUAL_PORT",
+		altsyncram_component.outdata_aclr_a = "NONE",
+		altsyncram_component.outdata_aclr_b = "NONE",
+		altsyncram_component.outdata_reg_a = "UNREGISTERED",
+		altsyncram_component.outdata_reg_b = "UNREGISTERED",
+		altsyncram_component.power_up_uninitialized = "FALSE",
+		altsyncram_component.ram_block_type = "M9K",
+		altsyncram_component.read_during_write_mode_port_a = "NEW_DATA_NO_NBE_READ",
+		altsyncram_component.read_during_write_mode_port_b = "NEW_DATA_NO_NBE_READ",
+		altsyncram_component.widthad_a = aaw,
+		altsyncram_component.widthad_b = baw,
+		altsyncram_component.width_a = adw,
+		altsyncram_component.width_b = bdw,
+		altsyncram_component.width_byteena_a = 1,
+		altsyncram_component.width_byteena_b = 1,
+		altsyncram_component.wrcontrol_wraddress_reg_b = "CLOCK1";
+end
+endgenerate
 endmodule

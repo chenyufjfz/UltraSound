@@ -55,7 +55,7 @@ module mac_reset (
         1:  begin rst_addr <= #1 8'd3;     rst_writedata <= #1 32'h06150910; end //mac address
         2:  begin rst_addr <= #1 8'd4;     rst_writedata <= #1 32'h2019; end //mac address
         3:  begin rst_addr <= #1 8'd9;     rst_writedata <= #1 500; end //tx section empty
-        4:  begin rst_addr <= #1 8'd10;    rst_writedata <= #1 100; end //tx section full
+        4:  begin rst_addr <= #1 8'd10;    rst_writedata <= #1 0; end //tx section full
         5:  begin rst_addr <= #1 8'd7;     rst_writedata <= #1 4000; end //rx section empty
         6:  begin rst_addr <= #1 8'd8;     rst_writedata <= #1 0; end //rx section full
         7:  begin rst_addr <= #1 8'd11;    rst_writedata <= #1 8; end //rx almost empty

@@ -76,7 +76,7 @@ set_location_assignment PIN_C14 -to ENET0_LINK100
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_50
 set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENET0_LINK100
 set_global_assignment -name ENABLE_SIGNALTAP ON
-set_global_assignment -name USE_SIGNALTAP_FILE signaltap/controller.stp
+set_global_assignment -name USE_SIGNALTAP_FILE signaltap/icmp.stp
 set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334528" -section_id auto_signaltap_0
@@ -103,6 +103,18 @@ set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
 set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
+set_location_assignment PIN_G19 -to RX_ERR
+set_location_assignment PIN_F19 -to TX_ERR
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=1024" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=1024" -section_id auto_signaltap_0
+set_global_assignment -name VERILOG_FILE udp_mac_complete/udp_arb_mux.v
+set_global_assignment -name VERILOG_FILE algorithm/source_mem.v
+set_global_assignment -name VERILOG_FILE algorithm/pcmmux_fifo.v
+set_global_assignment -name VERILOG_FILE algorithm/pcm2udp.v
+set_global_assignment -name VERILOG_FILE algorithm/dac_tx.v
+set_global_assignment -name VERILOG_FILE mem/rowo_dpram.v
+set_global_assignment -name VERILOG_FILE mem/generic_spram.v
+set_global_assignment -name VERILOG_FILE mem/generic_dpram.v
 set_global_assignment -name VERILOG_FILE util/glitch_remove.v
 set_global_assignment -name VERILOG_FILE util/gen_key_signal.v
 set_global_assignment -name VERILOG_FILE util/reg_dec_rate.v
@@ -139,67 +151,7 @@ set_global_assignment -name VERILOG_FILE udp_mac_complete/arbiter.v
 set_global_assignment -name SDC_FILE ultrasound.sdc
 set_global_assignment -name SIGNALTAP_FILE signaltap/mac_reset.stp
 set_global_assignment -name HEX_FILE signaltap/read_mac_counter.hex
-set_location_assignment PIN_G19 -to RX_ERR
-set_location_assignment PIN_F19 -to TX_ERR
 set_global_assignment -name SIGNALTAP_FILE signaltap/controller.stp
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "controller:controller_inst|clk" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "controller:controller_inst|check_invalid" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "controller:controller_inst|ctrl_in_udp_err" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "controller:controller_inst|ctrl_in_udp_hdr_ready" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "controller:controller_inst|check_invalid" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "controller:controller_inst|ctrl_in_udp_err" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "controller:controller_inst|ctrl_in_udp_hdr_ready" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=1024" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=1024" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "controller:controller_inst|ctrl_in_udp_hdr_ready~reg0" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "controller:controller_inst|ctrl_in_udp_hdr_valid" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tlast" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tready~reg0" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "controller:controller_inst|ctrl_in_udp_hdr_ready~reg0" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "controller:controller_inst|ctrl_in_udp_hdr_valid" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tdata[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tlast" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tready~reg0" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "controller:controller_inst|ctrl_in_udp_payload_lo" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "controller:controller_inst|ctrl_in_valid" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "controller:controller_inst|ctrl_out_udp_hdr_ready" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "controller:controller_inst|ctrl_out_udp_hdr_valid" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "controller:controller_inst|ctrl_out_udp_hdr_valid~reg0" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "controller:controller_inst|ctrl_out_udp_payload_axis_tvalid~reg0" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "controller:controller_inst|ctrl_out_udp_payload_lo" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "controller:controller_inst|execcmd:execcmd_inst|start_exec" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "controller:controller_inst|udp_hdr_tx_finish" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "controller:controller_inst|ctrl_in_udp_payload_lo" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "controller:controller_inst|ctrl_in_valid" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "controller:controller_inst|ctrl_out_udp_hdr_ready" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "controller:controller_inst|ctrl_out_udp_hdr_valid" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "controller:controller_inst|ctrl_out_udp_hdr_valid~reg0" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "controller:controller_inst|ctrl_out_udp_payload_axis_tvalid~reg0" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "controller:controller_inst|ctrl_out_udp_payload_lo" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "controller:controller_inst|execcmd:execcmd_inst|start_exec" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "controller:controller_inst|udp_hdr_tx_finish" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=24" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=24" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=96" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=15251" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=12987" -section_id auto_signaltap_0
-set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name QIP_FILE IP/ether1.qip
 set_global_assignment -name QIP_FILE controller/inputram.qip
 set_global_assignment -name QIP_FILE Controller/outputram.qip
@@ -208,3 +160,37 @@ set_global_assignment -name QIP_FILE IP/clkctrl1.qip
 set_global_assignment -name QIP_FILE IP/ddio_out1.qip
 set_global_assignment -name QIP_FILE algorithm/fir_pcm_ram.qip
 set_global_assignment -name QIP_FILE util/mult.qip
+set_global_assignment -name QIP_FILE IP/cic_inp.qip
+set_global_assignment -name SIGNALTAP_FILE signaltap/icmp.stp
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "enet_clk_pll:enet_clk_pll_inst|c1" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|m_icmp_ip_hdr_ready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|m_icmp_ip_hdr_valid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|m_icmp_payload_axis_tready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|m_icmp_payload_axis_tvalid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|s_icmp_ip_hdr_ready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|s_icmp_ip_hdr_valid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|s_icmp_payload_axis_tready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|s_icmp_payload_axis_tvalid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "udp_mac_complete:udp_mac_complete_inst|udp_complete:udp_complete_inst|ip_complete:ip_complete_inst|arp:arp_inst|arp_eth_tx:arp_eth_tx_inst|m_eth_hdr_ready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "udp_mac_complete:udp_mac_complete_inst|udp_complete:udp_complete_inst|ip_complete:ip_complete_inst|arp:arp_inst|arp_eth_tx:arp_eth_tx_inst|m_eth_hdr_valid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "udp_mac_complete:udp_mac_complete_inst|udp_complete:udp_complete_inst|ip_complete:ip_complete_inst|arp_rx_eth_hdr_valid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "udp_mac_complete:udp_mac_complete_inst|udp_complete:udp_complete_inst|ip_complete:ip_complete_inst|arp_rx_eth_payload_axis_tvalid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|m_icmp_ip_hdr_ready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|m_icmp_ip_hdr_valid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|m_icmp_payload_axis_tready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|m_icmp_payload_axis_tvalid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|s_icmp_ip_hdr_ready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|s_icmp_ip_hdr_valid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|s_icmp_payload_axis_tready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "udp_mac_complete:udp_mac_complete_inst|icmp_reply:icmp_reply_inst|s_icmp_payload_axis_tvalid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "udp_mac_complete:udp_mac_complete_inst|udp_complete:udp_complete_inst|ip_complete:ip_complete_inst|arp:arp_inst|arp_eth_tx:arp_eth_tx_inst|m_eth_hdr_ready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "udp_mac_complete:udp_mac_complete_inst|udp_complete:udp_complete_inst|ip_complete:ip_complete_inst|arp:arp_inst|arp_eth_tx:arp_eth_tx_inst|m_eth_hdr_valid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "udp_mac_complete:udp_mac_complete_inst|udp_complete:udp_complete_inst|ip_complete:ip_complete_inst|arp_rx_eth_hdr_valid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "udp_mac_complete:udp_mac_complete_inst|udp_complete:udp_complete_inst|ip_complete:ip_complete_inst|arp_rx_eth_payload_axis_tvalid" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=12" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=12" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=60" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=61270" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=58228" -section_id auto_signaltap_0
+set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
