@@ -47,7 +47,7 @@ parameter pcmaw=10;
     reg [pcmaw-1:0]             pcm_addr[CHANNEL-1:0];
     wire [31:0]                 reg_readdata_dac[CHANNEL-1:0];
     
-    always @(posedge clk_2)
+    always @(posedge clk_2 or posedge rst)
     if (rst)
         reg_ready <= #1 0;
     else

@@ -57,6 +57,13 @@ set	rgmii_rx_clk		"ENET0_RX_CLK"
 set rgmii_in			"ENET0_RX_DATA"
 set	rgmii_rx_control	"ENET0_RX_DV"
 
+set da_clk_pin          "DA_CLK_OUT"
+set da_pcm              "DA_PCM_OUT"
+set da_pcm_t            "DA_PCM_OUT_T"
+
+set ad_clk_pin          "AD_CLK_OUT"
+set ad_pcm              "AD_PCM_IN"
+
 # Board Delay
 # Assume trace delay, pin capacitance, and rise/fall time differences between data and\
 clock are negligible.
@@ -71,7 +78,11 @@ set th			0.8
 set tco_max		0.5	
 set tco_min		-0.5
 
+set da_tsu      3
+set da_th       2.5
 
+set ad_tco_max   4.9
+set ad_tco_min   1.3
 
 #**************************************************************
 # Create Clock
@@ -103,11 +114,14 @@ create_clock -name $rgmii_rx_25M_virtualclk 	-period $CLK_25M_PERIOD
 #**************************************************************
 # Create Generated Clock
 #**************************************************************
+create_generated_clock -name clk_2 -source [get_pins {main_pll_inst|altpll_component|auto_generated|pll1|inclk[0]}] -duty_cycle 50.000 -multiply_by 1 -master_clock $clk_in [get_pins {main_pll_inst|altpll_component|auto_generated|pll1|clk[0]}] 
+create_generated_clock -name clk -source [get_pins {main_pll_inst|altpll_component|auto_generated|pll1|inclk[0]}] -duty_cycle 50.000 -multiply_by 2 -master_clock $clk_in [get_pins {main_pll_inst|altpll_component|auto_generated|pll1|clk[1]}] 
+create_generated_clock -name da_clk -source [get_pins {main_pll_inst|altpll_component|auto_generated|pll1|inclk[0]}] -duty_cycle 50.000 -multiply_by 1 -master_clock $clk_in [get_pins {main_pll_inst|altpll_component|auto_generated|pll1|clk[2]}] 
+create_generated_clock -name ad_clk -source [get_pins {main_pll_inst|altpll_component|auto_generated|pll1|inclk[0]}] -duty_cycle 50.000 -multiply_by 1 -divide_by 2 -master_clock $clk_in [get_pins {main_pll_inst|altpll_component|auto_generated|pll1|clk[3]}] 
+create_generated_clock -name da_clk_90deg -source [get_pins {main_pll_inst|altpll_component|auto_generated|pll1|inclk[0]}] -duty_cycle 50.000 -multiply_by 1 -phase 180.000 -master_clock $clk_in [get_pins {main_pll_inst|altpll_component|auto_generated|pll1|clk[4]}]
+create_generated_clock -name clk_125M_0deg -source [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|inclk[0]}] -duty_cycle 50.000 -multiply_by 5 -divide_by 2 -master_clock $clk_in [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|clk[0]}] 
+create_generated_clock -name clk_25M_0deg -source [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|inclk[0]}] -duty_cycle 50.000 -multiply_by 1 -divide_by 2 -master_clock $clk_in [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|clk[1]}] 
 
-create_generated_clock -name clk_2 -source [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|inclk[0]}] -duty_cycle 50.000 -multiply_by 1 -master_clock $clk_in [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|clk[0]}] 
-create_generated_clock -name clk -source [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|inclk[0]}] -duty_cycle 50.000 -multiply_by 2 -master_clock $clk_in [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|clk[1]}] 
-create_generated_clock -name clk_125M_0deg -source [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|inclk[0]}] -duty_cycle 50.000 -multiply_by 5 -divide_by 2 -master_clock $clk_in [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|clk[2]}] 
-create_generated_clock -name clk_25M_0deg -source [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|inclk[0]}] -duty_cycle 50.000 -multiply_by 1 -divide_by 2 -master_clock $clk_in [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|clk[3]}] 
 
 # RGMII TX CLOCK
 #**************************************************************
@@ -117,12 +131,20 @@ create_generated_clock -name clk_25M_0deg -source [get_pins {enet_clk_pll_inst|a
 # -phase 90:Tells timing analysis that there is a phase-shift externaly.
 # It have no effect inside the FPGA
 create_generated_clock -name rgmii_125_tx_clk \
--source [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|clk[2]}]  \
+-source [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|clk[0]}]  \
 -master_clock clk_125M_0deg -phase 90 [get_ports $rgmii_tx_clk]
 
 create_generated_clock -name rgmii_25_tx_clk \
--source [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|clk[3]}] \
+-source [get_pins {enet_clk_pll_inst|altpll_component|auto_generated|pll1|clk[1]}] \
 -master_clock clk_25M_0deg  -phase 90 [get_ports $rgmii_tx_clk] -add
+
+create_generated_clock -name da_clk_out \
+-source [get_pins {main_pll_inst|altpll_component|auto_generated|pll1|clk[4]}] \
+-master_clock da_clk_90deg [get_ports $da_clk_pin]
+
+create_generated_clock -name ad_clk_out \
+-source [get_pins {main_pll_inst|altpll_component|auto_generated|pll1|clk[3]}] \
+-master_clock ad_clk -phase 180 [get_ports $ad_clk_pin]
 
 #**************************************************************
 # Set Clock Latency
@@ -142,7 +164,7 @@ set_clock_groups -exclusive \
 set_clock_groups -asynchronous \
 -group {clk_125M_0deg clk_25M_0deg} \
 -group $clk_in \
--group "clk clk_2" \
+-group "clk clk_2 da_clk ad_clk" \
 -group "$rgmii_rx_125M_clk $rgmii_rx_25M_clk"
 
 #**************************************************************
@@ -231,6 +253,15 @@ set_output_delay -clock rgmii_25_tx_clk \
 -clock_fall \
 -add_delay
 
+set_output_delay -clock da_clk_out \
+-max [expr $da_tsu ] \
+[get_ports "$da_pcm* $da_pcm_t*"] \
+-add_delay
+
+set_output_delay -clock da_clk_out \
+-min [expr - $da_th] \
+[get_ports "$da_pcm* $da_pcm_t*"] \
+-add_delay
 
 #**************************************************************
 # Set Input Delay
@@ -306,6 +337,16 @@ set_input_delay -clock  [get_clocks $rgmii_rx_25M_virtualclk] \
 -min [expr  $data_delay_min + $tco_min - $clk_delay_max] \
 [get_ports "$rgmii_in* $rgmii_rx_control"] \
 -clock_fall \
+-add_delay
+
+set_input_delay -clock ad_clk_out \
+-max [expr $ad_tco_max ] \
+[get_ports "$ad_pcm*"] \
+-add_delay
+
+set_input_delay -clock ad_clk_out \
+-min [expr $ad_tco_min ] \
+[get_ports "$ad_pcm*"] \
 -add_delay
 
 

@@ -40,8 +40,7 @@ parameter pcmaw=9;
     output [pcmaw-1:0]          pcm_available;
     input [7:0]                 pcm_capture_sep;
 
-    //internal wire & reg
-    
+    //internal wire & reg    
     wire [15:0]                 pcm_mux_in[CHANNEL-1:0];
     reg [7:0]                   capture_idx;
     reg [pcmaw-1:0]             pcm_write_addr;
@@ -75,11 +74,15 @@ begin
         pcm_out <= #1 pcm_mux_out;
     
     always @(posedge pcm_out_clk)
-    if (pcm_write_addr!=pcm_write_addr_d)
-        pcm_out_valid <= #1 1'b1;
+    if (rst)
+        pcm_out_valid <= #1 0;
     else
-        if (pcm_out_ready)
-            pcm_out_valid <= #1 1'b0;
+        if (pcm_write_addr!=pcm_write_addr_d)
+            pcm_out_valid <= #1 1'b1;
+        else
+            if (pcm_out_ready)
+                pcm_out_valid <= #1 1'b0;
+            
     assign pcm_available = pcm_out_valid;
     
     always @(posedge pcm_in_clk)

@@ -62,31 +62,46 @@ module mac_reset (
         8:  begin rst_addr <= #1 8'd12;    rst_writedata <= #1 8; end //rx almost full
         9:  begin rst_addr <= #1 8'd13;    rst_writedata <= #1 8; end //tx almost empty
         10: begin rst_addr <= #1 8'd14;    rst_writedata <= #1 3; end //tx almost full
-        11: begin rst_addr <= #1 8'd15;    rst_writedata <= #1 32'h10; end //set mdio phy addr
+        11: begin 
+        		rst_addr <= #1 8'd15;    
+        		rst_writedata <= #1 (REAL_PHY==32'h1111) ? 32'h10 : 32'h00; 
+        	end //set mdio phy addr
         12: begin
-                rst_addr <= #1 REAL_PHY ? 8'h84 : 1;
+                rst_addr <= #1 (REAL_PHY==32'h1111) ? 8'h84 : 8'h1;
                 rst_writedata <= #1 1;
             end //Phy Disable 10M & 100M Advertisement, No parse
         13: begin
-                rst_addr <= #1 REAL_PHY ? 8'h89 : 1;
+                rst_addr <= #1 (REAL_PHY==32'h1111) ? 8'h89 : 8'h1;
                 rst_writedata <= #1 32'h0c00;
             end //0c00 means Master mode, Disable 1000M Advertisement
         14: begin
-                rst_addr <= #1 REAL_PHY ? 8'h90 : 1;
-                rst_writedata <= #1 32'ha078;
+                rst_addr <= #1 (REAL_PHY==32'h1111) ? 8'h90 : 8'h1;
+                rst_writedata <= #1 (REAL_PHY==32'h1111) ? 32'ha078 : 32'h3060;
             end //A000 means set FIFO to 24b, 0060 means enable crossover
         15: begin
-                rst_addr <= #1 REAL_PHY ? 8'h94 : 1;
-                rst_writedata <= #1 32'h0ce2;
-            end //80 means add Rx clk delay, 2 means add Tx clk delay
+                rst_addr <= #1 (REAL_PHY==32'h1111) ? 8'h9b : (REAL_PHY ? 8'h96 : 8'h1);
+                rst_writedata <= #1 (REAL_PHY==32'h1111) ? 32'h848b : 32'h12;
+            end //b means RGMII to Copper            
         16: begin
-                rst_addr <= #1 REAL_PHY ? 8'h9b : 1;
-                rst_writedata <= #1 32'h848b;
-            end //b means RGMII to Copper
+                rst_addr <= #1 REAL_PHY ? 8'h94 : 1;
+                rst_writedata <= #1 (REAL_PHY==32'h1111) ? 32'h0ce2 : 32'h200;
+            end //80 means add Rx clk delay, 2 means add Tx clk delay
         17: begin
-                rst_addr <= #1 REAL_PHY ? 8'h80 : 1;
-                rst_writedata <= #1 set_1000 ? 32'h8140 : 32'ha100;
-            end //1000M duplex, reset phy
+                rst_addr <= #1 (REAL_PHY==32'h1512) ? 8'h96 : 8'h1;
+                rst_writedata <= #1 32'h3;
+            end //80 means add Rx clk delay, 2 means add Tx clk delay    
+        18: begin
+                rst_addr <= #1 (REAL_PHY==32'h1512) ? 8'h90 : 8'h1;
+                rst_writedata <= #1 32'h0122;
+            end //80 means add Rx clk delay, 2 means add Tx clk delay      
+        19: begin
+                rst_addr <= #1 (REAL_PHY==32'h1512) ? 8'h96 : 8'h1;
+                rst_writedata <= #1 32'h0;
+            end //80 means add Rx clk delay, 2 means add Tx clk delay            
+        20: begin
+                rst_addr <= #1 REAL_PHY ? 8'h80 : 8'h1;
+                rst_writedata <= #1 set_1000 ? ((REAL_PHY==32'h1512) ? 32'h9140 : 32'h8140) : 32'ha100;
+            end //1000M duplex, reset phy                
         FINISH: begin rst_addr <= #1 8'd2; rst_writedata = 32'h04002030 | (set_1000 << 3); end //command, reset, disable Tx & Rx
         FINISH+1: begin rst_addr <= #1 8'd2; rst_writedata = 32'h04000033 | (set_1000 << 3); end //command, discard err pkt, enable Tx & Rx
         FINISH+2: begin rst_addr <= #1 8'd2; rst_writedata = 32'h04000033 | (set_1000 << 3); end //command, discard err pkt, enable Tx & Rx

@@ -91,7 +91,7 @@ begin
     mult #(
         .di1(16),
         .di2(16),
-        .do(32),
+        .dow(32),
         .pipeline(2)
     ) mult_h(
         .clock              (clk1),
@@ -209,7 +209,7 @@ endgenerate
     mult #(
         .di1(16),
         .di2(16),
-        .do(32),
+        .dow(32),
         .pipeline(2)        //pipeline=2, means has input and output register
     ) mult_l(
         .clock              (clk1),

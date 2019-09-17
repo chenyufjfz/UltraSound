@@ -1,0 +1,127 @@
+../fir.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/fir.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module fir
+
+Top level modules:
+	fir
+
+} {} {}} ../mix_freq_mc.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/mix_freq_mc.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module mix_freq_mc
+
+Top level modules:
+	mix_freq_mc
+
+} {} {}} ../../mem/rowo_dpram.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/mem/rowo_dpram.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module rowo_dpram
+
+Top level modules:
+	rowo_dpram
+
+} {} {}} ../pcmmux_fifo.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/pcmmux_fifo.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module pcmmux_fifo
+
+Top level modules:
+	pcmmux_fifo
+
+} {} {}} ../source_mem.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/source_mem.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module source_mem
+
+Top level modules:
+	source_mem
+
+} {} {}} ../../mem/generic_spram.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/mem/generic_spram.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module generic_spram
+
+Top level modules:
+	generic_spram
+
+} {} {}} ../fir_mc.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/fir_mc.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module fir_mc
+
+Top level modules:
+	fir_mc
+
+} {} {}} ../testbench/test_mix_freq.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/testbench/test_mix_freq.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module test_mix_freq
+
+Top level modules:
+	test_mix_freq
+
+} {} {}} ../../mem/generic_dpram.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/mem/generic_dpram.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module generic_dpram
+
+Top level modules:
+	generic_dpram
+
+} {} {}} ../testbench/test_pcm2udp.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/testbench/test_pcm2udp.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module test_pcm2udp
+
+Top level modules:
+	test_pcm2udp
+
+} {} {}} ../../util/mult.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/util/mult.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module mult
+
+Top level modules:
+	mult
+
+} {} {}} ../mix_freq.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/mix_freq.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module mix_freq
+
+Top level modules:
+	mix_freq
+
+} {} {}} ../dac_tx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/dac_tx.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module dac_tx
+
+Top level modules:
+	dac_tx
+
+} {} {}} ../pcm2udp.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/pcm2udp.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module pcm2udp
+
+Top level modules:
+	pcm2udp
+
+} {} {}} ../IP/cic_inp.vo {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/IP/cic_inp.vo
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module cic_inp
+
+Top level modules:
+	cic_inp
+
+} {} {}} ../fir_pcm_ram.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/fir_pcm_ram.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module fir_pcm_ram
+
+Top level modules:
+	fir_pcm_ram
+
+} {} {}} ../testbench/test_fir.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/testbench/test_fir.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module test_fir
+
+Top level modules:
+	test_fir
+
+} {} {}} ../fir_lane.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/fir_lane.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module fir_lane
+
+Top level modules:
+	fir_lane
+
+} {} {}}

@@ -1,0 +1,62 @@
+library verilog;
+use verilog.vl_types.all;
+entity axis_fifo is
+    generic(
+        ADDR_WIDTH      : integer := 12;
+        DATA_WIDTH      : integer := 8;
+        KEEP_ENABLE     : vl_notype;
+        KEEP_WIDTH      : vl_notype;
+        LAST_ENABLE     : integer := 1;
+        ID_ENABLE       : integer := 0;
+        ID_WIDTH        : integer := 8;
+        DEST_ENABLE     : integer := 0;
+        DEST_WIDTH      : integer := 8;
+        USER_ENABLE     : integer := 1;
+        USER_WIDTH      : integer := 1;
+        FRAME_FIFO      : integer := 0;
+        USER_BAD_FRAME_VALUE: vl_logic := Hi1;
+        USER_BAD_FRAME_MASK: vl_logic := Hi1;
+        DROP_BAD_FRAME  : integer := 0;
+        DROP_WHEN_FULL  : integer := 0
+    );
+    port(
+        clk             : in     vl_logic;
+        rst             : in     vl_logic;
+        s_axis_tdata    : in     vl_logic_vector;
+        s_axis_tkeep    : in     vl_logic_vector;
+        s_axis_tvalid   : in     vl_logic;
+        s_axis_tready   : out    vl_logic;
+        s_axis_tlast    : in     vl_logic;
+        s_axis_tid      : in     vl_logic_vector;
+        s_axis_tdest    : in     vl_logic_vector;
+        s_axis_tuser    : in     vl_logic_vector;
+        m_axis_tdata    : out    vl_logic_vector;
+        m_axis_tkeep    : out    vl_logic_vector;
+        m_axis_tvalid   : out    vl_logic;
+        m_axis_tready   : in     vl_logic;
+        m_axis_tlast    : out    vl_logic;
+        m_axis_tid      : out    vl_logic_vector;
+        m_axis_tdest    : out    vl_logic_vector;
+        m_axis_tuser    : out    vl_logic_vector;
+        status_overflow : out    vl_logic;
+        status_bad_frame: out    vl_logic;
+        status_good_frame: out    vl_logic
+    );
+    attribute mti_svvh_generic_type : integer;
+    attribute mti_svvh_generic_type of ADDR_WIDTH : constant is 1;
+    attribute mti_svvh_generic_type of DATA_WIDTH : constant is 1;
+    attribute mti_svvh_generic_type of KEEP_ENABLE : constant is 3;
+    attribute mti_svvh_generic_type of KEEP_WIDTH : constant is 3;
+    attribute mti_svvh_generic_type of LAST_ENABLE : constant is 1;
+    attribute mti_svvh_generic_type of ID_ENABLE : constant is 1;
+    attribute mti_svvh_generic_type of ID_WIDTH : constant is 1;
+    attribute mti_svvh_generic_type of DEST_ENABLE : constant is 1;
+    attribute mti_svvh_generic_type of DEST_WIDTH : constant is 1;
+    attribute mti_svvh_generic_type of USER_ENABLE : constant is 1;
+    attribute mti_svvh_generic_type of USER_WIDTH : constant is 1;
+    attribute mti_svvh_generic_type of FRAME_FIFO : constant is 1;
+    attribute mti_svvh_generic_type of USER_BAD_FRAME_VALUE : constant is 1;
+    attribute mti_svvh_generic_type of USER_BAD_FRAME_MASK : constant is 1;
+    attribute mti_svvh_generic_type of DROP_BAD_FRAME : constant is 1;
+    attribute mti_svvh_generic_type of DROP_WHEN_FULL : constant is 1;
+end axis_fifo;

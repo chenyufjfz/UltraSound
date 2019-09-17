@@ -44,7 +44,7 @@ module pcm2udp (
     output [23:0]           pcm_udp_tx_left;
     input                   pcm_udp_tx_start;
     input [23:0]            pcm_udp_tx_total;
-    input [7:0]             pcm_udp_tx_th;
+    input [9:0]             pcm_udp_tx_th;
     input [7:0]             pcm_udp_channel_choose;
     input [7:0]             pcm_udp_capture_sep;
     reg                     pcm_udp_tx_start_d, pcm_udp_tx_start_dd;
@@ -81,7 +81,7 @@ module pcm2udp (
                                        ((pcm_udp_tx_idx == 2) ? {6'b0, pcm_udp_tx_num[9:8]} :
                                        ((pcm_udp_tx_idx == 3) ? pcm_udp_tx_num[7:0] :
                                         (pcm_out_lo ? pcm_out[7:0] : pcm_out[15:8]))));
-    assign pcm_udp_length = (pcm_udp_tx_num + 6) << 1;
+    assign pcm_udp_length = (pcm_udp_tx_num + 8'd6) << 1;
     assign pcm_udp_payload_axis_tlast = (pcm_udp_tx_num==1) && pcm_udp_payload_axis_tready && pcm_out_lo && pcm_udp_payload_axis_tvalid;
     assign pcm_out_ready = (pcm_udp_payload_axis_tvalid & pcm_udp_payload_axis_tready & pcm_out_lo && pcm_udp_tx_idx >=4);
     assign pcm_udp_tx_left = pcm_udp_tx_total_reg;
@@ -110,7 +110,7 @@ module pcm2udp (
             pcm_udp_tx_total_reg <= #1 pcm_udp_tx_total > pcm_udp_tx_num ? pcm_udp_tx_total :pcm_udp_tx_num;
         else
             if (pcm_out_ready && pcm_udp_tx_total_reg!=24'hffffff)
-                pcm_udp_tx_total_reg <= #1 (pcm_udp_tx_total_reg != 0) ? pcm_udp_tx_total_reg - 1 : 0;
+                pcm_udp_tx_total_reg <= #1 (pcm_udp_tx_total_reg != 0) ? pcm_udp_tx_total_reg - 1'd1 : 0;
     //states for block tx_udp
     reg		tx_udp_00;
     reg		tx_udp_01;
@@ -225,7 +225,7 @@ module pcm2udp (
         else
         begin
             if (tx_udp_03&&(pcm_available>=pcm_udp_tx_th) || tx_udp_02&&(pcm_available>=pcm_udp_tx_th))
-                pcm_udp_tx_num <= #1 (pcm_available > 660) ? 660 : ((pcm_available > pcm_udp_tx_total_reg) ? pcm_udp_tx_total_reg :  pcm_available);
+                pcm_udp_tx_num <= #1 (pcm_available > 10'd660) ? 10'd660 : ((pcm_available > pcm_udp_tx_total_reg) ? pcm_udp_tx_total_reg :  pcm_available);
             if ((pcm_udp_payload_axis_tready && pcm_out_lo)&&tx_udp_09&&!pcm_udp_payload_axis_tlast || tx_udp_08&&(pcm_udp_tx_idx==4)&&(pcm_udp_payload_axis_tready && pcm_out_lo))
                 pcm_udp_tx_num <= #1 pcm_udp_tx_num - 1'b1;
             if (tx_udp_09&&pcm_udp_payload_axis_tlast)

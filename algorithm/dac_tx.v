@@ -19,9 +19,14 @@ module dac_tx(
     reg_writedata,
     reg_readdata,
 
+    //controller
     dac_signal_len,
     dac_cic_rate,
-    dac_run
+    dac_run,
+    
+    //mix freq
+    ad_clk,
+    dac_resync
 );
 parameter CHANNEL=3;
 parameter pcmaw=10;
@@ -48,6 +53,8 @@ localparam cicdw=40;
     input [pcmaw*CHANNEL-1:0]   dac_signal_len;
     input [4*CHANNEL-1:0]       dac_cic_rate;
     input                       dac_run;
+    input                       ad_clk;
+    output                      dac_resync;
 
     //internal wire
     wire [CHANNEL-1:0]          pcm_out_valid;
@@ -55,12 +62,33 @@ localparam cicdw=40;
     wire [CHANNEL-1:0]          pcm_cic_in_ready;
     wire [16*CHANNEL-1:0]       pcm_cic_in;
     reg                         dac_run_d;
+    reg                         dac_run_dd;
+    reg                         dac_run_ad_clk_d;
+    reg [pcmaw*CHANNEL-1:0]     dac_signal_len_d;
+    reg [4*CHANNEL-1:0]         dac_cic_rate_d;
+
+    assign dac_resync = dac_run & !dac_run_ad_clk_d;
     
-    always @(posedge clk_2)
+    always @(posedge ad_clk)
+        dac_run_ad_clk_d <= #1 dac_run;
+    
+    always @(posedge pcm_clk)
+    begin
+        dac_signal_len_d <= #1 dac_signal_len;
+        dac_cic_rate_d <= #1 dac_cic_rate;
+    end
+
+    always @(posedge pcm_clk)
     if (rst)
-        dac_run_d <= #1 0;
+    begin
+        dac_run_d <= #1 1'b0;
+        dac_run_dd <= #1 1'b0;
+    end
     else
+    begin
         dac_run_d <= #1 dac_run;
+        dac_run_dd <= #1 dac_run_d;
+    end
 
     source_mem #(
     .CHANNEL                    (CHANNEL),
@@ -68,11 +96,11 @@ localparam cicdw=40;
     ) source_mem_inst(
     //clock and reset
     .pcm_clk                    (pcm_clk),
-    .rst                        (rst | (dac_run & !dac_run_d)),
+    .rst                        (rst | (dac_run_d & !dac_run_dd)),
 
     //pcm input and output
     .pcm_out_valid              (pcm_out_valid),
-    .pcm_out_ready              (pcm_cic_in_ready & {CHANNEL{dac_run}}),
+    .pcm_out_ready              (pcm_cic_in_ready & {CHANNEL{dac_run_d}}),
     .pcm_out                    (pcm_cic_in),
 
     //register access
@@ -84,7 +112,7 @@ localparam cicdw=40;
     .reg_writedata              (reg_writedata),
     .reg_readdata               (reg_readdata),
 
-    .signal_len                 (dac_signal_len)
+    .signal_len                 (dac_signal_len_d)
     );
 generate
 genvar k;
@@ -102,10 +130,10 @@ genvar k;
 	.out_error                  (),
 	.out_ready                  (dac_pcm_out_ready[k]),
 	.out_valid                  (dac_pcm_out_valid[k]),
-	.rate                       (13'd1<<dac_cic_rate[4*k+3:4*k]),
-	.reset_n                    (!rst & dac_run)
+	.rate                       (13'd1<<dac_cic_rate_d[4*k+3:4*k]),
+	.reset_n                    (!rst & dac_run_d)
 	);
-	assign dac_pcm_out[16*k+15:16*k] = out_data >> (dac_cic_rate[4*k+3:4*k] << 1);
+	assign dac_pcm_out[16*k+15:16*k] = out_data >> (dac_cic_rate_d[4*k+3:4*k] << 1);
 	assign pcm_cic_in_valid[k] = pcm_out_valid[k];
     end
 endgenerate

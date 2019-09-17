@@ -12,6 +12,13 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	arp
 
+} {} {}} ../IP/main_pll.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/IP/main_pll.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module main_pll
+
+Top level modules:
+	main_pll
+
 } {} {}} ../udp_mac_complete/udp_checksum_gen.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/udp_checksum_gen.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module udp_checksum_gen
@@ -25,6 +32,20 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 
 Top level modules:
 	lfsr
+
+} {} {}} ../ultrasound.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/ultrasound.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module ultrasound
+
+Top level modules:
+	ultrasound
+
+} {} {}} ../algorithm/mix_freq.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/mix_freq.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module mix_freq
+
+Top level modules:
+	mix_freq
 
 } {} {}} ../udp_mac_complete/ip.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/ip.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -40,13 +61,6 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	arbiter
 
-} {} {}} ../ultrasound.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/ultrasound.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module ultrasound
-
-Top level modules:
-	ultrasound
-
 } {} {}} ../udp_mac_complete/ip_arb_mux.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/ip_arb_mux.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module ip_arb_mux
@@ -60,6 +74,13 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 
 Top level modules:
 	controller
+
+} {} {}} ../util/mult.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/util/mult.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module mult
+
+Top level modules:
+	mult
 
 } {} {}} ../mem/rowo_dpram.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/mem/rowo_dpram.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -75,19 +96,19 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	axis_fifo
 
-} {} {}} ../algorithm/pcmmux_fifo.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/pcmmux_fifo.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module pcmmux_fifo
-
-Top level modules:
-	pcmmux_fifo
-
 } {} {}} ../udp_mac_complete/mac_reset.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/mac_reset.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module mac_reset
 
 Top level modules:
 	mac_reset
+
+} {} {}} ../algorithm/pcmmux_fifo.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/pcmmux_fifo.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module pcmmux_fifo
+
+Top level modules:
+	pcmmux_fifo
 
 } {} {}} ../udp_mac_complete/arp_eth_tx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/arp_eth_tx.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -96,12 +117,12 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	arp_eth_tx
 
-} {} {}} ../algorithm/pcm2udp.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/pcm2udp.v
+} {} {}} ../testbench/test_ultrasound.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/testbench/test_ultrasound.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module pcm2udp
+-- Compiling module test_ultrasound
 
 Top level modules:
-	pcm2udp
+	test_ultrasound
 
 } {} {}} ../util/reg_dec_rate.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/util/reg_dec_rate.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -137,6 +158,13 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 
 Top level modules:
 	generic_dpram
+
+} {} {}} ../algorithm/mix_freq_mc.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/mix_freq_mc.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module mix_freq_mc
+
+Top level modules:
+	mix_freq_mc
 
 } {} {}} ../udp_mac_complete/udp_complete.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/udp_complete.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -214,13 +242,6 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 
 Top level modules:
 	synchronizer
-
-} {} {}} ../controller/execcmd.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/controller/execcmd.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module execcmd
-
-Top level modules:
-	execcmd
 
 } {} {}} ../udp_mac_complete/udp_ip_tx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/udp_mac_complete/udp_ip_tx.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -313,13 +334,6 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	eth_axis_rx
 
-} {} {}} ../IP/ether1.vo {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/IP/ether1.vo
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module ether1
-
-Top level modules:
-	ether1
-
 } {} {}} ../IP/clkctrl1.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/IP/clkctrl1.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module clkctrl1_altclkctrl_9gi
@@ -334,5 +348,12 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 
 Top level modules:
 	ddio_out1
+
+} {} {}} ../IP/ether1.vo {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/IP/ether1.vo
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module ether1
+
+Top level modules:
+	ether1
 
 } {} {}}

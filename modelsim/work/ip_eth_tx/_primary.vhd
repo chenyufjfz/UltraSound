@@ -1,0 +1,40 @@
+library verilog;
+use verilog.vl_types.all;
+entity ip_eth_tx is
+    port(
+        clk             : in     vl_logic;
+        rst             : in     vl_logic;
+        s_ip_hdr_valid  : in     vl_logic;
+        s_ip_hdr_ready  : out    vl_logic;
+        s_eth_dest_mac  : in     vl_logic_vector(47 downto 0);
+        s_eth_src_mac   : in     vl_logic_vector(47 downto 0);
+        s_eth_type      : in     vl_logic_vector(15 downto 0);
+        s_ip_dscp       : in     vl_logic_vector(5 downto 0);
+        s_ip_ecn        : in     vl_logic_vector(1 downto 0);
+        s_ip_length     : in     vl_logic_vector(15 downto 0);
+        s_ip_identification: in     vl_logic_vector(15 downto 0);
+        s_ip_flags      : in     vl_logic_vector(2 downto 0);
+        s_ip_fragment_offset: in     vl_logic_vector(12 downto 0);
+        s_ip_ttl        : in     vl_logic_vector(7 downto 0);
+        s_ip_protocol   : in     vl_logic_vector(7 downto 0);
+        s_ip_source_ip  : in     vl_logic_vector(31 downto 0);
+        s_ip_dest_ip    : in     vl_logic_vector(31 downto 0);
+        s_ip_payload_axis_tdata: in     vl_logic_vector(7 downto 0);
+        s_ip_payload_axis_tvalid: in     vl_logic;
+        s_ip_payload_axis_tready: out    vl_logic;
+        s_ip_payload_axis_tlast: in     vl_logic;
+        s_ip_payload_axis_tuser: in     vl_logic;
+        m_eth_hdr_valid : out    vl_logic;
+        m_eth_hdr_ready : in     vl_logic;
+        m_eth_dest_mac  : out    vl_logic_vector(47 downto 0);
+        m_eth_src_mac   : out    vl_logic_vector(47 downto 0);
+        m_eth_type      : out    vl_logic_vector(15 downto 0);
+        m_eth_payload_axis_tdata: out    vl_logic_vector(7 downto 0);
+        m_eth_payload_axis_tvalid: out    vl_logic;
+        m_eth_payload_axis_tready: in     vl_logic;
+        m_eth_payload_axis_tlast: out    vl_logic;
+        m_eth_payload_axis_tuser: out    vl_logic;
+        busy            : out    vl_logic;
+        error_payload_early_termination: out    vl_logic
+    );
+end ip_eth_tx;

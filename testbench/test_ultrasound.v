@@ -8,7 +8,7 @@ module test_ultrasound;
     wire                US0_ENET0_RX_DV;
     wire                US0_ENET0_GTX_CLK;
     wire                US1_ENET0_GTX_CLK;
-    reg [3:0]           key;
+    reg [1:0]           key;
     integer             i, j;
     
 ultrasound #(
@@ -20,21 +20,15 @@ ultrasound #(
     .KEY                (key),
 	//////// Ethernet 0 //////////
 	.ENET0_GTX_CLK      (US0_ENET0_GTX_CLK),
-	.ENET0_INT_N        (),
 	.ENET0_MDC          (),
 	.ENET0_MDIO         (),
 	.ENET0_RST_N        (),
 	.ENET0_RX_CLK       (US1_ENET0_GTX_CLK),
-	.ENET0_RX_COL       (),
-	.ENET0_RX_CRS       (),
 	.ENET0_RX_DATA      (US0_ENET0_RX_DATA),
 	.ENET0_RX_DV        (US0_ENET0_RX_DV),
-	.ENET0_RX_ER        (),
-	.ENET0_TX_CLK       (),
 	.ENET0_TX_DATA      (US0_ENET0_TX_DATA),
 	.ENET0_TX_EN        (US0_ENET0_TX_EN),
-	.ENET0_TX_ER        (),
-	.ENET0_LINK100      (),
+	.ENET0_CONFIG       (),
 	//status led
 	.TX_ERR             (TX_ERR),
 	.RX_ERR             (RX_ERR)
@@ -47,24 +41,18 @@ ultrasound #(
     .REAL_PHY(0)
 ) ultrasound1(
     .CLOCK_50           (CLOCK_50),
-    .KEY                (4'hf),
+    .KEY                (2'h3),
 	//////// Ethernet 0 //////////
 	.ENET0_GTX_CLK      (US1_ENET0_GTX_CLK),
-	.ENET0_INT_N        (),
 	.ENET0_MDC          (),
 	.ENET0_MDIO         (),
 	.ENET0_RST_N        (),
 	.ENET0_RX_CLK       (US0_ENET0_GTX_CLK),
-	.ENET0_RX_COL       (),
-	.ENET0_RX_CRS       (),
 	.ENET0_RX_DATA      (US0_ENET0_TX_DATA),
 	.ENET0_RX_DV        (US0_ENET0_TX_EN),
-	.ENET0_RX_ER        (),
-	.ENET0_TX_CLK       (),
 	.ENET0_TX_DATA      (US0_ENET0_RX_DATA),
 	.ENET0_TX_EN        (US0_ENET0_RX_DV),
-	.ENET0_TX_ER        (),
-	.ENET0_LINK100      (),
+	.ENET0_CONFIG       (),
 	//status led
 	.TX_ERR             (TX_ERR),
 	.RX_ERR             (RX_ERR)
@@ -80,7 +68,7 @@ end
 
 initial
 begin
-    key = 4'hf;
+    key = 2'h3;
     force ultrasound0.pll_lock = 1;
     release ultrasound0.pll_lock;
     force ultrasound1.pll_lock = 1;
@@ -107,7 +95,7 @@ begin
     @(posedge ultrasound0.clk);
     $display("finish reset");
     
-    
+    /*
     key[1] <= 1'b0;
     @(posedge ultrasound0.clk);
     key[1] <= 1'b1; //trigger controller exec
@@ -140,7 +128,7 @@ begin
     @(ultrasound0.controller_inst.ctrl_in_udp_hdr_valid);
     $display("ultrasound0 receive reply packet");
     #10000;
-    $writememh("../testbench/inram0.txt",ultrasound0.controller_inst.SIM.inram.SIM_RAM.mem);
+    $writememh("../testbench/inram0.txt",ultrasound0.controller_inst.SIM.inram.SIM_RAM.mem);*/
 
    
     for (i=0; i<1024; i=i+1)
@@ -149,7 +137,7 @@ begin
         ultrasound0.controller_inst.SIM.outram.SIM_RAM.mem[i] = 16'hxxxx;
     end
     ultrasound0.controller_inst.SIM.inram.SIM_RAM.mem[0] = 0;
-    $readmemh("../testbench/dac_test.txt",ultrasound0.controller_inst.SIM.outram.SIM_RAM.mem);
+    $readmemh("../testbench/mf_test.txt",ultrasound0.controller_inst.SIM.outram.SIM_RAM.mem);
     force ultrasound0.controller_inst.exec_out_len = ultrasound0.controller_inst.SIM.outram.SIM_RAM.mem[0] +1;
     
     @(negedge ultrasound0.clk);

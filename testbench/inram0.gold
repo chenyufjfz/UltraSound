@@ -1,6 +1,7 @@
 // memory data file (do not edit the following line - required for mem load use)
 // instance=/test_ultrasound/ultrasound0/controller_inst/SIM/inram/SIM_RAM/mem
 // format=hex addressradix=h dataradix=h version=1.0 wordsperline=1 noaddress
+0123
 8100
 0100
 0000
@@ -36,7 +37,7 @@ aaaa
 01f4
 010a
 0000
-0064
+0000
 010b
 0000
 0008
@@ -1023,5 +1024,4 @@ xxxx
 xxxx
 xxxx
 xxxx
-xxxx
-0123
+00e1
