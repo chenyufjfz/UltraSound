@@ -26,14 +26,14 @@
  -- VCCINT        : Dedicated power pin, which MUST be connected to VCC  (1.2V).
  -- VCCIO         : Dedicated power pin, which MUST be connected to VCC
  --                 of its bank.
- --					Bank 1:		3.3V
- --					Bank 2:		3.3V
- --					Bank 3:		3.3V
- --					Bank 4:		3.3V
- --					Bank 5:		3.3V
- --					Bank 6:		3.3V
- --					Bank 7:		3.3V
- --					Bank 8:		3.3V
+ --					Bank 1:		2.5V
+ --					Bank 2:		2.5V
+ --					Bank 3:		2.5V
+ --					Bank 4:		2.5V
+ --					Bank 5:		2.5V
+ --					Bank 6:		2.5V
+ --					Bank 7:		2.5V
+ --					Bank 8:		2.5V
  -- GND           : Dedicated ground pin. Dedicated GND pins MUST be connected to GND.
  --					It can also be used to report unused dedicated pins. The connection
  --					on the board for unused dedicated pins depends on whether this will
@@ -68,50 +68,50 @@ CHIP  "UltraSound"  ASSIGNED TO AN: EP4CE115F29C7
 
 Pin Name/Usage               : Location  : Dir.   : I/O Standard      : Voltage : I/O Bank  : User Assignment
 -------------------------------------------------------------------------------------------------------------
-VCCIO8                       : A2        : power  :                   : 3.3V    : 8         :                
+VCCIO8                       : A2        : power  :                   : 2.5V    : 8         :                
 RESERVED_INPUT               : A3        :        :                   :         : 8         :                
 RESERVED_INPUT               : A4        :        :                   :         : 8         :                
-VCCIO8                       : A5        : power  :                   : 3.3V    : 8         :                
+VCCIO8                       : A5        : power  :                   : 2.5V    : 8         :                
 RESERVED_INPUT               : A6        :        :                   :         : 8         :                
 RESERVED_INPUT               : A7        :        :                   :         : 8         :                
 RESERVED_INPUT               : A8        :        :                   :         : 8         :                
-VCCIO8                       : A9        : power  :                   : 3.3V    : 8         :                
-CH_GAIN_DA[1]                : A10       : output : 3.3-V LVCMOS      :         : 8         : Y              
-CH_GAIN_DA[3]                : A11       : output : 3.3-V LVCMOS      :         : 8         : Y              
-CH_GAIN_DA[4]                : A12       : output : 3.3-V LVCMOS      :         : 8         : Y              
-VCCIO8                       : A13       : power  :                   : 3.3V    : 8         :                
+VCCIO8                       : A9        : power  :                   : 2.5V    : 8         :                
+RESERVED_INPUT               : A10       :        :                   :         : 8         :                
+RESERVED_INPUT               : A11       :        :                   :         : 8         :                
+RESERVED_INPUT               : A12       :        :                   :         : 8         :                
+VCCIO8                       : A13       : power  :                   : 2.5V    : 8         :                
 GND+                         : A14       :        :                   :         : 8         :                
-GND+                         : A15       :        :                   :         : 7         :                
-VCCIO7                       : A16       : power  :                   : 3.3V    : 7         :                
-CH_GAIN_DA[5]                : A17       : output : 3.3-V LVCMOS      :         : 7         : Y              
-CH_GAIN_DA[7]                : A18       : output : 3.3-V LVCMOS      :         : 7         : Y              
-CH_GAIN_DA[9]                : A19       : output : 3.3-V LVCMOS      :         : 7         : Y              
-VCCIO7                       : A20       : power  :                   : 3.3V    : 7         :                
-CH_GAIN_DA[11]               : A21       : output : 3.3-V LVCMOS      :         : 7         : Y              
-CH_GAIN_GAIN                 : A22       : output : 3.3-V LVCMOS      :         : 7         : Y              
+ENET0_RX_CLK                 : A15       : input  : 2.5 V             :         : 7         : Y              
+VCCIO7                       : A16       : power  :                   : 2.5V    : 7         :                
+ENET0_GTX_CLK                : A17       : output : 2.5 V             :         : 7         : Y              
+ENET0_TX_EN                  : A18       : output : 2.5 V             :         : 7         : Y              
+ENET0_TX_DATA[2]             : A19       : output : 2.5 V             :         : 7         : Y              
+VCCIO7                       : A20       : power  :                   : 2.5V    : 7         :                
+RESERVED_INPUT               : A21       :        :                   :         : 7         :                
+RESERVED_INPUT               : A22       :        :                   :         : 7         :                
 RESERVED_INPUT               : A23       :        :                   :         : 7         :                
-VCCIO7                       : A24       : power  :                   : 3.3V    : 7         :                
+VCCIO7                       : A24       : power  :                   : 2.5V    : 7         :                
 RESERVED_INPUT               : A25       :        :                   :         : 7         :                
 RESERVED_INPUT               : A26       :        :                   :         : 7         :                
-VCCIO7                       : A27       : power  :                   : 3.3V    : 7         :                
-VCCIO2                       : AA1       : power  :                   : 3.3V    : 2         :                
+VCCIO7                       : A27       : power  :                   : 2.5V    : 7         :                
+VCCIO2                       : AA1       : power  :                   : 2.5V    : 2         :                
 GND                          : AA2       : gnd    :                   :         :           :                
 RESERVED_INPUT               : AA3       :        :                   :         : 2         :                
 RESERVED_INPUT               : AA4       :        :                   :         : 2         :                
-DA_PCM_OUT[27]               : AA5       : output : 3.3-V LVCMOS      :         : 2         : Y              
-DA_PCM_OUT_T[24]             : AA6       : output : 3.3-V LVCMOS      :         : 2         : Y              
-DA_PCM_OUT_T[23]             : AA7       : output : 3.3-V LVCMOS      :         : 2         : Y              
-DA_PCM_OUT_T[5]              : AA8       : output : 3.3-V LVCMOS      :         : 3         : Y              
+RESERVED_INPUT               : AA5       :        :                   :         : 2         :                
+RESERVED_INPUT               : AA6       :        :                   :         : 2         :                
+RESERVED_INPUT               : AA7       :        :                   :         : 2         :                
+RESERVED_INPUT               : AA8       :        :                   :         : 3         :                
 GNDA1                        : AA9       : gnd    :                   :         :           :                
 RESERVED_INPUT               : AA10      :        :                   :         : 3         :                
-VCCIO3                       : AA11      : power  :                   : 3.3V    : 3         :                
+VCCIO3                       : AA11      : power  :                   : 2.5V    : 3         :                
 RESERVED_INPUT               : AA12      :        :                   :         : 3         :                
-DA_PCM_OUT[9]                : AA13      : output : 3.3-V LVCMOS      :         : 3         : Y              
+RESERVED_INPUT               : AA13      :        :                   :         : 3         :                
 RESERVED_INPUT               : AA14      :        :                   :         : 3         :                
 RESERVED_INPUT               : AA15      :        :                   :         : 4         :                
 RESERVED_INPUT               : AA16      :        :                   :         : 4         :                
 RESERVED_INPUT               : AA17      :        :                   :         : 4         :                
-VCCIO4                       : AA18      : power  :                   : 3.3V    : 4         :                
+VCCIO4                       : AA18      : power  :                   : 2.5V    : 4         :                
 RESERVED_INPUT               : AA19      :        :                   :         : 4         :                
 GNDA4                        : AA20      : gnd    :                   :         :           :                
 RESERVED_INPUT               : AA21      :        :                   :         : 4         :                
@@ -121,21 +121,21 @@ RESERVED_INPUT               : AA24      :        :                   :         
 RESERVED_INPUT               : AA25      :        :                   :         : 5         :                
 RESERVED_INPUT               : AA26      :        :                   :         : 5         :                
 GND                          : AA27      : gnd    :                   :         :           :                
-VCCIO5                       : AA28      : power  :                   : 3.3V    : 5         :                
-AD_PCM_IN[31]                : AB1       : input  : 2.5 V             :         : 2         : N              
+VCCIO5                       : AA28      : power  :                   : 2.5V    : 5         :                
+RESERVED_INPUT               : AB1       :        :                   :         : 2         :                
 RESERVED_INPUT               : AB2       :        :                   :         : 2         :                
-DA_PCM_OUT_T[25]             : AB3       : output : 3.3-V LVCMOS      :         : 2         : Y              
+RESERVED_INPUT               : AB3       :        :                   :         : 2         :                
 RESERVED_INPUT               : AB4       :        :                   :         : 2         :                
-DA_PCM_OUT_T[3]              : AB5       : output : 3.3-V LVCMOS      :         : 2         : Y              
-DA_PCM_OUT_T[4]              : AB6       : output : 3.3-V LVCMOS      :         : 2         : Y              
+RESERVED_INPUT               : AB5       :        :                   :         : 2         :                
+RESERVED_INPUT               : AB6       :        :                   :         : 2         :                
 RESERVED_INPUT               : AB7       :        :                   :         : 3         :                
-DA_PCM_OUT_T[6]              : AB8       : output : 3.3-V LVCMOS      :         : 3         : Y              
-DA_PCM_OUT[26]               : AB9       : output : 3.3-V LVCMOS      :         : 3         : Y              
-DA_PCM_OUT[10]               : AB10      : output : 3.3-V LVCMOS      :         : 3         : Y              
+RESERVED_INPUT               : AB8       :        :                   :         : 3         :                
+RESERVED_INPUT               : AB9       :        :                   :         : 3         :                
+RESERVED_INPUT               : AB10      :        :                   :         : 3         :                
 RESERVED_INPUT               : AB11      :        :                   :         : 3         :                
 RESERVED_INPUT               : AB12      :        :                   :         : 3         :                
 RESERVED_INPUT               : AB13      :        :                   :         : 3         :                
-DA_PCM_OUT_T[13]             : AB14      : output : 3.3-V LVCMOS      :         : 3         : Y              
+RESERVED_INPUT               : AB14      :        :                   :         : 3         :                
 RESERVED_INPUT               : AB15      :        :                   :         : 4         :                
 RESERVED_INPUT               : AB16      :        :                   :         : 4         :                
 RESERVED_INPUT               : AB17      :        :                   :         : 4         :                
@@ -145,22 +145,22 @@ RESERVED_INPUT               : AB20      :        :                   :         
 RESERVED_INPUT               : AB21      :        :                   :         : 4         :                
 RESERVED_INPUT               : AB22      :        :                   :         : 4         :                
 RESERVED_INPUT               : AB23      :        :                   :         : 5         :                
-ENET0_RST_N                  : AB24      : output : 3.3-V LVCMOS      :         : 5         : Y              
+RESERVED_INPUT               : AB24      :        :                   :         : 5         :                
 RESERVED_INPUT               : AB25      :        :                   :         : 5         :                
 RESERVED_INPUT               : AB26      :        :                   :         : 5         :                
-ENET0_RX_DATA[0]             : AB27      : input  : 3.3-V LVCMOS      :         : 5         : Y              
-ENET0_RX_DATA[1]             : AB28      : input  : 3.3-V LVCMOS      :         : 5         : Y              
-DA_PCM_OUT_T[0]              : AC1       : output : 3.3-V LVCMOS      :         : 2         : Y              
+RESERVED_INPUT               : AB27      :        :                   :         : 5         :                
+RESERVED_INPUT               : AB28      :        :                   :         : 5         :                
+RESERVED_INPUT               : AC1       :        :                   :         : 2         :                
 RESERVED_INPUT               : AC2       :        :                   :         : 2         :                
 RESERVED_INPUT               : AC3       :        :                   :         : 2         :                
-DA_PCM_OUT_T[26]             : AC4       : output : 3.3-V LVCMOS      :         : 2         : Y              
+RESERVED_INPUT               : AC4       :        :                   :         : 2         :                
 RESERVED_INPUT               : AC5       :        :                   :         : 2         :                
 GND                          : AC6       : gnd    :                   :         :           :                
 RESERVED_INPUT               : AC7       :        :                   :         : 3         :                
 RESERVED_INPUT               : AC8       :        :                   :         : 3         :                
 GND                          : AC9       : gnd    :                   :         :           :                
 RESERVED_INPUT               : AC10      :        :                   :         : 3         :                
-DA_PCM_OUT[11]               : AC11      : output : 3.3-V LVCMOS      :         : 3         : Y              
+RESERVED_INPUT               : AC11      :        :                   :         : 3         :                
 RESERVED_INPUT               : AC12      :        :                   :         : 3         :                
 GND                          : AC13      : gnd    :                   :         :           :                
 RESERVED_INPUT               : AC14      :        :                   :         : 3         :                
@@ -174,52 +174,52 @@ RESERVED_INPUT               : AC21      :        :                   :         
 RESERVED_INPUT               : AC22      :        :                   :         : 4         :                
 GND                          : AC23      : gnd    :                   :         :           :                
 RESERVED_INPUT               : AC24      :        :                   :         : 5         :                
-ENET0_CONFIG                 : AC25      : output : 3.3-V LVTTL       :         : 5         : Y              
+RESERVED_INPUT               : AC25      :        :                   :         : 5         :                
 RESERVED_INPUT               : AC26      :        :                   :         : 5         :                
-ENET0_RX_DATA[2]             : AC27      : input  : 3.3-V LVTTL       :         : 5         : Y              
-ENET0_RX_DATA[3]             : AC28      : input  : 3.3-V LVTTL       :         : 5         : Y              
-DA_PCM_OUT_T[1]              : AD1       : output : 3.3-V LVCMOS      :         : 2         : Y              
+RESERVED_INPUT               : AC27      :        :                   :         : 5         :                
+RESERVED_INPUT               : AC28      :        :                   :         : 5         :                
+RESERVED_INPUT               : AD1       :        :                   :         : 2         :                
 RESERVED_INPUT               : AD2       :        :                   :         : 2         :                
 RESERVED_INPUT               : AD3       :        :                   :         : 2         :                
-DA_PCM_OUT_T[27]             : AD4       : output : 3.3-V LVCMOS      :         : 3         : Y              
-DA_WR_T[0]                   : AD5       : output : 3.3-V LVCMOS      :         : 3         : Y              
-VCCIO3                       : AD6       : power  :                   : 3.3V    : 3         :                
+RESERVED_INPUT               : AD4       :        :                   :         : 3         :                
+RESERVED_INPUT               : AD5       :        :                   :         : 3         :                
+VCCIO3                       : AD6       : power  :                   : 2.5V    : 3         :                
 RESERVED_INPUT               : AD7       :        :                   :         : 3         :                
-DA_PCM_OUT[12]               : AD8       : output : 3.3-V LVCMOS      :         : 3         : Y              
-VCCIO3                       : AD9       : power  :                   : 3.3V    : 3         :                
+RESERVED_INPUT               : AD8       :        :                   :         : 3         :                
+VCCIO3                       : AD9       : power  :                   : 2.5V    : 3         :                
 RESERVED_INPUT               : AD10      :        :                   :         : 3         :                
 RESERVED_INPUT               : AD11      :        :                   :         : 3         :                
 RESERVED_INPUT               : AD12      :        :                   :         : 3         :                
-VCCIO3                       : AD13      : power  :                   : 3.3V    : 3         :                
+VCCIO3                       : AD13      : power  :                   : 2.5V    : 3         :                
 RESERVED_INPUT               : AD14      :        :                   :         : 3         :                
 RESERVED_INPUT               : AD15      :        :                   :         : 4         :                
-VCCIO4                       : AD16      : power  :                   : 3.3V    : 4         :                
+VCCIO4                       : AD16      : power  :                   : 2.5V    : 4         :                
 RESERVED_INPUT               : AD17      :        :                   :         : 4         :                
 RESERVED_INPUT               : AD18      :        :                   :         : 4         :                
 RESERVED_INPUT               : AD19      :        :                   :         : 4         :                
-VCCIO4                       : AD20      : power  :                   : 3.3V    : 4         :                
+VCCIO4                       : AD20      : power  :                   : 2.5V    : 4         :                
 RESERVED_INPUT               : AD21      :        :                   :         : 4         :                
 RESERVED_INPUT               : AD22      :        :                   :         : 4         :                
-VCCIO4                       : AD23      : power  :                   : 3.3V    : 4         :                
+VCCIO4                       : AD23      : power  :                   : 2.5V    : 4         :                
 RESERVED_INPUT               : AD24      :        :                   :         : 4         :                
 RESERVED_INPUT               : AD25      :        :                   :         : 4         :                
 RESERVED_INPUT               : AD26      :        :                   :         : 5         :                
-ENET0_TX_DATA[0]             : AD27      : output : 3.3-V LVTTL       :         : 5         : Y              
-ENET0_TX_DATA[1]             : AD28      : output : 3.3-V LVTTL       :         : 5         : Y              
-DA_PCM_OUT_T[2]              : AE1       : output : 3.3-V LVCMOS      :         : 2         : Y              
+RESERVED_INPUT               : AD27      :        :                   :         : 5         :                
+RESERVED_INPUT               : AD28      :        :                   :         : 5         :                
+RESERVED_INPUT               : AE1       :        :                   :         : 2         :                
 RESERVED_INPUT               : AE2       :        :                   :         : 2         :                
 RESERVED_INPUT               : AE3       :        :                   :         : 2         :                
-DA_WR_T[1]                   : AE4       : output : 3.3-V LVCMOS      :         : 3         : Y              
+RESERVED_INPUT               : AE4       :        :                   :         : 3         :                
 RESERVED_INPUT               : AE5       :        :                   :         : 3         :                
-DA_PCM_OUT[13]               : AE6       : output : 3.3-V LVCMOS      :         : 3         : Y              
+RESERVED_INPUT               : AE6       :        :                   :         : 3         :                
 RESERVED_INPUT               : AE7       :        :                   :         : 3         :                
 RESERVED_INPUT               : AE8       :        :                   :         : 3         :                
 RESERVED_INPUT               : AE9       :        :                   :         : 3         :                
-DA_PCM_OUT_T[7]              : AE10      : output : 3.3-V LVCMOS      :         : 3         : Y              
-DA_PCM_OUT_T[8]              : AE11      : output : 3.3-V LVCMOS      :         : 3         : Y              
-DA_PCM_OUT_T[9]              : AE12      : output : 3.3-V LVCMOS      :         : 3         : Y              
-DA_PCM_OUT_T[11]             : AE13      : output : 3.3-V LVCMOS      :         : 3         : Y              
-DA_PCM_OUT_T[12]             : AE14      : output : 3.3-V LVCMOS      :         : 3         : Y              
+RESERVED_INPUT               : AE10      :        :                   :         : 3         :                
+RESERVED_INPUT               : AE11      :        :                   :         : 3         :                
+RESERVED_INPUT               : AE12      :        :                   :         : 3         :                
+RESERVED_INPUT               : AE13      :        :                   :         : 3         :                
+RESERVED_INPUT               : AE14      :        :                   :         : 3         :                
 RESERVED_INPUT               : AE15      :        :                   :         : 4         :                
 RESERVED_INPUT               : AE16      :        :                   :         : 4         :                
 RESERVED_INPUT               : AE17      :        :                   :         : 4         :                
@@ -228,25 +228,25 @@ RESERVED_INPUT               : AE19      :        :                   :         
 RESERVED_INPUT               : AE20      :        :                   :         : 4         :                
 RESERVED_INPUT               : AE21      :        :                   :         : 4         :                
 RESERVED_INPUT               : AE22      :        :                   :         : 4         :                
-ENET0_GTX_CLK                : AE23      : output : 3.3-V LVTTL       :         : 4         : Y              
+RESERVED_INPUT               : AE23      :        :                   :         : 4         :                
 RESERVED_INPUT               : AE24      :        :                   :         : 4         :                
 RESERVED_INPUT               : AE25      :        :                   :         : 4         :                
 RESERVED_INPUT               : AE26      :        :                   :         : 5         :                
-ENET0_TX_DATA[2]             : AE27      : output : 3.3-V LVTTL       :         : 5         : Y              
-ENET0_TX_DATA[3]             : AE28      : output : 3.3-V LVTTL       :         : 5         : Y              
+RESERVED_INPUT               : AE27      :        :                   :         : 5         :                
+RESERVED_INPUT               : AE28      :        :                   :         : 5         :                
 GND                          : AF1       : gnd    :                   :         :           :                
 RESERVED_INPUT               : AF2       :        :                   :         : 2         :                
 RESERVED_INPUT               : AF3       :        :                   :         : 3         :                
 RESERVED_INPUT               : AF4       :        :                   :         : 3         :                
-DA_CLK_OUT                   : AF5       : output : 3.3-V LVCMOS      :         : 3         : Y              
-DA_WR[0]                     : AF6       : output : 3.3-V LVCMOS      :         : 3         : Y              
+RESERVED_INPUT               : AF5       :        :                   :         : 3         :                
+RESERVED_INPUT               : AF6       :        :                   :         : 3         :                
 RESERVED_INPUT               : AF7       :        :                   :         : 3         :                
 RESERVED_INPUT               : AF8       :        :                   :         : 3         :                
 RESERVED_INPUT               : AF9       :        :                   :         : 3         :                
 RESERVED_INPUT               : AF10      :        :                   :         : 3         :                
 RESERVED_INPUT               : AF11      :        :                   :         : 3         :                
 RESERVED_INPUT               : AF12      :        :                   :         : 3         :                
-DA_PCM_OUT_T[10]             : AF13      : output : 3.3-V LVCMOS      :         : 3         : Y              
+RESERVED_INPUT               : AF13      :        :                   :         : 3         :                
 RESERVED_INPUT               : AF14      :        :                   :         : 3         :                
 RESERVED_INPUT               : AF15      :        :                   :         : 4         :                
 RESERVED_INPUT               : AF16      :        :                   :         : 4         :                
@@ -256,13 +256,13 @@ RESERVED_INPUT               : AF19      :        :                   :         
 RESERVED_INPUT               : AF20      :        :                   :         : 4         :                
 RESERVED_INPUT               : AF21      :        :                   :         : 4         :                
 RESERVED_INPUT               : AF22      :        :                   :         : 4         :                
-ENET0_MDC                    : AF23      : output : 3.3-V LVTTL       :         : 4         : Y              
+RESERVED_INPUT               : AF23      :        :                   :         : 4         :                
 RESERVED_INPUT               : AF24      :        :                   :         : 4         :                
 RESERVED_INPUT               : AF25      :        :                   :         : 4         :                
 RESERVED_INPUT               : AF26      :        :                   :         : 4         :                
-ENET0_TX_EN                  : AF27      : output : 3.3-V LVTTL       :         : 5         : Y              
+RESERVED_INPUT               : AF27      :        :                   :         : 5         :                
 GND                          : AF28      : gnd    :                   :         :           :                
-VCCIO2                       : AG1       : power  :                   : 3.3V    : 2         :                
+VCCIO2                       : AG1       : power  :                   : 2.5V    : 2         :                
 GND                          : AG2       : gnd    :                   :         :           :                
 RESERVED_INPUT               : AG3       :        :                   :         : 3         :                
 RESERVED_INPUT               : AG4       :        :                   :         : 3         :                
@@ -289,34 +289,34 @@ GND                          : AG24      : gnd    :                   :         
 RESERVED_INPUT               : AG25      :        :                   :         : 4         :                
 RESERVED_INPUT               : AG26      :        :                   :         : 4         :                
 GND                          : AG27      : gnd    :                   :         :           :                
-VCCIO5                       : AG28      : power  :                   : 3.3V    : 5         :                
-VCCIO3                       : AH2       : power  :                   : 3.3V    : 3         :                
+VCCIO5                       : AG28      : power  :                   : 2.5V    : 5         :                
+VCCIO3                       : AH2       : power  :                   : 2.5V    : 3         :                
 RESERVED_INPUT               : AH3       :        :                   :         : 3         :                
 RESERVED_INPUT               : AH4       :        :                   :         : 3         :                
-VCCIO3                       : AH5       : power  :                   : 3.3V    : 3         :                
+VCCIO3                       : AH5       : power  :                   : 2.5V    : 3         :                
 RESERVED_INPUT               : AH6       :        :                   :         : 3         :                
 RESERVED_INPUT               : AH7       :        :                   :         : 3         :                
 RESERVED_INPUT               : AH8       :        :                   :         : 3         :                
-VCCIO3                       : AH9       : power  :                   : 3.3V    : 3         :                
+VCCIO3                       : AH9       : power  :                   : 2.5V    : 3         :                
 RESERVED_INPUT               : AH10      :        :                   :         : 3         :                
 RESERVED_INPUT               : AH11      :        :                   :         : 3         :                
 RESERVED_INPUT               : AH12      :        :                   :         : 3         :                
-VCCIO3                       : AH13      : power  :                   : 3.3V    : 3         :                
+VCCIO3                       : AH13      : power  :                   : 2.5V    : 3         :                
 GND+                         : AH14      :        :                   :         : 3         :                
 GND+                         : AH15      :        :                   :         : 4         :                
-VCCIO4                       : AH16      : power  :                   : 3.3V    : 4         :                
+VCCIO4                       : AH16      : power  :                   : 2.5V    : 4         :                
 RESERVED_INPUT               : AH17      :        :                   :         : 4         :                
 RESERVED_INPUT               : AH18      :        :                   :         : 4         :                
 RESERVED_INPUT               : AH19      :        :                   :         : 4         :                
-VCCIO4                       : AH20      : power  :                   : 3.3V    : 4         :                
+VCCIO4                       : AH20      : power  :                   : 2.5V    : 4         :                
 RESERVED_INPUT               : AH21      :        :                   :         : 4         :                
 RESERVED_INPUT               : AH22      :        :                   :         : 4         :                
 RESERVED_INPUT               : AH23      :        :                   :         : 4         :                
-VCCIO4                       : AH24      : power  :                   : 3.3V    : 4         :                
+VCCIO4                       : AH24      : power  :                   : 2.5V    : 4         :                
 RESERVED_INPUT               : AH25      :        :                   :         : 4         :                
 RESERVED_INPUT               : AH26      :        :                   :         : 4         :                
-VCCIO4                       : AH27      : power  :                   : 3.3V    : 4         :                
-VCCIO1                       : B1        : power  :                   : 3.3V    : 1         :                
+VCCIO4                       : AH27      : power  :                   : 2.5V    : 4         :                
+VCCIO1                       : B1        : power  :                   : 2.5V    : 1         :                
 GND                          : B2        : gnd    :                   :         :           :                
 RESERVED_INPUT               : B3        :        :                   :         : 8         :                
 RESERVED_INPUT               : B4        :        :                   :         : 8         :                
@@ -325,25 +325,25 @@ RESERVED_INPUT               : B6        :        :                   :         
 RESERVED_INPUT               : B7        :        :                   :         : 8         :                
 RESERVED_INPUT               : B8        :        :                   :         : 8         :                
 GND                          : B9        : gnd    :                   :         :           :                
-CH_GAIN_DA[0]                : B10       : output : 3.3-V LVCMOS      :         : 8         : Y              
-CH_GAIN_DA[2]                : B11       : output : 3.3-V LVCMOS      :         : 8         : Y              
+RESERVED_INPUT               : B10       :        :                   :         : 8         :                
+RESERVED_INPUT               : B11       :        :                   :         : 8         :                
 GND                          : B12       : gnd    :                   :         :           :                
 GND                          : B13       : gnd    :                   :         :           :                
 GND+                         : B14       :        :                   :         : 8         :                
 GND+                         : B15       :        :                   :         : 7         :                
 GND                          : B16       : gnd    :                   :         :           :                
-CH_GAIN_DA[6]                : B17       : output : 3.3-V LVCMOS      :         : 7         : Y              
-CH_GAIN_DA[8]                : B18       : output : 3.3-V LVCMOS      :         : 7         : Y              
-CH_GAIN_DA[10]               : B19       : output : 3.3-V LVCMOS      :         : 7         : Y              
+RESERVED_INPUT               : B17       :        :                   :         : 7         :                
+RESERVED_INPUT               : B18       :        :                   :         : 7         :                
+ENET0_TX_DATA[3]             : B19       : output : 2.5 V             :         : 7         : Y              
 GND                          : B20       : gnd    :                   :         :           :                
-CH_GAIN_WR                   : B21       : output : 3.3-V LVCMOS      :         : 7         : Y              
-CH_GAIN_CLR                  : B22       : output : 3.3-V LVCMOS      :         : 7         : Y              
+ENET0_MDIO                   : B21       : bidir  : 2.5 V             :         : 7         : Y              
+RESERVED_INPUT               : B22       :        :                   :         : 7         :                
 RESERVED_INPUT               : B23       :        :                   :         : 7         :                
 GND                          : B24       : gnd    :                   :         :           :                
 RESERVED_INPUT               : B25       :        :                   :         : 7         :                
 RESERVED_INPUT               : B26       :        :                   :         : 7         :                
 GND                          : B27       : gnd    :                   :         :           :                
-VCCIO6                       : B28       : power  :                   : 3.3V    : 6         :                
+VCCIO6                       : B28       : power  :                   : 2.5V    : 6         :                
 GND                          : C1        : gnd    :                   :         :           :                
 RESERVED_INPUT               : C2        :        :                   :         : 1         :                
 RESERVED_INPUT               : C3        :        :                   :         : 8         :                
@@ -352,24 +352,24 @@ RESERVED_INPUT               : C5        :        :                   :         
 RESERVED_INPUT               : C6        :        :                   :         : 8         :                
 RESERVED_INPUT               : C7        :        :                   :         : 8         :                
 RESERVED_INPUT               : C8        :        :                   :         : 8         :                
-AD_MODE                      : C9        : output : 3.3-V LVCMOS      :         : 8         : Y              
+RESERVED_INPUT               : C9        :        :                   :         : 8         :                
 RESERVED_INPUT               : C10       :        :                   :         : 8         :                
 RESERVED_INPUT               : C11       :        :                   :         : 8         :                
 RESERVED_INPUT               : C12       :        :                   :         : 8         :                
 RESERVED_INPUT               : C13       :        :                   :         : 8         :                
 RESERVED_INPUT               : C14       :        :                   :         : 8         :                
-RESERVED_INPUT               : C15       :        :                   :         : 7         :                
-RESERVED_INPUT               : C16       :        :                   :         : 7         :                
-RESERVED_INPUT               : C17       :        :                   :         : 7         :                
-RESERVED_INPUT               : C18       :        :                   :         : 7         :                
-RESERVED_INPUT               : C19       :        :                   :         : 7         :                
-RESERVED_INPUT               : C20       :        :                   :         : 7         :                
+ENET0_RX_DATA[3]             : C15       : input  : 2.5 V             :         : 7         : Y              
+ENET0_RX_DATA[0]             : C16       : input  : 2.5 V             :         : 7         : Y              
+ENET0_RX_DV                  : C17       : input  : 2.5 V             :         : 7         : Y              
+ENET0_TX_DATA[0]             : C18       : output : 2.5 V             :         : 7         : Y              
+ENET0_RST_N                  : C19       : output : 2.5 V             :         : 7         : Y              
+ENET0_MDC                    : C20       : output : 2.5 V             :         : 7         : Y              
 RESERVED_INPUT               : C21       :        :                   :         : 7         :                
-CH_GAIN_LDAC                 : C22       : output : 3.3-V LVCMOS      :         : 7         : Y              
+RESERVED_INPUT               : C22       :        :                   :         : 7         :                
 RESERVED_INPUT               : C23       :        :                   :         : 7         :                
-CH_GAIN_SEL[0]               : C24       : output : 3.3-V LVCMOS      :         : 7         : Y              
-CH_GAIN_SEL[1]               : C25       : output : 3.3-V LVCMOS      :         : 7         : Y              
-CH_GAIN_SEL[2]               : C26       : output : 3.3-V LVCMOS      :         : 7         : Y              
+RESERVED_INPUT               : C24       :        :                   :         : 7         :                
+RESERVED_INPUT               : C25       :        :                   :         : 7         :                
+RESERVED_INPUT               : C26       :        :                   :         : 7         :                
 RESERVED_INPUT               : C27       :        :                   :         : 6         :                
 GND                          : C28       : gnd    :                   :         :           :                
 RESERVED_INPUT               : D1        :        :                   :         : 1         :                
@@ -387,42 +387,42 @@ RESERVED_INPUT               : D12       :        :                   :         
 RESERVED_INPUT               : D13       :        :                   :         : 8         :                
 RESERVED_INPUT               : D14       :        :                   :         : 8         :                
 RESERVED_INPUT               : D15       :        :                   :         : 7         :                
-RESERVED_INPUT               : D16       :        :                   :         : 7         :                
-RESERVED_INPUT               : D17       :        :                   :         : 7         :                
+ENET0_RX_DATA[1]             : D16       : input  : 2.5 V             :         : 7         : Y              
+ENET0_RX_DATA[2]             : D17       : input  : 2.5 V             :         : 7         : Y              
 RESERVED_INPUT               : D18       :        :                   :         : 7         :                
-RESERVED_INPUT               : D19       :        :                   :         : 7         :                
+ENET0_TX_DATA[1]             : D19       : output : 2.5 V             :         : 7         : Y              
 RESERVED_INPUT               : D20       :        :                   :         : 7         :                
-CH_GAIN_BUF                  : D21       : output : 3.3-V LVCMOS      :         : 7         : Y              
+RESERVED_INPUT               : D21       :        :                   :         : 7         :                
 RESERVED_INPUT               : D22       :        :                   :         : 7         :                
-AD_CLK_OUT                   : D23       : output : 3.3-V LVCMOS      :         : 7         : Y              
+RESERVED_INPUT               : D23       :        :                   :         : 7         :                
 RESERVED_INPUT               : D24       :        :                   :         : 7         :                
 RESERVED_INPUT               : D25       :        :                   :         : 7         :                
 RESERVED_INPUT               : D26       :        :                   :         : 6         :                
 RESERVED_INPUT               : D27       :        :                   :         : 6         :                
 RESERVED_INPUT               : D28       :        :                   :         : 6         :                
 RESERVED_INPUT               : E1        :        :                   :         : 1         :                
-~ALTERA_FLASH_nCE_nCSO~ / RESERVED_INPUT_WITH_WEAK_PULLUP : E2        : input  : 3.3-V LVTTL       :         : 1         : N              
-AD_PCM_IN[12]                : E3        : input  : 3.3-V LVCMOS      :         : 1         : Y              
-AD_PCM_IN[13]                : E4        : input  : 3.3-V LVCMOS      :         : 8         : Y              
+~ALTERA_FLASH_nCE_nCSO~ / RESERVED_INPUT_WITH_WEAK_PULLUP : E2        : input  : 2.5 V             :         : 1         : N              
+RESERVED_INPUT               : E3        :        :                   :         : 1         :                
+RESERVED_INPUT               : E4        :        :                   :         : 8         :                
 RESERVED_INPUT               : E5        :        :                   :         : 8         :                
-VCCIO8                       : E6        : power  :                   : 3.3V    : 8         :                
+VCCIO8                       : E6        : power  :                   : 2.5V    : 8         :                
 RESERVED_INPUT               : E7        :        :                   :         : 8         :                
 RESERVED_INPUT               : E8        :        :                   :         : 8         :                
-VCCIO8                       : E9        : power  :                   : 3.3V    : 8         :                
+VCCIO8                       : E9        : power  :                   : 2.5V    : 8         :                
 RESERVED_INPUT               : E10       :        :                   :         : 8         :                
 RESERVED_INPUT               : E11       :        :                   :         : 8         :                
 RESERVED_INPUT               : E12       :        :                   :         : 8         :                
-VCCIO8                       : E13       : power  :                   : 3.3V    : 8         :                
+VCCIO8                       : E13       : power  :                   : 2.5V    : 8         :                
 RESERVED_INPUT               : E14       :        :                   :         : 8         :                
 RESERVED_INPUT               : E15       :        :                   :         : 7         :                
-VCCIO7                       : E16       : power  :                   : 3.3V    : 7         :                
+VCCIO7                       : E16       : power  :                   : 2.5V    : 7         :                
 RESERVED_INPUT               : E17       :        :                   :         : 7         :                
 RESERVED_INPUT               : E18       :        :                   :         : 7         :                
 RESERVED_INPUT               : E19       :        :                   :         : 7         :                
-VCCIO7                       : E20       : power  :                   : 3.3V    : 7         :                
+VCCIO7                       : E20       : power  :                   : 2.5V    : 7         :                
 RESERVED_INPUT               : E21       :        :                   :         : 7         :                
 RESERVED_INPUT               : E22       :        :                   :         : 7         :                
-VCCIO7                       : E23       : power  :                   : 3.3V    : 7         :                
+VCCIO7                       : E23       : power  :                   : 2.5V    : 7         :                
 RESERVED_INPUT               : E24       :        :                   :         : 7         :                
 RESERVED_INPUT               : E25       :        :                   :         : 7         :                
 RESERVED_INPUT               : E26       :        :                   :         : 6         :                
@@ -430,23 +430,23 @@ RESERVED_INPUT               : E27       :        :                   :         
 RESERVED_INPUT               : E28       :        :                   :         : 6         :                
 RESERVED_INPUT               : F1        :        :                   :         : 1         :                
 RESERVED_INPUT               : F2        :        :                   :         : 1         :                
-AD_PCM_IN[11]                : F3        : input  : 3.3-V LVCMOS      :         : 1         : Y              
-~ALTERA_ASDO_DATA1~ / RESERVED_INPUT_WITH_WEAK_PULLUP : F4        : input  : 3.3-V LVTTL       :         : 1         : N              
+RESERVED_INPUT               : F3        :        :                   :         : 1         :                
+~ALTERA_ASDO_DATA1~ / RESERVED_INPUT_WITH_WEAK_PULLUP : F4        : input  : 2.5 V             :         : 1         : N              
 RESERVED_INPUT               : F5        :        :                   :         : 1         :                
 GND                          : F6        : gnd    :                   :         :           :                
-DA_WR[1]                     : F7        : output : 3.3-V LVCMOS      :         : 8         : Y              
+RESERVED_INPUT               : F7        :        :                   :         : 8         :                
 RESERVED_INPUT               : F8        :        :                   :         : 8         :                
 GND                          : F9        : gnd    :                   :         :           :                
 RESERVED_INPUT               : F10       :        :                   :         : 8         :                
 RESERVED_INPUT               : F11       :        :                   :         : 8         :                
 RESERVED_INPUT               : F12       :        :                   :         : 8         :                
 GND                          : F13       : gnd    :                   :         :           :                
-CH_SEL_419                   : F14       : output : 3.3-V LVCMOS      :         : 8         : Y              
+RESERVED_INPUT               : F14       :        :                   :         : 8         :                
 RESERVED_INPUT               : F15       :        :                   :         : 7         :                
 GND                          : F16       : gnd    :                   :         :           :                
 RESERVED_INPUT               : F17       :        :                   :         : 7         :                
 RESERVED_INPUT               : F18       :        :                   :         : 7         :                
-RESERVED_INPUT               : F19       :        :                   :         : 7         :                
+TX_ERR                       : F19       : output : 2.5 V             :         : 7         : Y              
 GND                          : F20       : gnd    :                   :         :           :                
 RESERVED_INPUT               : F21       :        :                   :         : 7         :                
 RESERVED_INPUT               : F22       :        :                   :         : 7         :                
@@ -457,15 +457,15 @@ RESERVED_INPUT               : F26       :        :                   :         
 RESERVED_INPUT               : F27       :        :                   :         : 6         :                
 RESERVED_INPUT               : F28       :        :                   :         : 6         :                
 RESERVED_INPUT               : G1        :        :                   :         : 1         :                
-AD_PCM_IN[9]                 : G2        : input  : 3.3-V LVCMOS      :         : 1         : Y              
-AD_PCM_IN[10]                : G3        : input  : 3.3-V LVCMOS      :         : 1         : Y              
+RESERVED_INPUT               : G2        :        :                   :         : 1         :                
+RESERVED_INPUT               : G3        :        :                   :         : 1         :                
 RESERVED_INPUT               : G4        :        :                   :         : 1         :                
-DA_PCM_OUT[14]               : G5        : output : 3.3-V LVCMOS      :         : 1         : Y              
+RESERVED_INPUT               : G5        :        :                   :         : 1         :                
 RESERVED_INPUT               : G6        :        :                   :         : 1         :                
 RESERVED_INPUT               : G7        :        :                   :         : 8         :                
 RESERVED_INPUT               : G8        :        :                   :         : 8         :                
 RESERVED_INPUT               : G9        :        :                   :         : 8         :                
-DA_PCM_OUT[0]                : G10       : output : 3.3-V LVCMOS      :         : 8         : Y              
+RESERVED_INPUT               : G10       :        :                   :         : 8         :                
 RESERVED_INPUT               : G11       :        :                   :         : 8         :                
 RESERVED_INPUT               : G12       :        :                   :         : 8         :                
 RESERVED_INPUT               : G13       :        :                   :         : 8         :                
@@ -474,7 +474,7 @@ RESERVED_INPUT               : G15       :        :                   :         
 RESERVED_INPUT               : G16       :        :                   :         : 7         :                
 RESERVED_INPUT               : G17       :        :                   :         : 7         :                
 RESERVED_INPUT               : G18       :        :                   :         : 7         :                
-RESERVED_INPUT               : G19       :        :                   :         : 7         :                
+RX_ERR                       : G19       : output : 2.5 V             :         : 7         : Y              
 RESERVED_INPUT               : G20       :        :                   :         : 7         :                
 RESERVED_INPUT               : G21       :        :                   :         : 7         :                
 RESERVED_INPUT               : G22       :        :                   :         : 7         :                
@@ -484,24 +484,24 @@ RESERVED_INPUT               : G25       :        :                   :         
 RESERVED_INPUT               : G26       :        :                   :         : 6         :                
 RESERVED_INPUT               : G27       :        :                   :         : 6         :                
 RESERVED_INPUT               : G28       :        :                   :         : 6         :                
-VCCIO1                       : H1        : power  :                   : 3.3V    : 1         :                
+VCCIO1                       : H1        : power  :                   : 2.5V    : 1         :                
 GND                          : H2        : gnd    :                   :         :           :                
-AD_PCM_IN[8]                 : H3        : input  : 3.3-V LVCMOS      :         : 1         : Y              
-DA_PCM_OUT[16]               : H4        : output : 3.3-V LVCMOS      :         : 1         : Y              
+RESERVED_INPUT               : H3        :        :                   :         : 1         :                
+RESERVED_INPUT               : H4        :        :                   :         : 1         :                
 RESERVED_INPUT               : H5        :        :                   :         : 1         :                
-DA_PCM_OUT[15]               : H6        : output : 3.3-V LVCMOS      :         : 1         : Y              
+RESERVED_INPUT               : H6        :        :                   :         : 1         :                
 RESERVED_INPUT               : H7        :        :                   :         : 1         :                
 RESERVED_INPUT               : H8        :        :                   :         : 8         :                
 GNDA3                        : H9        : gnd    :                   :         :           :                
-DA_PCM_OUT[1]                : H10       : output : 3.3-V LVCMOS      :         : 8         : Y              
-VCCIO8                       : H11       : power  :                   : 3.3V    : 8         :                
+RESERVED_INPUT               : H10       :        :                   :         : 8         :                
+VCCIO8                       : H11       : power  :                   : 2.5V    : 8         :                
 RESERVED_INPUT               : H12       :        :                   :         : 8         :                
 RESERVED_INPUT               : H13       :        :                   :         : 8         :                
 RESERVED_INPUT               : H14       :        :                   :         : 8         :                
 RESERVED_INPUT               : H15       :        :                   :         : 7         :                
 RESERVED_INPUT               : H16       :        :                   :         : 7         :                
 RESERVED_INPUT               : H17       :        :                   :         : 7         :                
-VCCIO7                       : H18       : power  :                   : 3.3V    : 7         :                
+VCCIO7                       : H18       : power  :                   : 2.5V    : 7         :                
 RESERVED_INPUT               : H19       :        :                   :         : 7         :                
 GNDA2                        : H20       : gnd    :                   :         :           :                
 RESERVED_INPUT               : H21       :        :                   :         : 7         :                
@@ -511,20 +511,20 @@ RESERVED_INPUT               : H24       :        :                   :         
 RESERVED_INPUT               : H25       :        :                   :         : 6         :                
 RESERVED_INPUT               : H26       :        :                   :         : 6         :                
 GND                          : H27       : gnd    :                   :         :           :                
-VCCIO6                       : H28       : power  :                   : 3.3V    : 6         :                
+VCCIO6                       : H28       : power  :                   : 2.5V    : 6         :                
 GND+                         : J1        :        :                   :         : 1         :                
 GND                          : J2        : gnd    :                   :         :           :                
-AD_PCM_IN[7]                 : J3        : input  : 3.3-V LVCMOS      :         : 1         : Y              
+RESERVED_INPUT               : J3        :        :                   :         : 1         :                
 RESERVED_INPUT               : J4        :        :                   :         : 1         :                
-AD_PCM_IN[14]                : J5        : input  : 3.3-V LVCMOS      :         : 1         : Y              
+RESERVED_INPUT               : J5        :        :                   :         : 1         :                
 RESERVED_INPUT               : J6        :        :                   :         : 1         :                
 RESERVED_INPUT               : J7        :        :                   :         : 1         :                
 VCCA3                        : J8        : power  :                   : 2.5V    :           :                
 VCCD_PLL3                    : J9        : power  :                   : 1.2V    :           :                
 RESERVED_INPUT               : J10       :        :                   :         : 8         :                
 GND                          : J11       : gnd    :                   :         :           :                
-DA_PCM_OUT[2]                : J12       : output : 3.3-V LVCMOS      :         : 8         : Y              
-DA_PCM_OUT[3]                : J13       : output : 3.3-V LVCMOS      :         : 8         : Y              
+RESERVED_INPUT               : J12       :        :                   :         : 8         :                
+RESERVED_INPUT               : J13       :        :                   :         : 8         :                
 RESERVED_INPUT               : J14       :        :                   :         : 8         :                
 RESERVED_INPUT               : J15       :        :                   :         : 7         :                
 RESERVED_INPUT               : J16       :        :                   :         : 7         :                
@@ -542,12 +542,12 @@ GND+                         : J27       :        :                   :         
 GND+                         : J28       :        :                   :         : 6         :                
 RESERVED_INPUT               : K1        :        :                   :         : 1         :                
 RESERVED_INPUT               : K2        :        :                   :         : 1         :                
-AD_PCM_IN[5]                 : K3        : input  : 3.3-V LVCMOS      :         : 1         : Y              
-AD_PCM_IN[6]                 : K4        : input  : 3.3-V LVCMOS      :         : 1         : Y              
-VCCIO1                       : K5        : power  :                   : 3.3V    : 1         :                
+RESERVED_INPUT               : K3        :        :                   :         : 1         :                
+RESERVED_INPUT               : K4        :        :                   :         : 1         :                
+VCCIO1                       : K5        : power  :                   : 2.5V    : 1         :                
 GND                          : K6        : gnd    :                   :         :           :                
 RESERVED_INPUT               : K7        :        :                   :         : 1         :                
-DA_PCM_OUT[17]               : K8        : output : 3.3-V LVCMOS      :         : 1         : Y              
+RESERVED_INPUT               : K8        :        :                   :         : 1         :                
 VCCINT                       : K9        : power  :                   : 1.2V    :           :                
 GND                          : K10       : gnd    :                   :         :           :                
 VCCINT                       : K11       : power  :                   : 1.2V    :           :                
@@ -563,17 +563,17 @@ GND                          : K20       : gnd    :                   :         
 RESERVED_INPUT               : K21       :        :                   :         : 6         :                
 RESERVED_INPUT               : K22       :        :                   :         : 6         :                
 GND                          : K23       : gnd    :                   :         :           :                
-VCCIO6                       : K24       : power  :                   : 3.3V    : 6         :                
+VCCIO6                       : K24       : power  :                   : 2.5V    : 6         :                
 RESERVED_INPUT               : K25       :        :                   :         : 6         :                
 RESERVED_INPUT               : K26       :        :                   :         : 6         :                
 RESERVED_INPUT               : K27       :        :                   :         : 6         :                
 RESERVED_INPUT               : K28       :        :                   :         : 6         :                
 RESERVED_INPUT               : L1        :        :                   :         : 1         :                
-AD_PCM_IN[27]                : L2        : input  : 2.5 V             :         : 1         : N              
-AD_PCM_IN[3]                 : L3        : input  : 3.3-V LVCMOS      :         : 1         : Y              
-AD_PCM_IN[4]                 : L4        : input  : 3.3-V LVCMOS      :         : 1         : Y              
+RESERVED_INPUT               : L2        :        :                   :         : 1         :                
+RESERVED_INPUT               : L3        :        :                   :         : 1         :                
+RESERVED_INPUT               : L4        :        :                   :         : 1         :                
 RESERVED_INPUT               : L5        :        :                   :         : 1         :                
-AD_PCM_IN[15]                : L6        : input  : 3.3-V LVCMOS      :         : 1         : Y              
+RESERVED_INPUT               : L6        :        :                   :         : 1         :                
 RESERVED_INPUT               : L7        :        :                   :         : 1         :                
 RESERVED_INPUT               : L8        :        :                   :         : 1         :                
 GND                          : L9        : gnd    :                   :         :           :                
@@ -598,12 +598,12 @@ RESERVED_INPUT               : L27       :        :                   :         
 RESERVED_INPUT               : L28       :        :                   :         : 6         :                
 RESERVED_INPUT               : M1        :        :                   :         : 1         :                
 RESERVED_INPUT               : M2        :        :                   :         : 1         :                
-AD_PCM_IN[1]                 : M3        : input  : 3.3-V LVCMOS      :         : 1         : Y              
-AD_PCM_IN[2]                 : M4        : input  : 3.3-V LVCMOS      :         : 1         : Y              
+RESERVED_INPUT               : M3        :        :                   :         : 1         :                
+RESERVED_INPUT               : M4        :        :                   :         : 1         :                
 RESERVED_INPUT               : M5        :        :                   :         : 1         :                
 nSTATUS                      : M6        :        :                   :         : 1         :                
 RESERVED_INPUT               : M7        :        :                   :         : 1         :                
-DA_PCM_OUT[18]               : M8        : output : 3.3-V LVCMOS      :         : 1         : Y              
+RESERVED_INPUT               : M8        :        :                   :         : 1         :                
 VCCINT                       : M9        : power  :                   : 1.2V    :           :                
 GND                          : M10       : gnd    :                   :         :           :                
 VCCINT                       : M11       : power  :                   : 1.2V    :           :                
@@ -616,22 +616,22 @@ VCCINT                       : M17       : power  :                   : 1.2V    
 GND                          : M18       : gnd    :                   :         :           :                
 VCCINT                       : M19       : power  :                   : 1.2V    :           :                
 GND                          : M20       : gnd    :                   :         :           :                
-RESERVED_INPUT               : M21       :        :                   :         : 6         :                
+KEY[1]                       : M21       : input  : 2.5 V             :         : 6         : Y              
 MSEL2                        : M22       :        :                   :         : 6         :                
-KEY[0]                       : M23       : input  : 3.3-V LVCMOS      :         : 6         : Y              
+KEY[0]                       : M23       : input  : 2.5 V             :         : 6         : Y              
 RESERVED_INPUT               : M24       :        :                   :         : 6         :                
 RESERVED_INPUT               : M25       :        :                   :         : 6         :                
 RESERVED_INPUT               : M26       :        :                   :         : 6         :                
 RESERVED_INPUT               : M27       :        :                   :         : 6         :                
 RESERVED_INPUT               : M28       :        :                   :         : 6         :                
-VCCIO1                       : N1        : power  :                   : 3.3V    : 1         :                
+VCCIO1                       : N1        : power  :                   : 2.5V    : 1         :                
 GND                          : N2        : gnd    :                   :         :           :                
 RESERVED_INPUT               : N3        :        :                   :         : 1         :                
-AD_PCM_IN[0]                 : N4        : input  : 3.3-V LVCMOS      :         : 1         : Y              
-VCCIO1                       : N5        : power  :                   : 3.3V    : 1         :                
+RESERVED_INPUT               : N4        :        :                   :         : 1         :                
+VCCIO1                       : N5        : power  :                   : 2.5V    : 1         :                
 GND                          : N6        : gnd    :                   :         :           :                
-~ALTERA_DATA0~ / RESERVED_INPUT_WITH_WEAK_PULLUP : N7        : input  : 3.3-V LVTTL       :         : 1         : N              
-DA_PCM_OUT[19]               : N8        : output : 3.3-V LVCMOS      :         : 1         : Y              
+~ALTERA_DATA0~ / RESERVED_INPUT_WITH_WEAK_PULLUP : N7        : input  : 2.5 V             :         : 1         : N              
+RESERVED_INPUT               : N8        :        :                   :         : 1         :                
 GND                          : N9        : gnd    :                   :         :           :                
 VCCINT                       : N10       : power  :                   : 1.2V    :           :                
 GND                          : N11       : gnd    :                   :         :           :                
@@ -644,22 +644,22 @@ GND                          : N17       : gnd    :                   :         
 VCCINT                       : N18       : power  :                   : 1.2V    :           :                
 GND                          : N19       : gnd    :                   :         :           :                
 VCCINT                       : N20       : power  :                   : 1.2V    :           :                
-KEY[1]                       : N21       : input  : 3.3-V LVCMOS      :         : 6         : Y              
+ENCODER_IN[0]                : N21       : input  : 2.5 V             :         : 6         : Y              
 MSEL0                        : N22       :        :                   :         : 6         :                
 GND                          : N23       : gnd    :                   :         :           :                
-VCCIO6                       : N24       : power  :                   : 3.3V    : 6         :                
+VCCIO6                       : N24       : power  :                   : 2.5V    : 6         :                
 RESERVED_INPUT               : N25       :        :                   :         : 6         :                
 RESERVED_INPUT               : N26       :        :                   :         : 6         :                
 GND                          : N27       : gnd    :                   :         :           :                
-VCCIO6                       : N28       : power  :                   : 3.3V    : 6         :                
-AD_PCM_IN[20]                : P1        : input  : 2.5 V             :         : 1         : N              
-AD_PCM_IN[30]                : P2        : input  : 2.5 V             :         : 1         : N              
-~ALTERA_DCLK~                : P3        : output : 3.3-V LVTTL       :         : 1         : N              
+VCCIO6                       : N28       : power  :                   : 2.5V    : 6         :                
+RESERVED_INPUT               : P1        :        :                   :         : 1         :                
+ENET0_CONFIG                 : P2        : output : 2.5 V             :         : 1         : N              
+~ALTERA_DCLK~                : P3        : output : 2.5 V             :         : 1         : N              
 nCONFIG                      : P4        :        :                   :         : 1         :                
-altera_reserved_tck          : P5        : input  : 3.3-V LVTTL       :         : 1         : N              
-altera_reserved_tdo          : P6        : output : 3.3-V LVTTL       :         : 1         : N              
-altera_reserved_tdi          : P7        : input  : 3.3-V LVTTL       :         : 1         : N              
-altera_reserved_tms          : P8        : input  : 3.3-V LVTTL       :         : 1         : N              
+altera_reserved_tck          : P5        : input  : 2.5 V             :         : 1         : N              
+altera_reserved_tdo          : P6        : output : 2.5 V             :         : 1         : N              
+altera_reserved_tdi          : P7        : input  : 2.5 V             :         : 1         : N              
+altera_reserved_tms          : P8        : input  : 2.5 V             :         : 1         : N              
 VCCINT                       : P9        : power  :                   : 1.2V    :           :                
 GND                          : P10       : gnd    :                   :         :           :                
 VCCINT                       : P11       : power  :                   : 1.2V    :           :                
@@ -679,14 +679,14 @@ CONF_DONE                    : P24       :        :                   :         
 RESERVED_INPUT               : P25       :        :                   :         : 6         :                
 RESERVED_INPUT               : P26       :        :                   :         : 6         :                
 RESERVED_INPUT               : P27       :        :                   :         : 6         :                
-~ALTERA_nCEO~ / RESERVED_OUTPUT_OPEN_DRAIN : P28       : output : 3.3-V LVTTL       :         : 6         : N              
-AD_PCM_IN[21]                : R1        : input  : 2.5 V             :         : 2         : N              
-AD_PCM_IN[18]                : R2        : input  : 2.5 V             :         : 2         : N              
-AD_PCM_IN[22]                : R3        : input  : 2.5 V             :         : 2         : N              
-DA_PCM_OUT_T[16]             : R4        : output : 3.3-V LVCMOS      :         : 2         : Y              
-DA_PCM_OUT_T[15]             : R5        : output : 3.3-V LVCMOS      :         : 2         : Y              
-DA_PCM_OUT_T[14]             : R6        : output : 3.3-V LVCMOS      :         : 2         : Y              
-AD_PCM_IN[19]                : R7        : input  : 2.5 V             :         : 2         : N              
+RESERVED_INPUT               : P28       :        :                   :         : 6         :                
+RESERVED_INPUT               : R1        :        :                   :         : 2         :                
+RESERVED_INPUT               : R2        :        :                   :         : 2         :                
+RESERVED_INPUT               : R3        :        :                   :         : 2         :                
+RESERVED_INPUT               : R4        :        :                   :         : 2         :                
+RESERVED_INPUT               : R5        :        :                   :         : 2         :                
+RESERVED_INPUT               : R6        :        :                   :         : 2         :                
+RESERVED_INPUT               : R7        :        :                   :         : 2         :                
 nCE                          : R8        :        :                   :         : 1         :                
 GND                          : R9        : gnd    :                   :         :           :                
 VCCINT                       : R10       : power  :                   : 1.2V    :           :                
@@ -708,13 +708,13 @@ RESERVED_INPUT               : R25       :        :                   :         
 RESERVED_INPUT               : R26       :        :                   :         : 5         :                
 RESERVED_INPUT               : R27       :        :                   :         : 5         :                
 RESERVED_INPUT               : R28       :        :                   :         : 5         :                
-VCCIO2                       : T1        : power  :                   : 3.3V    : 2         :                
+VCCIO2                       : T1        : power  :                   : 2.5V    : 2         :                
 GND                          : T2        : gnd    :                   :         :           :                
-DA_PCM_OUT_T[17]             : T3        : output : 3.3-V LVCMOS      :         : 2         : Y              
-AD_PCM_IN[26]                : T4        : input  : 2.5 V             :         : 2         : N              
-VCCIO2                       : T5        : power  :                   : 3.3V    : 2         :                
+RESERVED_INPUT               : T3        :        :                   :         : 2         :                
+RESERVED_INPUT               : T4        :        :                   :         : 2         :                
+VCCIO2                       : T5        : power  :                   : 2.5V    : 2         :                
 GND                          : T6        : gnd    :                   :         :           :                
-AD_PCM_IN[28]                : T7        : input  : 2.5 V             :         : 2         : N              
+RESERVED_INPUT               : T7        :        :                   :         : 2         :                
 RESERVED_INPUT               : T8        :        :                   :         : 2         :                
 VCCINT                       : T9        : power  :                   : 1.2V    :           :                
 GND                          : T10       : gnd    :                   :         :           :                
@@ -731,18 +731,18 @@ GND                          : T20       : gnd    :                   :         
 RESERVED_INPUT               : T21       :        :                   :         : 5         :                
 RESERVED_INPUT               : T22       :        :                   :         : 5         :                
 GND                          : T23       : gnd    :                   :         :           :                
-VCCIO5                       : T24       : power  :                   : 3.3V    : 5         :                
+VCCIO5                       : T24       : power  :                   : 2.5V    : 5         :                
 RESERVED_INPUT               : T25       :        :                   :         : 5         :                
 RESERVED_INPUT               : T26       :        :                   :         : 5         :                
 GND                          : T27       : gnd    :                   :         :           :                
-VCCIO5                       : T28       : power  :                   : 3.3V    : 5         :                
-AD_PCM_IN[24]                : U1        : input  : 2.5 V             :         : 2         : N              
-AD_PCM_IN[25]                : U2        : input  : 2.5 V             :         : 2         : N              
-DA_PCM_OUT_T[19]             : U3        : output : 3.3-V LVCMOS      :         : 2         : Y              
-AD_PCM_IN[16]                : U4        : input  : 2.5 V             :         : 2         : N              
-DA_PCM_OUT_T[18]             : U5        : output : 3.3-V LVCMOS      :         : 2         : Y              
-DA_PCM_OUT[20]               : U6        : output : 3.3-V LVCMOS      :         : 2         : Y              
-DA_PCM_OUT[4]                : U7        : output : 3.3-V LVCMOS      :         : 2         : Y              
+VCCIO5                       : T28       : power  :                   : 2.5V    : 5         :                
+ENCODER_IN[1]                : U1        : input  : 2.5 V             :         : 2         : N              
+RESERVED_INPUT               : U2        :        :                   :         : 2         :                
+RESERVED_INPUT               : U3        :        :                   :         : 2         :                
+RESERVED_INPUT               : U4        :        :                   :         : 2         :                
+RESERVED_INPUT               : U5        :        :                   :         : 2         :                
+RESERVED_INPUT               : U6        :        :                   :         : 2         :                
+RESERVED_INPUT               : U7        :        :                   :         : 2         :                
 RESERVED_INPUT               : U8        :        :                   :         : 2         :                
 GND                          : U9        : gnd    :                   :         :           :                
 VCCINT                       : U10       : power  :                   : 1.2V    :           :                
@@ -756,7 +756,7 @@ GND                          : U17       : gnd    :                   :         
 VCCINT                       : U18       : power  :                   : 1.2V    :           :                
 GND                          : U19       : gnd    :                   :         :           :                
 VCCINT                       : U20       : power  :                   : 1.2V    :           :                
-ENET0_MDIO                   : U21       : bidir  : 3.3-V LVCMOS      :         : 5         : Y              
+RESERVED_INPUT               : U21       :        :                   :         : 5         :                
 RESERVED_INPUT               : U22       :        :                   :         : 5         :                
 RESERVED_INPUT               : U23       :        :                   :         : 5         :                
 RESERVED_INPUT               : U24       :        :                   :         : 5         :                
@@ -764,14 +764,14 @@ RESERVED_INPUT               : U25       :        :                   :         
 RESERVED_INPUT               : U26       :        :                   :         : 5         :                
 RESERVED_INPUT               : U27       :        :                   :         : 5         :                
 RESERVED_INPUT               : U28       :        :                   :         : 5         :                
-AD_PCM_IN[23]                : V1        : input  : 2.5 V             :         : 2         : N              
-AD_PCM_IN[29]                : V2        : input  : 2.5 V             :         : 2         : N              
-DA_PCM_OUT[22]               : V3        : output : 3.3-V LVCMOS      :         : 2         : Y              
-AD_PCM_IN[17]                : V4        : input  : 2.5 V             :         : 2         : N              
-DA_PCM_OUT_T[20]             : V5        : output : 3.3-V LVCMOS      :         : 2         : Y              
-DA_PCM_OUT_T[21]             : V6        : output : 3.3-V LVCMOS      :         : 2         : Y              
-DA_PCM_OUT[21]               : V7        : output : 3.3-V LVCMOS      :         : 2         : Y              
-DA_PCM_OUT[5]                : V8        : output : 3.3-V LVCMOS      :         : 2         : Y              
+RESERVED_INPUT               : V1        :        :                   :         : 2         :                
+RESERVED_INPUT               : V2        :        :                   :         : 2         :                
+RESERVED_INPUT               : V3        :        :                   :         : 2         :                
+RESERVED_INPUT               : V4        :        :                   :         : 2         :                
+RESERVED_INPUT               : V5        :        :                   :         : 2         :                
+RESERVED_INPUT               : V6        :        :                   :         : 2         :                
+RESERVED_INPUT               : V7        :        :                   :         : 2         :                
+RESERVED_INPUT               : V8        :        :                   :         : 2         :                
 VCCINT                       : V9        : power  :                   : 1.2V    :           :                
 GND                          : V10       : gnd    :                   :         :           :                
 VCCINT                       : V11       : power  :                   : 1.2V    :           :                
@@ -794,12 +794,12 @@ RESERVED_INPUT               : V27       :        :                   :         
 RESERVED_INPUT               : V28       :        :                   :         : 5         :                
 RESERVED_INPUT               : W1        :        :                   :         : 2         :                
 RESERVED_INPUT               : W2        :        :                   :         : 2         :                
-DA_PCM_OUT[24]               : W3        : output : 3.3-V LVCMOS      :         : 2         : Y              
+RESERVED_INPUT               : W3        :        :                   :         : 2         :                
 RESERVED_INPUT               : W4        :        :                   :         : 2         :                
-VCCIO2                       : W5        : power  :                   : 3.3V    : 2         :                
+VCCIO2                       : W5        : power  :                   : 2.5V    : 2         :                
 GND                          : W6        : gnd    :                   :         :           :                
-DA_PCM_OUT[23]               : W7        : output : 3.3-V LVCMOS      :         : 2         : Y              
-DA_PCM_OUT[6]                : W8        : output : 3.3-V LVCMOS      :         : 2         : Y              
+RESERVED_INPUT               : W7        :        :                   :         : 2         :                
+RESERVED_INPUT               : W8        :        :                   :         : 2         :                
 GND                          : W9        : gnd    :                   :         :           :                
 VCCINT                       : W10       : power  :                   : 1.2V    :           :                
 GND                          : W11       : gnd    :                   :         :           :                
@@ -815,24 +815,24 @@ VCCINT                       : W20       : power  :                   : 1.2V    
 RESERVED_INPUT               : W21       :        :                   :         : 5         :                
 RESERVED_INPUT               : W22       :        :                   :         : 5         :                
 GND                          : W23       : gnd    :                   :         :           :                
-VCCIO5                       : W24       : power  :                   : 3.3V    : 5         :                
+VCCIO5                       : W24       : power  :                   : 2.5V    : 5         :                
 RESERVED_INPUT               : W25       :        :                   :         : 5         :                
 RESERVED_INPUT               : W26       :        :                   :         : 5         :                
-ENET0_RX_DV                  : W27       : input  : 3.3-V LVCMOS      :         : 5         : Y              
+RESERVED_INPUT               : W27       :        :                   :         : 5         :                
 RESERVED_INPUT               : W28       :        :                   :         : 5         :                
-CLOCK_50                     : Y1        : input  : 3.3-V LVCMOS      :         : 2         : Y              
-GND+                         : Y2        :        :                   :         : 2         :                
+GND+                         : Y1        :        :                   :         : 2         :                
+CLOCK_50                     : Y2        : input  : 3.3-V LVTTL       :         : 2         : Y              
 RESERVED_INPUT               : Y3        :        :                   :         : 2         :                
 RESERVED_INPUT               : Y4        :        :                   :         : 2         :                
 RESERVED_INPUT               : Y5        :        :                   :         : 2         :                
-DA_PCM_OUT_T[22]             : Y6        : output : 3.3-V LVCMOS      :         : 2         : Y              
-DA_PCM_OUT[25]               : Y7        : output : 3.3-V LVCMOS      :         : 2         : Y              
+RESERVED_INPUT               : Y6        :        :                   :         : 2         :                
+RESERVED_INPUT               : Y7        :        :                   :         : 2         :                
 VCCA1                        : Y8        : power  :                   : 2.5V    :           :                
 VCCD_PLL1                    : Y9        : power  :                   : 1.2V    :           :                
 RESERVED_INPUT               : Y10       :        :                   :         : 3         :                
 GND                          : Y11       : gnd    :                   :         :           :                
-DA_PCM_OUT[8]                : Y12       : output : 3.3-V LVCMOS      :         : 3         : Y              
-DA_PCM_OUT[7]                : Y13       : output : 3.3-V LVCMOS      :         : 3         : Y              
+RESERVED_INPUT               : Y12       :        :                   :         : 3         :                
+RESERVED_INPUT               : Y13       :        :                   :         : 3         :                
 RESERVED_INPUT               : Y14       :        :                   :         : 3         :                
 RESERVED_INPUT               : Y15       :        :                   :         : 3         :                
 RESERVED_INPUT               : Y16       :        :                   :         : 4         :                
@@ -847,4 +847,4 @@ RESERVED_INPUT               : Y24       :        :                   :         
 RESERVED_INPUT               : Y25       :        :                   :         : 5         :                
 RESERVED_INPUT               : Y26       :        :                   :         : 5         :                
 GND+                         : Y27       :        :                   :         : 5         :                
-ENET0_RX_CLK                 : Y28       : input  : 3.3-V LVCMOS      :         : 5         : Y              
+GND+                         : Y28       :        :                   :         : 5         :                

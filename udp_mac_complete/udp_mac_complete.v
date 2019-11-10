@@ -314,8 +314,10 @@ parameter REAL_PHY = 0;
     wire            set_1000;
 
     //internal reg counter
-    reg [31:0]      udp_tx_counter;
-    reg [31:0]      udp_rx_counter;
+    reg [31:0]      udp_tx_counter, udp_tx_counter_d;
+    reg [31:0]      udp_rx_counter, udp_rx_counter_d;
+    reg [31:0]      icmp_counter_d;
+    reg [31:0]      unknow_rx_ip_counter_d;
     assign set_1000 = 1;
 
     
@@ -712,7 +714,7 @@ end
 
 always @(posedge clk_2) begin
     if (rst)
-        local_ip <= #1 32'hc0a80101;
+        local_ip <= #1 32'hc0a80164;
     else
         if (write && address == 8'hf0)
             local_ip <= #1 writedata;
@@ -750,13 +752,21 @@ always @(posedge clk) begin
             udp_rx_counter <= #1 udp_rx_counter + 1;
 end
 
+always @(posedge clk_2)
+begin
+    icmp_counter_d <= #1 icmp_counter;
+    udp_tx_counter_d <= #1 udp_tx_counter;
+    udp_rx_counter_d <= #1 udp_rx_counter;
+    unknow_rx_ip_counter_d <= #1 unknow_rx_ip_counter;
+end
+
 assign reg_readdata = (reg_addr == 8'hf0) ? local_ip :
                      ((reg_addr == 8'hf1) ? subnet_mask :
                      ((reg_addr == 8'hf2) ? gateway_ip :
-                     ((reg_addr == 8'hf3) ? unknow_rx_ip_counter :
-                     ((reg_addr == 8'hf4) ? icmp_counter : 
-                     ((reg_addr == 8'hf5) ? udp_tx_counter :
-                     ((reg_addr == 8'hf6) ? udp_rx_counter : readdata))))));
+                     ((reg_addr == 8'hf3) ? unknow_rx_ip_counter_d :
+                     ((reg_addr == 8'hf4) ? icmp_counter_d : 
+                     ((reg_addr == 8'hf5) ? udp_tx_counter_d :
+                     ((reg_addr == 8'hf6) ? udp_rx_counter_d : readdata))))));
 
 assign writedata = rst_finish ? reg_writedata : rst_writedata;
 assign address = rst_finish ? reg_addr : rst_addr;

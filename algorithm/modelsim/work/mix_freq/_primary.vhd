@@ -29,6 +29,7 @@ entity mix_freq is
         dec_rate        : in     vl_logic_vector(7 downto 0);
         dec_rate2       : in     vl_logic_vector(7 downto 0);
         acc_clr         : in     vl_logic;
-        acc_shift       : in     vl_logic_vector(3 downto 0)
+        acc_shift       : in     vl_logic_vector(3 downto 0);
+        resync          : in     vl_logic
     );
 end mix_freq;

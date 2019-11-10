@@ -20,7 +20,9 @@ entity dac_tx is
         reg_readdata    : out    vl_logic_vector(31 downto 0);
         dac_signal_len  : in     vl_logic_vector;
         dac_cic_rate    : in     vl_logic_vector;
-        dac_run         : in     vl_logic
+        dac_run         : in     vl_logic;
+        ad_clk          : in     vl_logic;
+        dac_resync      : out    vl_logic
     );
     attribute mti_svvh_generic_type : integer;
     attribute mti_svvh_generic_type of CHANNEL : constant is 1;

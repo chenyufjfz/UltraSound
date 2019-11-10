@@ -26,18 +26,20 @@ entity mix_freq_mc is
         iqpcm_dump_valid: out    vl_logic_vector;
         iqpcm_dump      : out    vl_logic_vector;
         clk_2           : in     vl_logic;
-        reg_addr        : in     vl_logic_vector(15 downto 0);
+        reg_addr        : in     vl_logic_vector(12 downto 0);
         reg_rd          : in     vl_logic;
         reg_wr          : in     vl_logic;
         reg_ready       : out    vl_logic;
         reg_writedata   : in     vl_logic_vector(31 downto 0);
         reg_readdata    : out    vl_logic_vector(31 downto 0);
         pcm_out_shift   : in     vl_logic_vector(3 downto 0);
-        choose_lb       : in     vl_logic_vector;
+        choose_lb       : in     vl_logic;
         dec_rate        : in     vl_logic_vector(7 downto 0);
         dec_rate2       : in     vl_logic_vector(7 downto 0);
         acc_shift       : in     vl_logic_vector(3 downto 0);
         sin_length      : in     vl_logic_vector;
+        cycle_num       : in     vl_logic_vector(23 downto 0);
+        status          : out    vl_logic_vector(31 downto 0);
         resync          : in     vl_logic
     );
     attribute mti_svvh_generic_type : integer;

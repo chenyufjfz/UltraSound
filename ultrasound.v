@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 
-//`define DEV_BOARD
+`define DEV_BOARD
 
 module ultrasound(
     CLOCK_50,
@@ -17,6 +17,8 @@ module ultrasound(
     ENET0_TX_EN,
     ENET0_CONFIG,
 
+    //ENCODER
+    ENCODER_IN,
 
 `ifndef    DEV_BOARD
     //AD interface
@@ -26,6 +28,7 @@ module ultrasound(
 
     //DA interface
     DA_CLK_OUT,
+    DA_CLK_OUT1,
     DA_PCM_OUT,
     DA_PCM_OUT_T,
     DA_WR,
@@ -39,23 +42,32 @@ module ultrasound(
     CH_GAIN_GAIN,
     CH_GAIN_BUF,
     CH_GAIN_LDAC,
-    CH_SEL_419,
+    SYN_CLK,
+    SYN_SCK,
+    SYN_SDATAIN,
+    SYN_SDATAOUT,
+    SYN_TRIG_START,
+    SYN_TRIG_PULSE,
+    MODEL_SEL,
+    CH_FILTER_SEL,
+    CH_EMIT_RECV_EN,
+    ENCODER_ERR,
 `else
     //status led
     TX_ERR,
     RX_ERR
-`endif    
+`endif
 );
 parameter SIMULATION = 0;
 parameter RESET_CTR_WIDTH = SIMULATION ? 5 : 22;
 parameter ENET0_RST_CTR_WIDTH = 21;
-parameter DAC_CHANNEL = 4;
-parameter ADC_CHANNEL = 2;
-parameter FREQ_NUM = 4;
+parameter DAC_CHANNEL = 10;
+parameter ADC_CHANNEL = 8;
+parameter FREQ_NUM = 5;
 parameter pcm2usb_pcmaw = 11;
-parameter dac_pcmaw = 12;
 parameter sintb_aw = 12;
 parameter DA_AD_RATE = 8'd2;
+parameter MIX_NUM = 5;
 `ifdef    DEV_BOARD
 parameter REAL_PHY = 32'h1111;
 `else
@@ -66,7 +78,7 @@ localparam DACT_CHANNEL = DAC_CHANNEL - ADC_CHANNEL;
     //clk
     input                               CLOCK_50;
     input [1:0]                         KEY;
-    //Ethernet0                        
+    //Ethernet0
     output                              ENET0_GTX_CLK;
     output                              ENET0_MDC;
     inout                               ENET0_MDIO;
@@ -83,8 +95,9 @@ localparam DACT_CHANNEL = DAC_CHANNEL - ADC_CHANNEL;
     output                              AD_CLK_OUT;
     input [16*ADC_CHANNEL-1:0]          AD_PCM_IN;
     output                              AD_MODE;
-    //DA interface                      
+    //DA interface
     output                              DA_CLK_OUT;
+    output                              DA_CLK_OUT1;
     output reg [14*ADC_CHANNEL-1:0]     DA_PCM_OUT;
     output reg [14*DACT_CHANNEL-1:0]    DA_PCM_OUT_T;
 
@@ -97,12 +110,25 @@ localparam DACT_CHANNEL = DAC_CHANNEL - ADC_CHANNEL;
     output                              CH_GAIN_GAIN;
     output                              CH_GAIN_BUF;
     output                              CH_GAIN_LDAC;
-    output                              CH_SEL_419;
-`else                                   
-    //status led                        
+    output                              SYN_CLK;
+    output                              SYN_SCK;
+    input                               SYN_SDATAIN;
+    output                              SYN_SDATAOUT;
+    output [1:0]                        MODEL_SEL;
+    output                              CH_FILTER_SEL;
+    output [7:0]                        CH_EMIT_RECV_EN;
+    output [1:0]                        ENCODER_ERR;
+    output                              SYN_TRIG_START;
+    output                              SYN_TRIG_PULSE;
+    input [5:0]                         ENCODER_IN;
+`else
+    //status led
     output                              TX_ERR;
     output                              RX_ERR;
+    input [1:0]                         ENCODER_IN;
 `endif
+
+    wire [4:0]                          slot_idx;
 
     // udp_mac_complete tx & rx UDP
     wire                                tx_udp_hdr_valid;
@@ -134,8 +160,8 @@ localparam DACT_CHANNEL = DAC_CHANNEL - ADC_CHANNEL;
     wire                                mdio_in;
     wire                                mdio_oen;
     wire                                mdio_out;
-                                        
-    //clk & reset                       
+
+    //clk & reset
     wire                                clk;
     wire                                clk_2;
     wire                                ad_clk;
@@ -145,8 +171,8 @@ localparam DACT_CHANNEL = DAC_CHANNEL - ADC_CHANNEL;
     wire                                enet0_rst;
     wire                                tx_clk_mac;
     wire                                tx_clk_phy;
-                                        
-    //PLL                               
+
+    //PLL
     wire                                pll_lock;
     wire                                pll_125m;
     wire                                pll_25m;
@@ -154,34 +180,33 @@ localparam DACT_CHANNEL = DAC_CHANNEL - ADC_CHANNEL;
 
     //dac
     wire [DAC_CHANNEL-1:0]              dac_pcm_out_valid;
-    wire [DAC_CHANNEL-1:0]              dac_pcm_out_ready;
     wire [16*DAC_CHANNEL-1:0]           dac_pcm_out;
-    wire [DAC_CHANNEL*dac_pcmaw-1:0]    dac_signal_len;
-    wire [DAC_CHANNEL*4-1:0]            dac_cic_rate;
-    wire                                dac_run;
-    wire                                dac_resync;
-                                        
-    //adc                               
-    wire [16*ADC_CHANNEL-1:0]           lb_dac_pcm;
-    wire [ADC_CHANNEL-1:0]              lb_dac_pcm_valid;
-    wire [ADC_CHANNEL-1:0]              lb_dac_pcm_ready;
+    wire [16*MIX_NUM*DAC_CHANNEL-1:0]   dac_cos_sita, dac_sin_sita;
+    wire [4*MIX_NUM*DAC_CHANNEL-1:0]    dac_choose;
+    wire [DAC_CHANNEL-1:0]              dac_err_clr;
+    wire [DAC_CHANNEL-1:0]              dac_err;
 
     //mix freq
     wire [32*ADC_CHANNEL*FREQ_NUM-1:0]  mf_ipcm_acc_out;
     wire [32*ADC_CHANNEL*FREQ_NUM-1:0]  mf_qpcm_acc_out;
-    wire [4*FREQ_NUM-1:0]               mf_pcm_out_shift;
     wire [FREQ_NUM-1:0]                 mf_choose_lb;
-    wire [8*FREQ_NUM-1:0]               mf_dec_rate;
-    wire [8*FREQ_NUM-1:0]               mf_dec_rate2;
     wire [4*FREQ_NUM-1:0]               mf_acc_shift;
-    wire [16*FREQ_NUM-1:0]              mf_sin_length;
     wire [24*FREQ_NUM-1:0]              mf_cycle_num;
-    wire [32*FREQ_NUM-1:0]              mf_status;
-    wire [FREQ_NUM-1:0]                 mf_ctrl_resync;
-    wire [FREQ_NUM-1:0]                 mf_reg_ready;
-    wire [31:0]                         mf_reg_readdata[FREQ_NUM-1:0];
-                                        
-    //pcm_udp                           
+    wire [FREQ_NUM-1:0]                 mf_err_clr;
+    wire [FREQ_NUM-1:0]                 mf_err;
+    wire                                mf_iq_read;
+
+    //sincos_gen
+    wire [16*FREQ_NUM-1:0]              sc_ipcm_out, sc_qpcm_out;
+    wire                                sc_iqpcm_valid;
+    wire                                sc_ad_valid;
+    wire [4*FREQ_NUM-1:0]               sc_cic_rate;
+    wire [16*FREQ_NUM-1:0]              sc_sin_length;
+    wire                                sc_resync;
+    wire [16*FREQ_NUM-1:0]              sc_status;
+    wire                                sc_err;
+
+    //pcm_udp
     wire                                pcm_udp_hdr_valid;
     wire                                pcm_udp_hdr_ready;
     wire [15:0]                         pcm_udp_length;
@@ -198,8 +223,40 @@ localparam DACT_CHANNEL = DAC_CHANNEL - ADC_CHANNEL;
     wire [9:0]                          pcm_udp_tx_th;
     wire [7:0]                          pcm_udp_channel_choose;
     wire [7:0]                          pcm_udp_capture_sep;
-                                        
-    //controller                       
+
+    //sdio access
+    wire                                sdio_miso;
+    wire                                sdio_mosi;
+    wire                                sdio_sck;
+
+    //encoder
+    wire                                encoder1_dir, encoder2_dir;
+    wire                                encoder1_start, encoder2_start;
+    wire                                encoder1_div, encoder2_div;
+    wire [31:0]                         encoder1_cnt, encoder2_cnt;
+    wire [31:0]                         encoder1_total_a, encoder1_total_b;
+    wire [31:0]                         encoder2_total_a, encoder2_total_b;
+    wire [11:0]                         encoder_pulse_width;
+    wire                                encoder1_err, encoder2_err;
+    wire [2:0]                          encoder1_err_status, encoder2_err_status;
+
+    //iqbuf
+    wire [15:0]                         iq_buf_write;
+    wire [15:0]                         iq_buf_read;
+    wire                                iq_buf_rst;
+    wire                                iq_buf_block_ov;
+    wire                                iq_buf_overflow;
+    wire [31:0]                         sync_slot;
+    wire [31:0]                         sync_encoder1, sync_encoder2;
+
+    //shadow sc mem
+    wire [16*MIX_NUM*DAC_CHANNEL-1:0]   shadow_cos_sita;
+    wire [16*MIX_NUM*DAC_CHANNEL-1:0]   shadow_sin_sita;
+    wire [4*MIX_NUM*DAC_CHANNEL-1:0]    shadow_choose;
+    wire [15:0]                         shadow_read_addr;
+    wire                                shadow_read_trigger;
+
+    //controller
     wire                                trigger_exec;
     wire                                ctrl_out_udp_hdr_valid;
     wire                                ctrl_out_udp_hdr_ready;
@@ -211,25 +268,35 @@ localparam DACT_CHANNEL = DAC_CHANNEL - ADC_CHANNEL;
     wire                                ctrl_out_udp_payload_axis_tvalid;
     wire                                ctrl_out_udp_payload_axis_tready;
     wire                                ctrl_out_udp_payload_axis_tlast;
-                                        
-    //AXI reg access                    
+
+    //AXI reg access
     wire [28:0]                         reg_addr;
     wire [31:0]                         reg_writedata;
     wire                                reg_rd_udp_mac;
     wire                                reg_wr_udp_mac;
-    wire                                reg_rd_pcm_udp;
-    wire                                reg_wr_pcm_udp;
-    wire                                reg_rd_dac;
-    wire                                reg_wr_dac;
-    wire                                reg_rd_mf;
-    wire                                reg_wr_mf;
-    wire                                reg_busy_udp_mac;    
     wire [31:0]                         reg_readdata_udp_mac;
-    wire [31:0]                         reg_readdata_dac;
-    wire [31:0]                         reg_readdata_mf;
-    wire                                reg_ready_dac;
-    wire                                reg_ready_mf;
-    
+    wire                                reg_busy_udp_mac;
+
+    wire                                reg_rd_sc;
+    wire                                reg_wr_sc;
+    wire [31:0]                         reg_readdata_sc;
+    wire                                reg_ready_sc;
+
+    wire                                reg_rd_sdio;
+    wire                                reg_wr_sdio;
+    wire [31:0]                         reg_readdata_sdio;
+    wire                                reg_ready_sdio;
+
+    wire                                reg_wr_iq_buf;
+    wire                                reg_rd_iq_buf;
+    wire                                reg_ready_iq_buf;
+    wire [31:0]                         reg_readdata_iq_buf;
+
+    wire                                reg_rd_shadow_sc;
+    wire                                reg_wr_shadow_sc;
+    wire                                reg_ready_shadow_sc;
+    wire [31:0]                         reg_readdata_shadow_sc;
+
     // ===== MDIO Tristate
     assign ENET0_CONFIG = 1'b0;
     assign mdio_in = ENET0_MDIO;
@@ -249,7 +316,7 @@ main_pll main_pll_inst(
     .c1                                 (clk),
     .c2                                 (da_clk),
     .c3                                 (ad_clk),
-`ifndef DEV_BOARD   
+`ifndef DEV_BOARD
     .c4                                 (DA_CLK_OUT),
 `else
     .c4                                 (),
@@ -291,6 +358,7 @@ glitch_remove glitch_remove_rx_pending(
     .glitch_free_out                    (RX_ERR)
 );
 `else
+    assign DA_CLK_OUT1 = DA_CLK_OUT;
     assign AD_CLK_OUT = ad_clk;
     assign AD_MODE = 1;
 
@@ -314,11 +382,63 @@ generate
 endgenerate
 `endif
 
+    wire [3:0]                          encoder_in;
+
+    encoder encoder_1(
+    .clk                                (clk_2),
+    .rst                                (rst),
+    .pulse_width                        (encoder_pulse_width),
+    .Encoder_A                          (encoder_in[0]),
+    .Encoder_B                          (encoder_in[1]),
+    .Encoder_dir                        (encoder1_dir),
+    .capture_start                      (encoder1_start),
+    .Encoder_div_number                 (encoder1_div),
+    .o_encoder_cnt_div_a                (encoder1_cnt),
+    .encoder_total_a                    (encoder1_total_a),
+    .encoder_total_b                    (encoder1_total_b),
+    .o_encoder_err                      (encoder1_err),
+    .err_status                         (encoder1_err_status)
+    );
+
+    encoder encoder_2(
+    .clk                                (clk_2),
+    .rst                                (rst),
+    .pulse_width                        (encoder_pulse_width),
+    .Encoder_A                          (encoder_in[2]),
+    .Encoder_B                          (encoder_in[3]),
+    .Encoder_dir                        (encoder2_dir),
+    .capture_start                      (encoder2_start),
+    .Encoder_div_number                 (encoder2_div),
+    .o_encoder_cnt_div_a                (encoder2_cnt),
+    .encoder_total_a                    (encoder2_total_a),
+    .encoder_total_b                    (encoder2_total_b),
+    .o_encoder_err                      (encoder2_err),
+    .err_status                         (encoder2_err_status)
+    );
+
+
+`ifndef DEV_BOARD
+    assign encoder_in[0] = ENCODER_IN[0];
+    assign encoder_in[1] = ENCODER_IN[1];
+    assign encoder_in[2] = ENCODER_IN[3];
+    assign encoder_in[3] = ENCODER_IN[4];
+    assign ENCODER_ERR[0] = encoder1_err;
+    assign ENCODER_ERR[1] = encoder2_err;
+`else
+    reg [1:0]                           encoder_in_delay;
+    assign encoder_in[0] = ENCODER_IN[0];
+    assign encoder_in[1] = encoder_in_delay[0];
+    assign encoder_in[2] = ENCODER_IN[1];
+    assign encoder_in[3] = encoder_in_delay[1];
+    always @(posedge clk_2)
+        encoder_in_delay <= #1 ENCODER_IN;
+`endif
+
 synchronizer synchronizer_mac(
     .reset                              (rst),
     .clk                                (tx_clk_mac),
     .d                                  (eth_mode),
-    .q                                  (eth_mode_tx_clk_mac_sync)  
+    .q                                  (eth_mode_tx_clk_mac_sync)
 );
 
 clkctrl1 clkctrl1_mac(
@@ -433,128 +553,102 @@ udp_mac_complete_inst (
     .mdio_out                           (mdio_out)
 );
 
-dac_tx #(
-    .CHANNEL                            (DAC_CHANNEL),
-    .pcmaw                              (dac_pcmaw)
-) dac_tx_inst(
+sincos_gen #(
+    .FREQ_NUM                           (FREQ_NUM),
+    .pcmaw                              (sintb_aw)
+    ) sincos_gen_inst(
     //clock and reset
-    .pcm_clk                            (da_clk),
+    .ad_clk                             (ad_clk),
+    .da_clk                             (da_clk),
     .rst                                (rst),
 
     //pcm input and output
-    .dac_pcm_out_valid                  (dac_pcm_out_valid),
-    .dac_pcm_out_ready                  (dac_pcm_out_ready),
-    .dac_pcm_out                        (dac_pcm_out),
+    .sc_iqpcm_valid                     (sc_iqpcm_valid),
+    .sc_ipcm_out                        (sc_ipcm_out),
+    .sc_qpcm_out                        (sc_qpcm_out),
+    .sc_ad_valid                        (sc_ad_valid),
 
     //register access
     .clk_2                              (clk_2),
-    .reg_addr                           (reg_addr[15:0]),
-    .reg_rd                             (reg_rd_dac),
-    .reg_wr                             (reg_wr_dac),
-    .reg_ready                          (reg_ready_dac),
+    .reg_addr                           (reg_addr[16:0]),
+    .reg_rd                             (reg_rd_sc),
+    .reg_wr                             (reg_wr_sc),
+    .reg_ready                          (reg_ready_sc),
     .reg_writedata                      (reg_writedata),
-    .reg_readdata                       (reg_readdata_dac),
+    .reg_readdata                       (reg_readdata_sc),
 
-    .dac_signal_len                     (dac_signal_len),
-    .dac_cic_rate                       (dac_cic_rate),
-    .dac_run                            (dac_run),
-    .ad_clk                             (ad_clk),
-    .dac_resync                         (dac_resync)
+    //controller
+    .sc_sin_length                      (sc_sin_length),
+    .sc_cic_rate                        (sc_cic_rate),
+    .sc_resync                          (sc_resync),
+    .sc_status                          (sc_status),
+    .sc_err                             (sc_err)
 );
-assign dac_pcm_out_ready = {DAC_CHANNEL{1'b1}};
 
-generate
-genvar k;
-for (k=0; k<ADC_CHANNEL; k=k+1)
-begin : da_loopback
-pcmmux_fifo #(
-    .CHANNEL                            (1'b1),
-    .pcmaw                              (1'b1)
-) ad_da_mux(
-//clock and reset
-    .pcm_in_clk                         (da_clk),
-    .pcm_out_clk                        (ad_clk),
-    .rst                                (rst | dac_resync),
-
-    //pcm input and output
-    .pcm_in_valid                       (dac_pcm_out_valid[k]),
-    .pcm_in_ready                       (),
-    .pcm_in                             (dac_pcm_out[16*k+15:16*k]),
-    .pcm_out_valid                      (lb_dac_pcm_valid[k]),
-    .pcm_out_ready                      (lb_dac_pcm_ready[k]),
-    .pcm_out                            (lb_dac_pcm[16*k+15:16*k]),
-
-    //register access
-    .pcm_channel_choose                 (8'd0),
-    .pcm_available                      (),
-    .pcm_capture_sep                    (DA_AD_RATE - 1'b1)
-);
-end
-endgenerate
-
-assign lb_dac_pcm_ready = {ADC_CHANNEL{1'b1}};
-
-generate
-genvar m;
-for (m=0; m<FREQ_NUM; m=m+1)
-begin : mix_inst
-mix_freq_mc #(
-    .CHANNEL                            (ADC_CHANNEL),
-    .pcmaw                              (sintb_aw)
-) mix_freq_mc_inst(
+mix_freq2_mc #(
+    .FREQ_NUM                           (FREQ_NUM),
+    .CHANNEL                            (ADC_CHANNEL)
+    ) mix_freq2_mc_inst (
     //reset and clock
     .rst                                (rst),
     .clk1                               (clk),
-    .pcm_clk                            (ad_clk),
+    .clk_2                              (clk_2),
+    .ad_clk                             (ad_clk),
 
     //pcm input
+`ifndef DEV_BOARD
     .ad_pcm_in_valid                    ({ADC_CHANNEL{1'b1}}),
-    .ad_pcm_in_ready                    (),
-`ifndef DEV_BOARD    
     .ad_pcm_in                          (AD_PCM_IN),
 `else
+    .ad_pcm_in_valid                    ({ADC_CHANNEL{1'b0}}),
     .ad_pcm_in                          (),
 `endif
-    .da_lb_pcm_in_valid                 (lb_dac_pcm_valid),
-    .da_lb_pcm_in_ready                 (),
-    .da_lb_pcm_in                       (lb_dac_pcm),
+    .da_lb_pcm_in_valid                 (dac_pcm_out_valid[ADC_CHANNEL-1:0]),
+    .da_lb_pcm_in                       (dac_pcm_out[16*ADC_CHANNEL-1:0]),
 
-    //iq pcm output
-    .ipcm_dec_out_valid                 (),
-    .ipcm_dec_out_ready                 ({ADC_CHANNEL{1'b1}}),
-    .ipcm_dec_out                       (),
-    .ipcm_acc_out                       (mf_ipcm_acc_out[32*ADC_CHANNEL*(m+1)-1 : 32*ADC_CHANNEL*m]),
-    .qpcm_dec_out_valid                 (),
-    .qpcm_dec_out_ready                 ({ADC_CHANNEL{1'b1}}),
-    .qpcm_dec_out                       (),
-    .qpcm_acc_out                       (mf_qpcm_acc_out[32*ADC_CHANNEL*(m+1)-1 : 32*ADC_CHANNEL*m]),
-    .iqpcm_dump_valid                   (),
-    .iqpcm_dump                         (),
+    //iq pcm input
+    .ipcm_in                            (sc_ipcm_out),
+    .qpcm_in                            (sc_qpcm_out),
+    .iqpcm_valid						(sc_iqpcm_valid),
+    .ad_valid                           (sc_ad_valid),
+    .mf_ipcm_acc_out                    (mf_ipcm_acc_out),
+    .mf_qpcm_acc_out                    (mf_qpcm_acc_out),
 
-    //register access
-    .clk_2                              (clk_2),
-    .reg_addr                           (reg_addr[12:0]),
-    .reg_rd                             (reg_rd_mf & reg_addr[15:13] == m),
-    .reg_wr                             (reg_wr_mf & reg_addr[15:13] == m),
-    .reg_ready                          (mf_reg_ready[m]),
-    .reg_writedata                      (reg_writedata),
-    .reg_readdata                       (mf_reg_readdata[m]),
+    //controller
+    .mf_iq_read                         (mf_iq_read),
+    .choose_lb                          (mf_choose_lb),
+    .acc_shift                          (mf_acc_shift),
+    .cycle_num                          (mf_cycle_num),
+    .err_clr                            (mf_err_clr),
+    .err                                (mf_err)
+);
+
+dac_tx2 #(
+    .CHANNEL                            (DAC_CHANNEL),
+    .FREQ_NUM                           (FREQ_NUM),
+    .MIX_NUM                            (MIX_NUM)
+    )  dac_tx2_inst(
+    //reset and clock
+    .rst                                (rst),
+    .clk1                               (clk),
+    .da_clk                             (da_clk),
+
+    //iq pcm input
+    .ipcm_in                            (sc_ipcm_out),
+    .qpcm_in                            (sc_qpcm_out),
+    .iqpcm_valid                        (sc_iqpcm_valid),
+
+    //da pcm output
+    .dac_pcm_out_valid                  (dac_pcm_out_valid),
+    .dac_pcm_out                        (dac_pcm_out),
 
     //controller input
-    .pcm_out_shift                      (mf_pcm_out_shift[4*m+3:4*m]),
-    .choose_lb                          (mf_choose_lb[m]),
-    .dec_rate                           (mf_dec_rate[8*m+7:8*m]),
-    .dec_rate2                          (mf_dec_rate2[8*m+7:8*m]),
-    .acc_shift                          (mf_acc_shift[4*m+3:4*m]),
-    .sin_length                         (mf_sin_length[16*m+sintb_aw-1:16*m]),
-    .cycle_num                          (mf_cycle_num[24*m+23:24*m]),
-    .status                             (mf_status[32*m+31:32*m]),
-    .resync                             (mf_ctrl_resync[m] | dac_resync)
+    .cos_sita                           (dac_cos_sita),
+    .sin_sita                           (dac_sin_sita),
+    .choose                             (dac_choose),
+    .err_clr                            (dac_err_clr),
+    .err                                (dac_err)
 );
-end
-endgenerate
-    assign reg_ready_mf = (reg_addr[15:13] < FREQ_NUM) ? mf_reg_ready[reg_addr[15:13]] : 1'b1;
-    assign reg_readdata_mf = (reg_addr[15:13] < FREQ_NUM) ? mf_reg_readdata[reg_addr[15:13]] : 32'h0BAD0BAD;
 
 pcm2udp #(
 `ifdef DEV_BOARD
@@ -570,12 +664,12 @@ pcm2udp #(
     .rst                                (rst),
 
     //pcm input and output
-`ifdef DEV_BOARD    
-    .pcm_in_valid                       ({lb_dac_pcm_valid & lb_dac_pcm_ready}),
-    .pcm_in                             ({lb_dac_pcm}),
+`ifdef DEV_BOARD
+    .pcm_in_valid                       (dac_pcm_out_valid[ADC_CHANNEL-1:0]),
+    .pcm_in                             (dac_pcm_out[16*ADC_CHANNEL-1:0]),
 `else
-    .pcm_in_valid                       ({{ADC_CHANNEL{1'b1}}, lb_dac_pcm_valid & lb_dac_pcm_ready}),
-    .pcm_in                             ({AD_PCM_IN, lb_dac_pcm}),
+    .pcm_in_valid                       ({{ADC_CHANNEL{1'b1}}, dac_pcm_out_valid[ADC_CHANNEL-1:0]}),
+    .pcm_in                             ({AD_PCM_IN, dac_pcm_out[16*ADC_CHANNEL-1:0]}),
 `endif
     //UDP frame output
     .pcm_udp_hdr_valid                  (pcm_udp_hdr_valid),
@@ -595,12 +689,141 @@ pcm2udp #(
     .pcm_udp_capture_sep                (pcm_udp_capture_sep)
 );
 
+iq_buf #(
+    .FREQ_NUM                           (FREQ_NUM),
+    .ADC_CHANNEL                        (ADC_CHANNEL)
+) iq_buf_inst (
+    .clk                                (clk_2),
+    .rst                                (rst),
+
+    //iq pcm input
+    .mf_ipcm_acc_out                    (mf_ipcm_acc_out),
+    .mf_qpcm_acc_out                    (mf_qpcm_acc_out),
+    .sync_slot                          (sync_slot),
+    .sync_encoder1                      (sync_encoder1),
+    .sync_encoder2                      (sync_encoder2),
+
+    //controller
+    .mf_iq_read                         (mf_iq_read),
+    .iq_buf_write                       (iq_buf_write),
+    .iq_buf_read                        (iq_buf_read),
+    .iq_buf_rst                         (iq_buf_rst),
+    .iq_buf_block_ov                    (iq_buf_block_ov),
+    .iq_buf_overflow                    (iq_buf_overflow),
+
+    //AXI access
+    .reg_addr                           (reg_addr[15:0]),
+    .reg_readdata                       (reg_readdata_iq_buf),
+    .reg_wr                             (reg_wr_iq_buf),
+    .reg_rd                             (reg_rd_iq_buf),
+    .reg_ready                          (reg_ready_iq_buf)
+);
+
+shadow_sc #(
+    .MIX_NUM                            (MIX_NUM),
+    .DAC_CHANNEL                        (DAC_CHANNEL)
+) shadow_sc_inst(
+    .clk                                (clk_2),
+    .rst                                (rst),
+
+    //controller interface
+    .shadow_cos_sita                    (shadow_cos_sita),
+    .shadow_sin_sita                    (shadow_sin_sita),
+    .shadow_choose                      (shadow_choose),
+    .shadow_read_addr                   (shadow_read_addr),
+    .shadow_read_trigger                (shadow_read_trigger),
+
+    //AXI interface
+    .reg_addr                           (reg_addr[15:0]),
+    .reg_readdata                       (reg_readdata_shadow_sc),
+    .reg_writedata                      (reg_writedata),
+    .reg_rd                             (reg_rd_shadow_sc),
+    .reg_wr                             (reg_wr_shadow_sc),
+    .reg_ready                          (reg_ready_shadow_sc)
+);
+
+sdio_master sdio_master_inst(
+    .clk_2                              (clk_2),
+    .rst                                (rst),
+    //AXI reg access
+    .reg_addr                           (reg_addr[7:0]),
+    .reg_writedata                      (reg_writedata),
+    .reg_rd_sdio                        (reg_rd_sdio),
+    .reg_wr_sdio                        (reg_wr_sdio),
+    .reg_ready_sdio                     (reg_ready_sdio),
+    .reg_readdata_sdio                  (reg_readdata_sdio),
+
+    //sdio access
+    .sdio_miso                          (sdio_miso),
+    .sdio_mosi                          (sdio_mosi),
+    .sdio_sck                           (sdio_sck)
+);
+
+`ifdef DEV_BOARD
+    wire [31:0]                         sdio_writedata, sdio_readdata;
+    wire [7:0]                          sdio_addr;
+    wire                                sdio_rd, sdio_wr;
+
+sdio_slave sdio_slave_inst(
+    //clock and reset
+    .clk                                (clk_2),
+    .rst                                (!rst),
+
+    //reg access
+    .sdio_addr                          (sdio_addr),
+    .sdio_writedata                     (sdio_writedata),
+    .sdio_rd                            (sdio_rd),
+    .sdio_wr                            (sdio_wr),
+    .sdio_readdata                      (sdio_readdata),
+
+    //sdio access
+    .sdio_miso                          (sdio_miso),
+    .sdio_mosi                          (sdio_mosi),
+    .sdio_sck                           (sdio_sck)
+);
+
+generic_spram #(
+    .SIMULATION                         (SIMULATION),
+    .aw                                 (8),
+    .dw                                 (32)
+) generic_spram_inst(
+    .clk                                (clk_2),
+    .re                                 (sdio_rd),
+    .we                                 (sdio_wr),
+    .addr                               (sdio_addr),
+    .q                                  (sdio_readdata),
+    .data                               (sdio_writedata)
+);
+`else
+    assign SYN_SCK = sdio_sck;
+    assign sdio_miso = SYN_SDATAIN;
+    assign SYN_SDATAOUT = sdio_mosi;
+
+    reg [2:0]                           counter;
+    reg                                 syn_clk;
+
+    always @(posedge clk)
+    if (rst)
+    begin
+        counter <= #1 0;
+        syn_clk <= #1 0;
+    end
+    else
+    begin
+        counter <= (counter==4) ? 0 : counter + 1;
+        if (counter==4)
+            syn_clk <= !syn_clk;
+    end
+
+    assign SYN_CLK = syn_clk;
+`endif
+
 controller #(
     .SIMULATION                         (SIMULATION),
     .DAC_CHANNEL                        (DAC_CHANNEL),
     .ADC_CHANNEL                        (ADC_CHANNEL),
     .FREQ_NUM                           (FREQ_NUM),
-    .dac_pcmaw                          (dac_pcmaw)
+    .MIX_NUM                            (MIX_NUM)
 ) controller_inst(
     //input
     .clk                                (clk),
@@ -645,61 +868,122 @@ controller #(
     .pcm_udp_remote_ip                  (pcm_udp_remote_ip),
     .pcm_udp_remote_port                (pcm_udp_remote_port),
     .pcm_udp_source_port                (pcm_udp_source_port),
-    
+
     //dac reg control
-    .dac_signal_len                     (dac_signal_len),
-    .dac_cic_rate                       (dac_cic_rate),
-    .dac_run                            (dac_run),
+    .dac_cos_sita                       (dac_cos_sita),
+    .dac_sin_sita                       (dac_sin_sita),
+    .dac_choose                         (dac_choose),
+    .dac_err_clr                        (dac_err_clr),
+    .dac_err                            (dac_err),
 
     //Gain control
 `ifndef DEV_BOARD
-    .ch_gain_sel                        (CH_GAIN_SEL), 
+    .ch_gain_sel                        (CH_GAIN_SEL),
     .ch_gain_da                         (CH_GAIN_DA),
     .ch_gain_wr                         (CH_GAIN_WR),
     .ch_gain_clr                        (CH_GAIN_CLR),
     .ch_gain_gain                       (CH_GAIN_GAIN),
     .ch_gain_buf                        (CH_GAIN_BUF),
     .ch_gain_ldac                       (CH_GAIN_LDAC),
-    .ch_sel_419                         (CH_SEL_419),
+    .model_sel                          (MODEL_SEL),
+    .ch_emit_recv_en                    (CH_EMIT_RECV_EN),
+    .ch_filter_sel                      (CH_FILTER_SEL),
+    .syn_trigger_start                  (SYN_TRIG_START),
+    .syn_trigger_pulse                  (SYN_TRIG_PULSE),
+
 `else
-    .ch_gain_sel                        (), 
+    .ch_gain_sel                        (),
     .ch_gain_da                         (),
     .ch_gain_wr                         (),
     .ch_gain_clr                        (),
     .ch_gain_gain                       (),
     .ch_gain_buf                        (),
     .ch_gain_ldac                       (),
-    .ch_sel_419                         (),    
+    .model_sel                          (),
+    .ch_emit_recv_en                    (),
+    .ch_filter_sel                      (),
+    .syn_trigger_start                  (),
+    .syn_trigger_pulse                  (),
 `endif
 
+    .slot_idx                           (slot_idx),
     //mix freq control
     .mf_ipcm_acc_out                    (mf_ipcm_acc_out),
     .mf_qpcm_acc_out                    (mf_qpcm_acc_out),
-    .mf_pcm_out_shift                   (mf_pcm_out_shift),
+    .mf_iq_read                         (mf_iq_read),
     .mf_choose_lb                       (mf_choose_lb),
-    .mf_dec_rate                        (mf_dec_rate),
-    .mf_dec_rate2                       (mf_dec_rate2),
     .mf_acc_shift                       (mf_acc_shift),
-    .mf_sin_length                      (mf_sin_length),
     .mf_cycle_num                       (mf_cycle_num),
-    .mf_status                          (mf_status),
-    .mf_ctrl_resync                     (mf_ctrl_resync),
-    
+    .mf_err_clr                         (mf_err_clr),
+    .mf_err                             (mf_err),
+
+    //sincos gen control
+    .sc_status                          (sc_status),
+    .sc_sin_length                      (sc_sin_length),
+    .sc_resync                          (sc_resync),
+    .sc_err                             (sc_err),
+    .sc_cic_rate                        (sc_cic_rate),
+
+    //iq buffer
+    .sync_slot                          (sync_slot),
+    .sync_encoder1                      (sync_encoder1),
+    .sync_encoder2                      (sync_encoder2),
+    .iq_buf_write                       (iq_buf_write),
+    .iq_buf_rst                         (iq_buf_rst),
+    .iq_buf_block_ov                    (iq_buf_block_ov),
+    .iq_buf_overflow                    (iq_buf_overflow),
+
+    //controller interface
+    .shadow_cos_sita                    (shadow_cos_sita),
+    .shadow_sin_sita                    (shadow_sin_sita),
+    .shadow_choose                      (shadow_choose),
+    .shadow_read_addr                   (shadow_read_addr),
+    .shadow_read_trigger                (shadow_read_trigger),
+
+    //encoder control
+    .encoder1_dir                       (encoder1_dir),
+    .encoder1_start                     (encoder1_start),
+    .encoder1_div                       (encoder1_div),
+    .encoder1_cnt                       (encoder1_cnt),
+    .encoder1_total_a                   (encoder1_total_a),
+    .encoder1_total_b                   (encoder1_total_b),
+    .encoder2_dir                       (encoder2_dir),
+    .encoder2_start                     (encoder2_start),
+    .encoder2_div                       (encoder2_div),
+    .encoder2_cnt                       (encoder2_cnt),
+    .encoder2_total_a                   (encoder2_total_a),
+    .encoder2_total_b                   (encoder2_total_b),
+    .encoder_pulse_width                (encoder_pulse_width),
+    .encoder1_err_status                (encoder1_err_status),
+    .encoder2_err_status                (encoder2_err_status),
+
     //AXI reg access
     .reg_addr                           (reg_addr),
     .reg_writedata                      (reg_writedata),
     .reg_rd_udp_mac                     (reg_rd_udp_mac),
     .reg_wr_udp_mac                     (reg_wr_udp_mac),
-    .reg_rd_dac                         (reg_rd_dac),
-    .reg_wr_dac                         (reg_wr_dac),
-    .reg_rd_mf                          (reg_rd_mf),
-    .reg_wr_mf                          (reg_wr_mf),
     .reg_ready_udp_mac                  (!reg_busy_udp_mac),
-    .reg_ready_dac                      (reg_ready_dac),
-    .reg_ready_mf                       (reg_ready_mf),
     .reg_readdata_udp_mac               (reg_readdata_udp_mac),
-    .reg_readdata_dac                   (reg_readdata_dac),
-    .reg_readdata_mf                    (reg_readdata_mf) 
+
+    .reg_rd_sc                          (reg_rd_sc),
+    .reg_wr_sc                          (reg_wr_sc),
+    .reg_ready_sc                       (reg_ready_sc),
+    .reg_readdata_sc                    (reg_readdata_sc),
+
+    .reg_rd_sdio                        (reg_rd_sdio),
+    .reg_wr_sdio                        (reg_wr_sdio),
+    .reg_ready_sdio                     (reg_ready_sdio),
+    .reg_readdata_sdio                  (reg_readdata_sdio),
+
+    .reg_wr_iq_buf                      (reg_wr_iq_buf),
+    .reg_rd_iq_buf                      (reg_rd_iq_buf),
+    .reg_ready_iq_buf                   (reg_ready_iq_buf),
+    .reg_readdata_iq_buf                (reg_readdata_iq_buf),
+
+    .reg_rd_shadow_sc                   (reg_rd_shadow_sc),
+    .reg_wr_shadow_sc                   (reg_wr_shadow_sc),
+    .reg_ready_shadow_sc                (reg_ready_shadow_sc),
+    .reg_readdata_shadow_sc             (reg_readdata_shadow_sc)
 );
 
 udp_arb_mux #(

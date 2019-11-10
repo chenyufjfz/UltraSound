@@ -14,6 +14,7 @@ module test_ultrasound;
 ultrasound #(
     .SIMULATION(1), 
     .DAC_CHANNEL(2),
+    .ADC_CHANNEL(2),
     .REAL_PHY(0)
 ) ultrasound0(
     .CLOCK_50           (CLOCK_50),
@@ -29,6 +30,7 @@ ultrasound #(
 	.ENET0_TX_DATA      (US0_ENET0_TX_DATA),
 	.ENET0_TX_EN        (US0_ENET0_TX_EN),
 	.ENET0_CONFIG       (),
+	.ENCODER_IN         (2'b0),
 	//status led
 	.TX_ERR             (TX_ERR),
 	.RX_ERR             (RX_ERR)
@@ -38,6 +40,7 @@ ultrasound #(
     .SIMULATION(0), 
     .RESET_CTR_WIDTH(5), 
     .DAC_CHANNEL(2),
+    .ADC_CHANNEL(2),
     .REAL_PHY(0)
 ) ultrasound1(
     .CLOCK_50           (CLOCK_50),
@@ -53,6 +56,7 @@ ultrasound #(
 	.ENET0_TX_DATA      (US0_ENET0_RX_DATA),
 	.ENET0_TX_EN        (US0_ENET0_RX_DV),
 	.ENET0_CONFIG       (),
+	.ENCODER_IN         (2'b0),
 	//status led
 	.TX_ERR             (TX_ERR),
 	.RX_ERR             (RX_ERR)
@@ -93,16 +97,16 @@ begin
     @(negedge ultrasound0.rst);    
     #10000;
     @(posedge ultrasound0.clk);
-    $display("finish reset");
+    $display("finish reset");    
     
-    /*
     key[1] <= 1'b0;
     @(posedge ultrasound0.clk);
     key[1] <= 1'b1; //trigger controller exec
     @(posedge ultrasound0.clk);
-    #10000;
+    #30000;
     $writememh("../testbench/outram0.txt",ultrasound0.controller_inst.SIM.outram.SIM_RAM.mem);
-    
+    $stop;
+    /*
     for (i=0; i<1024; i=i+1)
     begin
         ultrasound0.controller_inst.SIM.inram.SIM_RAM.mem[i] = 16'hxxxx;

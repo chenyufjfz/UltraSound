@@ -1,0 +1,61 @@
+library verilog;
+use verilog.vl_types.all;
+entity eth_arb_mux is
+    generic(
+        S_COUNT         : integer := 4;
+        DATA_WIDTH      : integer := 8;
+        KEEP_ENABLE     : vl_notype;
+        KEEP_WIDTH      : vl_notype;
+        ID_ENABLE       : integer := 0;
+        ID_WIDTH        : integer := 8;
+        DEST_ENABLE     : integer := 0;
+        DEST_WIDTH      : integer := 8;
+        USER_ENABLE     : integer := 1;
+        USER_WIDTH      : integer := 1;
+        ARB_TYPE        : string  := "PRIORITY";
+        LSB_PRIORITY    : string  := "HIGH"
+    );
+    port(
+        clk             : in     vl_logic;
+        rst             : in     vl_logic;
+        s_eth_hdr_valid : in     vl_logic_vector;
+        s_eth_hdr_ready : out    vl_logic_vector;
+        s_eth_dest_mac  : in     vl_logic_vector;
+        s_eth_src_mac   : in     vl_logic_vector;
+        s_eth_type      : in     vl_logic_vector;
+        s_eth_payload_axis_tdata: in     vl_logic_vector;
+        s_eth_payload_axis_tkeep: in     vl_logic_vector;
+        s_eth_payload_axis_tvalid: in     vl_logic_vector;
+        s_eth_payload_axis_tready: out    vl_logic_vector;
+        s_eth_payload_axis_tlast: in     vl_logic_vector;
+        s_eth_payload_axis_tid: in     vl_logic_vector;
+        s_eth_payload_axis_tdest: in     vl_logic_vector;
+        s_eth_payload_axis_tuser: in     vl_logic_vector;
+        m_eth_hdr_valid : out    vl_logic;
+        m_eth_hdr_ready : in     vl_logic;
+        m_eth_dest_mac  : out    vl_logic_vector(47 downto 0);
+        m_eth_src_mac   : out    vl_logic_vector(47 downto 0);
+        m_eth_type      : out    vl_logic_vector(15 downto 0);
+        m_eth_payload_axis_tdata: out    vl_logic_vector;
+        m_eth_payload_axis_tkeep: out    vl_logic_vector;
+        m_eth_payload_axis_tvalid: out    vl_logic;
+        m_eth_payload_axis_tready: in     vl_logic;
+        m_eth_payload_axis_tlast: out    vl_logic;
+        m_eth_payload_axis_tid: out    vl_logic_vector;
+        m_eth_payload_axis_tdest: out    vl_logic_vector;
+        m_eth_payload_axis_tuser: out    vl_logic_vector
+    );
+    attribute mti_svvh_generic_type : integer;
+    attribute mti_svvh_generic_type of S_COUNT : constant is 1;
+    attribute mti_svvh_generic_type of DATA_WIDTH : constant is 1;
+    attribute mti_svvh_generic_type of KEEP_ENABLE : constant is 3;
+    attribute mti_svvh_generic_type of KEEP_WIDTH : constant is 3;
+    attribute mti_svvh_generic_type of ID_ENABLE : constant is 1;
+    attribute mti_svvh_generic_type of ID_WIDTH : constant is 1;
+    attribute mti_svvh_generic_type of DEST_ENABLE : constant is 1;
+    attribute mti_svvh_generic_type of DEST_WIDTH : constant is 1;
+    attribute mti_svvh_generic_type of USER_ENABLE : constant is 1;
+    attribute mti_svvh_generic_type of USER_WIDTH : constant is 1;
+    attribute mti_svvh_generic_type of ARB_TYPE : constant is 1;
+    attribute mti_svvh_generic_type of LSB_PRIORITY : constant is 1;
+end eth_arb_mux;

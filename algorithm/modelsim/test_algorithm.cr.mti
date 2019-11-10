@@ -19,6 +19,13 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	rowo_dpram
 
+} {} {}} ../mix_freq2_mc.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/mix_freq2_mc.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module mix_freq2_mc
+
+Top level modules:
+	mix_freq2_mc
+
 } {} {}} ../pcmmux_fifo.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/pcmmux_fifo.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module pcmmux_fifo
@@ -32,6 +39,13 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 
 Top level modules:
 	source_mem
+
+} {} {}} ../sincos_gen.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/sincos_gen.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module sincos_gen
+
+Top level modules:
+	sincos_gen
 
 } {} {}} ../../mem/generic_spram.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/mem/generic_spram.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -47,6 +61,20 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	fir_mc
 
+} {} {}} ../testbench/test_pcm2udp.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/testbench/test_pcm2udp.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module test_pcm2udp
+
+Top level modules:
+	test_pcm2udp
+
+} {} {}} ../tx_mix.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/tx_mix.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module tx_mix
+
+Top level modules:
+	tx_mix
+
 } {} {}} ../testbench/test_mix_freq.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/testbench/test_mix_freq.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module test_mix_freq
@@ -61,26 +89,12 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	generic_dpram
 
-} {} {}} ../testbench/test_pcm2udp.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/testbench/test_pcm2udp.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module test_pcm2udp
-
-Top level modules:
-	test_pcm2udp
-
 } {} {}} ../../util/mult.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/util/mult.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module mult
 
 Top level modules:
 	mult
-
-} {} {}} ../mix_freq.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/mix_freq.v
-Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
--- Compiling module mix_freq
-
-Top level modules:
-	mix_freq
 
 } {} {}} ../dac_tx.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/dac_tx.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
@@ -96,12 +110,47 @@ Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 Top level modules:
 	pcm2udp
 
+} {} {}} ../mix_freq.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/mix_freq.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module mix_freq
+
+Top level modules:
+	mix_freq
+
+} {} {}} ../testbench/test_mf2_dac2.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/testbench/test_mf2_dac2.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module test_mf2_dac2
+
+Top level modules:
+	test_mf2_dac2
+
 } {} {}} ../IP/cic_inp.vo {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/IP/cic_inp.vo
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
 -- Compiling module cic_inp
 
 Top level modules:
 	cic_inp
+
+} {} {}} ../dac_tx2.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/dac_tx2.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module dac_tx2
+
+Top level modules:
+	dac_tx2
+
+} {} {}} ../sincos_mem.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/sincos_mem.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module sincos_mem
+
+Top level modules:
+	sincos_mem
+
+} {} {}} ../mix_freq2.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/mix_freq2.v
+Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012
+-- Compiling module mix_freq2
+
+Top level modules:
+	mix_freq2
 
 } {} {}} ../fir_pcm_ram.v {1 {vlog -work work C:/chenyu/RTL_work/RTL_work/UltraSound/algorithm/fir_pcm_ram.v
 Model Technology ModelSim ALTERA vlog 10.1b Compiler 2012.04 Apr 27 2012

@@ -5,13 +5,13 @@ entity ultrasound is
         SIMULATION      : integer := 0;
         RESET_CTR_WIDTH : vl_notype;
         ENET0_RST_CTR_WIDTH: integer := 21;
-        DAC_CHANNEL     : integer := 4;
-        ADC_CHANNEL     : integer := 2;
-        FREQ_NUM        : integer := 4;
+        DAC_CHANNEL     : integer := 10;
+        ADC_CHANNEL     : integer := 8;
+        FREQ_NUM        : integer := 5;
         pcm2usb_pcmaw   : integer := 11;
-        dac_pcmaw       : integer := 12;
         sintb_aw        : integer := 12;
         DA_AD_RATE      : vl_logic_vector(0 to 7) := (Hi0, Hi0, Hi0, Hi0, Hi0, Hi0, Hi1, Hi0);
+        MIX_NUM         : integer := 5;
         REAL_PHY        : integer := 4369
     );
     port(
@@ -27,6 +27,7 @@ entity ultrasound is
         ENET0_TX_DATA   : out    vl_logic_vector(3 downto 0);
         ENET0_TX_EN     : out    vl_logic;
         ENET0_CONFIG    : out    vl_logic;
+        ENCODER_IN      : in     vl_logic_vector(1 downto 0);
         TX_ERR          : out    vl_logic;
         RX_ERR          : out    vl_logic
     );
@@ -38,8 +39,8 @@ entity ultrasound is
     attribute mti_svvh_generic_type of ADC_CHANNEL : constant is 1;
     attribute mti_svvh_generic_type of FREQ_NUM : constant is 1;
     attribute mti_svvh_generic_type of pcm2usb_pcmaw : constant is 1;
-    attribute mti_svvh_generic_type of dac_pcmaw : constant is 1;
     attribute mti_svvh_generic_type of sintb_aw : constant is 1;
     attribute mti_svvh_generic_type of DA_AD_RATE : constant is 1;
+    attribute mti_svvh_generic_type of MIX_NUM : constant is 1;
     attribute mti_svvh_generic_type of REAL_PHY : constant is 1;
 end ultrasound;

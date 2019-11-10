@@ -50,25 +50,25 @@ set_global_assignment -name PARTITION_NETLIST_TYPE SOURCE -section_id Top
 set_global_assignment -name PARTITION_FITTER_PRESERVATION_LEVEL PLACEMENT_AND_ROUTING -section_id Top
 set_global_assignment -name PARTITION_COLOR 16764057 -section_id Top
 set_global_assignment -name STRATIX_DEVICE_IO_STANDARD "2.5 V"
-set_location_assignment PIN_Y1 -to CLOCK_50
-set_location_assignment PIN_AE23 -to ENET0_GTX_CLK
-set_location_assignment PIN_AF23 -to ENET0_MDC
-set_location_assignment PIN_U21 -to ENET0_MDIO
-set_location_assignment PIN_Y28 -to ENET0_RX_CLK
-set_location_assignment PIN_AB24 -to ENET0_RST_N
-set_location_assignment PIN_AC28 -to ENET0_RX_DATA[3]
-set_location_assignment PIN_AC27 -to ENET0_RX_DATA[2]
-set_location_assignment PIN_AB28 -to ENET0_RX_DATA[1]
-set_location_assignment PIN_AB27 -to ENET0_RX_DATA[0]
-set_location_assignment PIN_W27 -to ENET0_RX_DV
-set_location_assignment PIN_AD27 -to ENET0_TX_DATA[0]
-set_location_assignment PIN_AD28 -to ENET0_TX_DATA[1]
-set_location_assignment PIN_AE27 -to ENET0_TX_DATA[2]
-set_location_assignment PIN_AE28 -to ENET0_TX_DATA[3]
-set_location_assignment PIN_AF27 -to ENET0_TX_EN
-set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CLOCK_50
+set_location_assignment PIN_Y2 -to CLOCK_50
+set_location_assignment PIN_A17 -to ENET0_GTX_CLK
+set_location_assignment PIN_C20 -to ENET0_MDC
+set_location_assignment PIN_B21 -to ENET0_MDIO
+set_location_assignment PIN_A15 -to ENET0_RX_CLK
+set_location_assignment PIN_C19 -to ENET0_RST_N
+set_location_assignment PIN_C15 -to ENET0_RX_DATA[3]
+set_location_assignment PIN_D17 -to ENET0_RX_DATA[2]
+set_location_assignment PIN_D16 -to ENET0_RX_DATA[1]
+set_location_assignment PIN_C16 -to ENET0_RX_DATA[0]
+set_location_assignment PIN_C17 -to ENET0_RX_DV
+set_location_assignment PIN_C18 -to ENET0_TX_DATA[0]
+set_location_assignment PIN_D19 -to ENET0_TX_DATA[1]
+set_location_assignment PIN_A19 -to ENET0_TX_DATA[2]
+set_location_assignment PIN_B19 -to ENET0_TX_DATA[3]
+set_location_assignment PIN_A18 -to ENET0_TX_EN
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to CLOCK_50
 set_global_assignment -name ENABLE_SIGNALTAP ON
-set_global_assignment -name USE_SIGNALTAP_FILE signaltap/mixfreq.stp
+set_global_assignment -name USE_SIGNALTAP_FILE signaltap/controller.stp
 set_global_assignment -name SLD_NODE_CREATOR_ID 110 -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_ENTITY_NAME sld_signaltap -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_INFO=805334528" -section_id auto_signaltap_0
@@ -84,116 +84,16 @@ set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_IN_ENABLE
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ADVANCED_TRIGGER_ENTITY=basic,1," -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_LEVEL_PIPELINE=1" -section_id auto_signaltap_0
 set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_ENABLE_ADVANCED_TRIGGER=0" -section_id auto_signaltap_0
-set_global_assignment -name USE_CONFIGURATION_DEVICE OFF
+set_global_assignment -name USE_CONFIGURATION_DEVICE ON
 set_global_assignment -name CRC_ERROR_OPEN_DRAIN OFF
 set_global_assignment -name RESERVE_ALL_UNUSED_PINS_WEAK_PULLUP "AS INPUT TRI-STATED"
 set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -rise
 set_global_assignment -name OUTPUT_IO_TIMING_NEAR_END_VMEAS "HALF VCCIO" -fall
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -rise
 set_global_assignment -name OUTPUT_IO_TIMING_FAR_END_VMEAS "HALF SIGNAL SWING" -fall
-set_global_assignment -name VERILOG_FILE algorithm/mix_freq_mc.v
-set_global_assignment -name VERILOG_FILE algorithm/mix_freq.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/udp_arb_mux.v
-set_global_assignment -name VERILOG_FILE algorithm/source_mem.v
-set_global_assignment -name VERILOG_FILE algorithm/pcmmux_fifo.v
-set_global_assignment -name VERILOG_FILE algorithm/pcm2udp.v
-set_global_assignment -name VERILOG_FILE algorithm/dac_tx.v
-set_global_assignment -name VERILOG_FILE mem/rowo_dpram.v
-set_global_assignment -name VERILOG_FILE mem/generic_spram.v
-set_global_assignment -name VERILOG_FILE mem/generic_dpram.v
-set_global_assignment -name VERILOG_FILE util/glitch_remove.v
-set_global_assignment -name VERILOG_FILE util/gen_key_signal.v
-set_global_assignment -name VERILOG_FILE util/reg_dec_rate.v
-set_global_assignment -name VERILOG_FILE ./ultrasound.v
-set_global_assignment -name VERILOG_FILE util/gen_reset.v
-set_global_assignment -name VERILOG_FILE controller/execcmd.v
-set_global_assignment -name VERILOG_FILE controller/controller.v
-set_global_assignment -name VERILOG_FILE util/synchronizer.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/udp_mac_complete.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/udp_ip_tx.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/udp_ip_rx.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/udp_complete.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/udp_checksum_gen.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/udp.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/priority_encoder.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/mac_reset.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/lfsr.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/ip_eth_tx.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/ip_eth_rx.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/ip_complete.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/ip_arb_mux.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/ip.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/icmp_reply.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/eth_axis_tx.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/eth_axis_rx.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/eth_arb_mux.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/axis_fifo.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/avalon2axi.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/arp_eth_tx.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/arp_eth_rx.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/arp_cache.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/arp.v
-set_global_assignment -name VERILOG_FILE udp_mac_complete/arbiter.v
-set_global_assignment -name SDC_FILE ultrasound.sdc
-set_global_assignment -name SIGNALTAP_FILE signaltap/mac_reset.stp
-set_global_assignment -name HEX_FILE signaltap/read_mac_counter.hex
-set_global_assignment -name SIGNALTAP_FILE signaltap/controller.stp
-set_global_assignment -name SIGNALTAP_FILE signaltap/icmp.stp
-set_global_assignment -name SIGNALTAP_FILE signaltap/mixfreq.stp
 set_location_assignment PIN_E7 -to KEY
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=1024" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=1024" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[12]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[13]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[14]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[15]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[12]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[13]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[14]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[15]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "dac_tx:dac_tx_inst|source_mem:source_mem_inst|generic_dpram:dac_mem[0].pcm_mem|q_a[9]" -section_id auto_signaltap_0
 set_location_assignment PIN_M23 -to KEY[0]
-set_location_assignment PIN_N21 -to KEY[1]
-set_location_assignment PIN_AC25 -to ENET0_CONFIG
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENET0_CONFIG
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENET0_GTX_CLK
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENET0_MDC
-set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to ENET0_MDIO
-set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to ENET0_RST_N
-set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to ENET0_RX_CLK
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENET0_RX_DATA[3]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENET0_RX_DATA[2]
-set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to ENET0_RX_DATA[1]
-set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to ENET0_RX_DATA[0]
-set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to ENET0_RX_DV
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENET0_TX_DATA[3]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENET0_TX_DATA[2]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENET0_TX_DATA[1]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENET0_TX_DATA[0]
-set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to ENET0_TX_EN
+set_location_assignment PIN_M21 -to KEY[1]
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to KEY
 set_location_assignment PIN_D23 -to AD_CLK_OUT
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_CLK_OUT
@@ -250,7 +150,6 @@ set_location_assignment PIN_C26 -to CH_GAIN_SEL[2]
 set_location_assignment PIN_C25 -to CH_GAIN_SEL[1]
 set_location_assignment PIN_C24 -to CH_GAIN_SEL[0]
 set_location_assignment PIN_B21 -to CH_GAIN_WR
-set_location_assignment PIN_F14 -to CH_SEL_419
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_GAIN_BUF
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_GAIN_CLR
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_GAIN_DA[10]
@@ -271,7 +170,6 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_GAIN_SEL[2]
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_GAIN_SEL[1]
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_GAIN_SEL[0]
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_GAIN_WR
-set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_SEL_419
 set_location_assignment PIN_AA5 -to DA_PCM_OUT[27]
 set_location_assignment PIN_AB9 -to DA_PCM_OUT[26]
 set_location_assignment PIN_Y7 -to DA_PCM_OUT[25]
@@ -360,8 +258,6 @@ set_location_assignment PIN_F7 -to DA_WR[1]
 set_location_assignment PIN_AF6 -to DA_WR[0]
 set_location_assignment PIN_AD5 -to DA_WR_T[0]
 set_location_assignment PIN_AE4 -to DA_WR_T[1]
-set_location_assignment PIN_G19 -to RX_ERR
-set_location_assignment PIN_F19 -to TX_ERR
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT_T[27]
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT_T[26]
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT_T[25]
@@ -397,207 +293,662 @@ set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_WR_T[0]
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_MODE
 set_location_assignment PIN_C9 -to AD_MODE
 set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[1]
-set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to KEY[1]
-set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to KEY[0]
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[52] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|resync" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[53] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[54] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[55] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[56] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[57] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[58] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[59] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[60] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[61] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[62] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[63] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[100] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|resync" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[101] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[102] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[103] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[104] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[105] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[106] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[107] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[108] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[109] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[110] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[111] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[52] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|resync" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[53] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[54] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[55] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[56] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[57] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[58] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[59] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[60] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[61] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[62] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[63] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|sin_addr[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[100] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|resync" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[101] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[102] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[103] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[104] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[105] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[106] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[107] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[108] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[109] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[110] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[111] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|sin_addr[9]" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=112" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=112" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=360" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=23553" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|clk1" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|iq_next_d[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|iq_next_d[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|iq_next_d[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|acc_clr" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[12]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[13]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[25] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[14]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[26] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[15]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[27] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[28] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[29] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[30] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[31] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[32] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[33] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[34] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[35] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[36] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[37] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[38] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[39] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[12]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[40] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[13]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[41] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[14]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[42] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[15]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[43] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[44] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[45] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[46] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[47] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[48] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[49] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[50] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[51] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[64] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|iq_next_d[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[65] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|iq_next_d[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[66] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|iq_next_d[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[67] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[68] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[69] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[70] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[12]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[71] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[13]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[72] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[14]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[73] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[15]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[74] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[75] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[76] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[77] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[78] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[79] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[80] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[81] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[82] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[83] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_inst0|acc_clr" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[84] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[85] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[86] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[87] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[12]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[88] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[13]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[89] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[14]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[90] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[15]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[91] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[92] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[93] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[94] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[95] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[96] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[97] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[98] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[99] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|iq_next_d[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|iq_next_d[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|iq_next_d[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|acc_clr" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[12]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[13]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[25] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[14]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[26] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[15]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[27] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[29] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[30] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[31] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[35] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|mix_freq:mix_freq_inst0|pcmmux_fifo:pcmmux_fifo_in|pcm_out[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[36] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[37] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[38] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[39] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[12]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[40] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[13]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[41] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[14]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[42] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[15]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[43] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[44] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[45] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[46] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[47] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[48] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[49] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[50] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[51] -to "mix_freq_mc:mix_inst[0].mix_freq_mc_inst|qpcm_in[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[64] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|iq_next_d[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[65] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|iq_next_d[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[66] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|iq_next_d[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[67] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[68] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[69] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[70] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[12]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[71] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[13]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[72] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[14]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[73] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[15]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[74] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[75] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[76] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[77] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[78] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[79] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[80] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[81] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[82] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_create[1].mix_freq_inst|pcmmux_fifo:pcmmux_fifo_in|pcm_out[9]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[83] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|mix_freq:mix_freq_inst0|acc_clr" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[84] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[0]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[85] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[10]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[86] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[11]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[87] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[12]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[88] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[13]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[89] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[14]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[90] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[15]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[91] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[1]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[92] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[2]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[93] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[3]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[94] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[4]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[95] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[5]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[96] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[6]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[97] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[7]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[98] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[8]" -section_id auto_signaltap_0
-set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[99] -to "mix_freq_mc:mix_inst[1].mix_freq_mc_inst|qpcm_in[9]" -section_id auto_signaltap_0
-set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=14834" -section_id auto_signaltap_0
+set_instance_assignment -name IO_STANDARD "2.5 V" -to KEY[1]
+set_instance_assignment -name IO_STANDARD "2.5 V" -to KEY[0]
+set_location_assignment PIN_D10 -to AD_PCM_IN[16]
+set_location_assignment PIN_C10 -to AD_PCM_IN[17]
+set_location_assignment PIN_D11 -to AD_PCM_IN[18]
+set_location_assignment PIN_C11 -to AD_PCM_IN[19]
+set_location_assignment PIN_C12 -to AD_PCM_IN[20]
+set_location_assignment PIN_C13 -to AD_PCM_IN[21]
+set_location_assignment PIN_C14 -to AD_PCM_IN[22]
+set_location_assignment PIN_D14 -to AD_PCM_IN[23]
+set_location_assignment PIN_F15 -to AD_PCM_IN[24]
+set_location_assignment PIN_E15 -to AD_PCM_IN[25]
+set_location_assignment PIN_D16 -to AD_PCM_IN[26]
+set_location_assignment PIN_E17 -to AD_PCM_IN[27]
+set_location_assignment PIN_E18 -to AD_PCM_IN[28]
+set_location_assignment PIN_C19 -to AD_PCM_IN[29]
+set_location_assignment PIN_D19 -to AD_PCM_IN[30]
+set_location_assignment PIN_C20 -to AD_PCM_IN[31]
+set_location_assignment PIN_AF4 -to AD_PCM_IN[32]
+set_location_assignment PIN_AD3 -to AD_PCM_IN[33]
+set_location_assignment PIN_AC3 -to AD_PCM_IN[34]
+set_location_assignment PIN_AB2 -to AD_PCM_IN[35]
+set_location_assignment PIN_AA4 -to AD_PCM_IN[36]
+set_location_assignment PIN_AA3 -to AD_PCM_IN[37]
+set_location_assignment PIN_Y3 -to AD_PCM_IN[38]
+set_location_assignment PIN_Y4 -to AD_PCM_IN[39]
+set_location_assignment PIN_W4 -to AD_PCM_IN[40]
+set_location_assignment PIN_V4 -to AD_PCM_IN[41]
+set_location_assignment PIN_U4 -to AD_PCM_IN[42]
+set_location_assignment PIN_T4 -to AD_PCM_IN[43]
+set_location_assignment PIN_L8 -to AD_PCM_IN[44]
+set_location_assignment PIN_K7 -to AD_PCM_IN[45]
+set_location_assignment PIN_J7 -to AD_PCM_IN[46]
+set_location_assignment PIN_J4 -to AD_PCM_IN[47]
+set_location_assignment PIN_H5 -to AD_PCM_IN[48]
+set_location_assignment PIN_G4 -to AD_PCM_IN[49]
+set_location_assignment PIN_F5 -to AD_PCM_IN[50]
+set_location_assignment PIN_E5 -to AD_PCM_IN[51]
+set_location_assignment PIN_C3 -to AD_PCM_IN[52]
+set_location_assignment PIN_D4 -to AD_PCM_IN[53]
+set_location_assignment PIN_C4 -to AD_PCM_IN[54]
+set_location_assignment PIN_J6 -to AD_PCM_IN[55]
+set_location_assignment PIN_G6 -to AD_PCM_IN[56]
+set_location_assignment PIN_G8 -to AD_PCM_IN[57]
+set_location_assignment PIN_G7 -to AD_PCM_IN[58]
+set_location_assignment PIN_D9 -to AD_PCM_IN[59]
+set_location_assignment PIN_F11 -to AD_PCM_IN[60]
+set_location_assignment PIN_D12 -to AD_PCM_IN[61]
+set_location_assignment PIN_E12 -to AD_PCM_IN[62]
+set_location_assignment PIN_E14 -to AD_PCM_IN[63]
+set_location_assignment PIN_D15 -to AD_PCM_IN[64]
+set_location_assignment PIN_C16 -to AD_PCM_IN[65]
+set_location_assignment PIN_D17 -to AD_PCM_IN[66]
+set_location_assignment PIN_C18 -to AD_PCM_IN[67]
+set_location_assignment PIN_H19 -to AD_PCM_IN[68]
+set_location_assignment PIN_G20 -to AD_PCM_IN[69]
+set_location_assignment PIN_C21 -to AD_PCM_IN[70]
+set_location_assignment PIN_H21 -to AD_PCM_IN[71]
+set_location_assignment PIN_D22 -to AD_PCM_IN[72]
+set_location_assignment PIN_J23 -to AD_PCM_IN[73]
+set_location_assignment PIN_H24 -to AD_PCM_IN[74]
+set_location_assignment PIN_D25 -to AD_PCM_IN[75]
+set_location_assignment PIN_E26 -to AD_PCM_IN[76]
+set_location_assignment PIN_G26 -to AD_PCM_IN[77]
+set_location_assignment PIN_H26 -to AD_PCM_IN[78]
+set_location_assignment PIN_H25 -to AD_PCM_IN[79]
+set_location_assignment PIN_J24 -to AD_PCM_IN[80]
+set_location_assignment PIN_L24 -to AD_PCM_IN[81]
+set_location_assignment PIN_L23 -to AD_PCM_IN[82]
+set_location_assignment PIN_M25 -to AD_PCM_IN[83]
+set_location_assignment PIN_N26 -to AD_PCM_IN[84]
+set_location_assignment PIN_R24 -to AD_PCM_IN[85]
+set_location_assignment PIN_T25 -to AD_PCM_IN[86]
+set_location_assignment PIN_U25 -to AD_PCM_IN[87]
+set_location_assignment PIN_U26 -to AD_PCM_IN[88]
+set_location_assignment PIN_V25 -to AD_PCM_IN[89]
+set_location_assignment PIN_V26 -to AD_PCM_IN[90]
+set_location_assignment PIN_W25 -to AD_PCM_IN[91]
+set_location_assignment PIN_W26 -to AD_PCM_IN[92]
+set_location_assignment PIN_Y25 -to AD_PCM_IN[93]
+set_location_assignment PIN_Y26 -to AD_PCM_IN[94]
+set_location_assignment PIN_AA26 -to AD_PCM_IN[95]
+set_location_assignment PIN_AA25 -to AD_PCM_IN[96]
+set_location_assignment PIN_AB26 -to AD_PCM_IN[97]
+set_location_assignment PIN_AB25 -to AD_PCM_IN[98]
+set_location_assignment PIN_AC26 -to AD_PCM_IN[99]
+set_location_assignment PIN_AC17 -to AD_PCM_IN[100]
+set_location_assignment PIN_AD21 -to AD_PCM_IN[101]
+set_location_assignment PIN_AE18 -to AD_PCM_IN[102]
+set_location_assignment PIN_AD17 -to AD_PCM_IN[103]
+set_location_assignment PIN_AA17 -to AD_PCM_IN[104]
+set_location_assignment PIN_AA16 -to AD_PCM_IN[105]
+set_location_assignment PIN_AC15 -to AD_PCM_IN[106]
+set_location_assignment PIN_AA14 -to AD_PCM_IN[107]
+set_location_assignment PIN_AB12 -to AD_PCM_IN[108]
+set_location_assignment PIN_AA12 -to AD_PCM_IN[109]
+set_location_assignment PIN_AA10 -to AD_PCM_IN[110]
+set_location_assignment PIN_AC10 -to AD_PCM_IN[111]
+set_location_assignment PIN_D26 -to AD_PCM_IN[112]
+set_location_assignment PIN_E25 -to AD_PCM_IN[113]
+set_location_assignment PIN_F21 -to AD_PCM_IN[114]
+set_location_assignment PIN_G19 -to AD_PCM_IN[115]
+set_location_assignment PIN_G16 -to AD_PCM_IN[116]
+set_location_assignment PIN_J17 -to AD_PCM_IN[117]
+set_location_assignment PIN_J19 -to AD_PCM_IN[118]
+set_location_assignment PIN_K22 -to AD_PCM_IN[119]
+set_location_assignment PIN_L22 -to AD_PCM_IN[120]
+set_location_assignment PIN_M24 -to AD_PCM_IN[121]
+set_location_assignment PIN_T22 -to AD_PCM_IN[122]
+set_location_assignment PIN_U22 -to AD_PCM_IN[123]
+set_location_assignment PIN_V22 -to AD_PCM_IN[124]
+set_location_assignment PIN_W22 -to AD_PCM_IN[125]
+set_location_assignment PIN_Y24 -to AD_PCM_IN[126]
+set_location_assignment PIN_AA23 -to AD_PCM_IN[127]
+set_location_assignment PIN_A6 -to DA_PCM_OUT[28]
+set_location_assignment PIN_B6 -to DA_PCM_OUT[29]
+set_location_assignment PIN_A4 -to DA_PCM_OUT[30]
+set_location_assignment PIN_B4 -to DA_PCM_OUT[31]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[31]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[30]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[29]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[28]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[127]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[126]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[125]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[124]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[123]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[122]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[121]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[120]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[119]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[118]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[117]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[116]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[115]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[114]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[113]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[112]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[111]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[110]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[109]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[108]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[107]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[106]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[105]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[104]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[103]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[102]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[101]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[100]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[99]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[98]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[97]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[96]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[95]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[94]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[93]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[92]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[91]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[90]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[89]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[88]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[87]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[86]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[85]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[84]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[83]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[82]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[81]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[80]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[79]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[78]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[77]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[76]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[75]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[74]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[73]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[72]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[71]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[70]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[69]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[68]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[67]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[66]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[65]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[64]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[63]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[62]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[61]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[60]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[59]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[58]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[57]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[56]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[55]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[54]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[53]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[52]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[51]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[50]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[49]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[48]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[47]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[46]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[45]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[44]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[43]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[42]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[41]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[40]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[39]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[38]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[37]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[36]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[35]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[34]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[33]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[32]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[31]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[30]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[29]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[28]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[27]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[26]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[25]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[24]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[23]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[22]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[21]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[20]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[19]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[18]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[17]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to AD_PCM_IN[16]
+set_location_assignment PIN_A3 -to DA_PCM_OUT[32]
+set_location_assignment PIN_B3 -to DA_PCM_OUT[33]
+set_location_assignment PIN_C2 -to DA_PCM_OUT[34]
+set_location_assignment PIN_D1 -to DA_PCM_OUT[35]
+set_location_assignment PIN_D2 -to DA_PCM_OUT[36]
+set_location_assignment PIN_E1 -to DA_PCM_OUT[37]
+set_location_assignment PIN_F1 -to DA_PCM_OUT[38]
+set_location_assignment PIN_F2 -to DA_PCM_OUT[39]
+set_location_assignment PIN_G1 -to DA_PCM_OUT[40]
+set_location_assignment PIN_K2 -to DA_PCM_OUT[41]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[41]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[40]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[39]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[38]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[37]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[36]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[35]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[34]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[33]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[32]
+set_location_assignment PIN_L1 -to DA_PCM_OUT[42]
+set_location_assignment PIN_M2 -to DA_PCM_OUT[43]
+set_location_assignment PIN_M1 -to DA_PCM_OUT[44]
+set_location_assignment PIN_P2 -to DA_PCM_OUT[45]
+set_location_assignment PIN_P1 -to DA_PCM_OUT[46]
+set_location_assignment PIN_R3 -to DA_PCM_OUT[47]
+set_location_assignment PIN_R1 -to DA_PCM_OUT[48]
+set_location_assignment PIN_R2 -to DA_PCM_OUT[49]
+set_location_assignment PIN_U1 -to DA_PCM_OUT[50]
+set_location_assignment PIN_U2 -to DA_PCM_OUT[51]
+set_location_assignment PIN_V1 -to DA_PCM_OUT[52]
+set_location_assignment PIN_V2 -to DA_PCM_OUT[53]
+set_location_assignment PIN_W1 -to DA_PCM_OUT[54]
+set_location_assignment PIN_W2 -to DA_PCM_OUT[55]
+set_location_assignment PIN_G28 -to DA_PCM_OUT[56]
+set_location_assignment PIN_F27 -to DA_PCM_OUT[57]
+set_location_assignment PIN_F28 -to DA_PCM_OUT[58]
+set_location_assignment PIN_E27 -to DA_PCM_OUT[59]
+set_location_assignment PIN_E28 -to DA_PCM_OUT[60]
+set_location_assignment PIN_D27 -to DA_PCM_OUT[61]
+set_location_assignment PIN_D28 -to DA_PCM_OUT[62]
+set_location_assignment PIN_C27 -to DA_PCM_OUT[63]
+set_location_assignment PIN_B26 -to DA_PCM_OUT[64]
+set_location_assignment PIN_A26 -to DA_PCM_OUT[65]
+set_location_assignment PIN_B25 -to DA_PCM_OUT[66]
+set_location_assignment PIN_A25 -to DA_PCM_OUT[67]
+set_location_assignment PIN_B23 -to DA_PCM_OUT[68]
+set_location_assignment PIN_A23 -to DA_PCM_OUT[69]
+set_location_assignment PIN_W28 -to DA_PCM_OUT[70]
+set_location_assignment PIN_V27 -to DA_PCM_OUT[71]
+set_location_assignment PIN_V28 -to DA_PCM_OUT[72]
+set_location_assignment PIN_U27 -to DA_PCM_OUT[73]
+set_location_assignment PIN_U28 -to DA_PCM_OUT[74]
+set_location_assignment PIN_R27 -to DA_PCM_OUT[75]
+set_location_assignment PIN_R28 -to DA_PCM_OUT[76]
+set_location_assignment PIN_R26 -to DA_PCM_OUT[77]
+set_location_assignment PIN_P28 -to DA_PCM_OUT[78]
+set_location_assignment PIN_P27 -to DA_PCM_OUT[79]
+set_location_assignment PIN_M28 -to DA_PCM_OUT[80]
+set_location_assignment PIN_M27 -to DA_PCM_OUT[81]
+set_location_assignment PIN_L28 -to DA_PCM_OUT[82]
+set_location_assignment PIN_L27 -to DA_PCM_OUT[83]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[83]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[82]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[81]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[80]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[79]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[78]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[77]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[76]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[75]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[74]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[73]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[72]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[71]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[70]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[69]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[68]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[67]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[66]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[65]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[64]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[63]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[62]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[61]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[60]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[59]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[58]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[57]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[56]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[55]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[54]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[53]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[52]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[51]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[50]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[49]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[48]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[47]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[46]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[45]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[44]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[43]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[42]
+set_location_assignment PIN_AB22 -to DA_PCM_OUT[84]
+set_location_assignment PIN_AA22 -to DA_PCM_OUT[85]
+set_location_assignment PIN_Y23 -to DA_PCM_OUT[86]
+set_location_assignment PIN_Y22 -to DA_PCM_OUT[87]
+set_location_assignment PIN_V21 -to DA_PCM_OUT[88]
+set_location_assignment PIN_V23 -to DA_PCM_OUT[89]
+set_location_assignment PIN_T21 -to DA_PCM_OUT[90]
+set_location_assignment PIN_R21 -to DA_PCM_OUT[91]
+set_location_assignment PIN_R25 -to DA_PCM_OUT[92]
+set_location_assignment PIN_R23 -to DA_PCM_OUT[93]
+set_location_assignment PIN_R22 -to DA_PCM_OUT[94]
+set_location_assignment PIN_P21 -to DA_PCM_OUT[95]
+set_location_assignment PIN_P26 -to DA_PCM_OUT[96]
+set_location_assignment PIN_P25 -to DA_PCM_OUT[97]
+set_location_assignment PIN_AE15 -to DA_PCM_OUT[98]
+set_location_assignment PIN_AE16 -to DA_PCM_OUT[99]
+set_location_assignment PIN_AE17 -to DA_PCM_OUT[100]
+set_location_assignment PIN_AF17 -to DA_PCM_OUT[101]
+set_location_assignment PIN_AB17 -to DA_PCM_OUT[102]
+set_location_assignment PIN_AD19 -to DA_PCM_OUT[103]
+set_location_assignment PIN_AB21 -to DA_PCM_OUT[104]
+set_location_assignment PIN_AA21 -to DA_PCM_OUT[105]
+set_location_assignment PIN_AC21 -to DA_PCM_OUT[106]
+set_location_assignment PIN_AC22 -to DA_PCM_OUT[107]
+set_location_assignment PIN_AD24 -to DA_PCM_OUT[108]
+set_location_assignment PIN_AE24 -to DA_PCM_OUT[109]
+set_location_assignment PIN_AF26 -to DA_PCM_OUT[110]
+set_location_assignment PIN_AE26 -to DA_PCM_OUT[111]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[111]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[110]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[109]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[108]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[107]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[106]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[105]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[104]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[103]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[102]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[101]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[100]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[99]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[98]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[97]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[96]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[95]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[94]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[93]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[92]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[91]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[90]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[89]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[88]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[87]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[86]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[85]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_PCM_OUT[84]
+set_location_assignment PIN_K1 -to DA_WR[2]
+set_location_assignment PIN_L2 -to DA_WR[3]
+set_location_assignment PIN_K27 -to DA_WR[4]
+set_location_assignment PIN_K28 -to DA_WR[5]
+set_location_assignment PIN_AC24 -to DA_WR[6]
+set_location_assignment PIN_AD25 -to DA_WR[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_WR[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_WR[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_WR[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_WR[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_WR[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_WR[2]
+set_global_assignment -name CYCLONEII_RESERVE_NCEO_AFTER_CONFIGURATION "USE AS REGULAR IO"
+set_location_assignment PIN_G19 -to RX_ERR
+set_location_assignment PIN_F19 -to TX_ERR
+set_location_assignment PIN_D20 -to MODEL_SEL[0]
+set_location_assignment PIN_C17 -to MODEL_SEL[1]
+set_location_assignment PIN_C5 -to SYN_CLK
+set_location_assignment PIN_H17 -to SYN_SCK
+set_location_assignment PIN_E19 -to SYN_SDATAIN
+set_location_assignment PIN_J16 -to SYN_SDATAOUT
+set_location_assignment PIN_F19 -to SYN_TRIG_PULSE
+set_location_assignment PIN_E21 -to SYN_TRIG_START
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to MODEL_SEL[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to MODEL_SEL[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SYN_CLK
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SYN_SCK
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SYN_SDATAIN
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SYN_SDATAOUT
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SYN_TRIG_PULSE
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to SYN_TRIG_START
+set_location_assignment PIN_C23 -to DA_CLK_OUT1
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to DA_CLK_OUT1
+set_location_assignment PIN_F14 -to CH_FILTER_SEL
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_FILTER_SEL
+set_location_assignment PIN_E10 -to CH_EMIT_RECV_EN[0]
+set_location_assignment PIN_J10 -to CH_EMIT_RECV_EN[1]
+set_location_assignment PIN_F12 -to CH_EMIT_RECV_EN[2]
+set_location_assignment PIN_G13 -to CH_EMIT_RECV_EN[3]
+set_location_assignment PIN_D18 -to CH_EMIT_RECV_EN[4]
+set_location_assignment PIN_G21 -to CH_EMIT_RECV_EN[5]
+set_location_assignment PIN_G22 -to CH_EMIT_RECV_EN[6]
+set_location_assignment PIN_H22 -to CH_EMIT_RECV_EN[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_EMIT_RECV_EN[7]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_EMIT_RECV_EN[6]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_EMIT_RECV_EN[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_EMIT_RECV_EN[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_EMIT_RECV_EN[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_EMIT_RECV_EN[2]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_EMIT_RECV_EN[1]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_EMIT_RECV_EN[0]
+set_location_assignment PIN_AE3 -to ENCODER_IN[5]
+set_location_assignment PIN_AE2 -to ENCODER_IN[4]
+set_location_assignment PIN_AC5 -to ENCODER_IN[3]
+set_location_assignment PIN_AB1 -to ENCODER_IN[2]
+set_location_assignment PIN_N21 -to ENCODER_IN[0]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to ENCODER_IN[5]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to ENCODER_IN[4]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to ENCODER_IN[3]
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to ENCODER_IN[2]
+set_global_assignment -name VERILOG_FILE algorithm/shadow_sc.v
+set_global_assignment -name VERILOG_FILE algorithm/iq_buf.v
+set_global_assignment -name VERILOG_FILE util/reg2ram.v
+set_global_assignment -name VERILOG_FILE util/ram2reg.v
+set_global_assignment -name VERILOG_FILE util/encoder.v
+set_global_assignment -name VERILOG_FILE util/sdio_slave.v
+set_global_assignment -name VERILOG_FILE util/sdio_master.v
+set_global_assignment -name VERILOG_FILE algorithm/dac_tx2.v
+set_global_assignment -name VERILOG_FILE algorithm/tx_mix.v
+set_global_assignment -name VERILOG_FILE algorithm/mix_freq2_mc.v
+set_global_assignment -name VERILOG_FILE algorithm/mix_freq2.v
+set_global_assignment -name VERILOG_FILE algorithm/sincos_mem.v
+set_global_assignment -name VERILOG_FILE algorithm/sincos_gen.v
+set_global_assignment -name VERILOG_FILE algorithm/mix_freq_mc.v
+set_global_assignment -name VERILOG_FILE algorithm/mix_freq.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/udp_arb_mux.v
+set_global_assignment -name VERILOG_FILE algorithm/source_mem.v
+set_global_assignment -name VERILOG_FILE algorithm/pcmmux_fifo.v
+set_global_assignment -name VERILOG_FILE algorithm/pcm2udp.v
+set_global_assignment -name VERILOG_FILE algorithm/dac_tx.v
+set_global_assignment -name VERILOG_FILE mem/rowo_dpram.v
+set_global_assignment -name VERILOG_FILE mem/generic_spram.v
+set_global_assignment -name VERILOG_FILE mem/generic_dpram.v
+set_global_assignment -name VERILOG_FILE util/glitch_remove.v
+set_global_assignment -name VERILOG_FILE util/gen_key_signal.v
+set_global_assignment -name VERILOG_FILE util/reg_dec_rate.v
+set_global_assignment -name VERILOG_FILE ./ultrasound.v
+set_global_assignment -name VERILOG_FILE util/gen_reset.v
+set_global_assignment -name VERILOG_FILE controller/execcmd.v
+set_global_assignment -name VERILOG_FILE controller/controller.v
+set_global_assignment -name VERILOG_FILE util/synchronizer.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/udp_mac_complete.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/udp_ip_tx.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/udp_ip_rx.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/udp_complete.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/udp_checksum_gen.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/udp.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/priority_encoder.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/mac_reset.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/lfsr.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/ip_eth_tx.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/ip_eth_rx.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/ip_complete.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/ip_arb_mux.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/ip.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/icmp_reply.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/eth_axis_tx.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/eth_axis_rx.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/eth_arb_mux.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/axis_fifo.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/avalon2axi.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/arp_eth_tx.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/arp_eth_rx.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/arp_cache.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/arp.v
+set_global_assignment -name VERILOG_FILE udp_mac_complete/arbiter.v
+set_global_assignment -name SDC_FILE ultrasound.sdc
+set_global_assignment -name SIGNALTAP_FILE signaltap/mac_reset.stp
+set_global_assignment -name HEX_FILE signaltap/read_mac_counter.hex
+set_global_assignment -name SIGNALTAP_FILE signaltap/controller.stp
+set_global_assignment -name SIGNALTAP_FILE signaltap/icmp.stp
+set_global_assignment -name SIGNALTAP_FILE signaltap/mixfreq.stp
+set_global_assignment -name SIGNALTAP_FILE signaltap/shadow.stp
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SEGMENT_SIZE=256" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_SAMPLE_DEPTH=256" -section_id auto_signaltap_0
+set_location_assignment PIN_F14 -to CH_SEL_419
+set_instance_assignment -name IO_STANDARD "3.3-V LVCMOS" -to CH_SEL_419
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_clk -to "controller:controller_inst|clk" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[0] -to "controller:controller_inst|check_invalid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[1] -to "controller:controller_inst|ctrl_in_udp_err" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[2] -to "controller:controller_inst|ctrl_in_udp_hdr_ready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[3] -to "controller:controller_inst|ctrl_in_udp_hdr_ready~reg0" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[4] -to "controller:controller_inst|ctrl_in_udp_hdr_valid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[5] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tlast" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[6] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tready~reg0" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[7] -to "controller:controller_inst|ctrl_in_udp_payload_lo" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[8] -to "controller:controller_inst|ctrl_in_valid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[9] -to "controller:controller_inst|ctrl_out_udp_hdr_ready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[10] -to "controller:controller_inst|ctrl_out_udp_hdr_valid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[11] -to "controller:controller_inst|ctrl_out_udp_hdr_valid~reg0" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[12] -to "controller:controller_inst|ctrl_out_udp_payload_axis_tvalid~reg0" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[13] -to "controller:controller_inst|ctrl_out_udp_payload_lo" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[0] -to "controller:controller_inst|check_invalid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[1] -to "controller:controller_inst|ctrl_in_udp_err" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[2] -to "controller:controller_inst|ctrl_in_udp_hdr_ready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[3] -to "controller:controller_inst|ctrl_in_udp_hdr_ready~reg0" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[4] -to "controller:controller_inst|ctrl_in_udp_hdr_valid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[5] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tlast" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[6] -to "controller:controller_inst|ctrl_in_udp_payload_axis_tready~reg0" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[7] -to "controller:controller_inst|ctrl_in_udp_payload_lo" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[8] -to "controller:controller_inst|ctrl_in_valid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[9] -to "controller:controller_inst|ctrl_out_udp_hdr_ready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[10] -to "controller:controller_inst|ctrl_out_udp_hdr_valid" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[11] -to "controller:controller_inst|ctrl_out_udp_hdr_valid~reg0" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[12] -to "controller:controller_inst|ctrl_out_udp_payload_axis_tvalid~reg0" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[13] -to "controller:controller_inst|ctrl_out_udp_payload_lo" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[14] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_00" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[15] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_01" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[16] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_02" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[17] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_03" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[18] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_04" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[19] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_05" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[20] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_06" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[21] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_07" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[22] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_08" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[23] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_09" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[24] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_10" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[25] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_11" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[26] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_12" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[27] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_13" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[14] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_00" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[15] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_01" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[16] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_02" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[17] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_03" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[18] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_04" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[19] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_05" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[20] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_06" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[21] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_07" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[22] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_08" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[23] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_09" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[24] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_10" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[25] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_11" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[26] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_12" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[27] -to "controller:controller_inst|execcmd:execcmd_inst|cmd_process_13" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[28] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|clk_en" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[28] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|clk_en" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[29] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[30] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[31] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[32] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[33] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[34] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[35] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[36] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[37] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[38] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[39] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[40] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[41] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[42] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[43] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_rd" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[44] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_ready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[45] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_wr" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[46] -to "controller:controller_inst|execcmd:execcmd_inst|start_exec" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[47] -to "controller:controller_inst|rec_udp_00" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[48] -to "controller:controller_inst|rec_udp_01" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[49] -to "controller:controller_inst|rec_udp_02" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[50] -to "controller:controller_inst|rec_udp_03" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[51] -to "controller:controller_inst|rec_udp_04" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[52] -to "controller:controller_inst|rec_udp_05" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[53] -to "controller:controller_inst|rec_udp_06" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[54] -to "controller:controller_inst|rec_udp_07" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[55] -to "controller:controller_inst|tx_udp_00" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[56] -to "controller:controller_inst|tx_udp_01" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[57] -to "controller:controller_inst|tx_udp_02" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[58] -to "controller:controller_inst|tx_udp_03" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[59] -to "controller:controller_inst|tx_udp_05" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[60] -to "controller:controller_inst|tx_udp_06" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[61] -to "controller:controller_inst|tx_udp_07" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[62] -to "controller:controller_inst|tx_udp_08" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_trigger_in[63] -to "controller:controller_inst|udp_hdr_tx_finish" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[29] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[0]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[30] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[10]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[31] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[11]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[32] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[12]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[33] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[13]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[34] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[1]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[35] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[2]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[36] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[3]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[37] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[4]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[38] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[5]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[39] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[6]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[40] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[7]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[41] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[8]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[42] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_addr[9]" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[43] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_rd" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[44] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_ready" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[45] -to "controller:controller_inst|execcmd:execcmd_inst|reg_dec_rate:reg_dec_rate_inst|reg_m_wr" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[46] -to "controller:controller_inst|execcmd:execcmd_inst|start_exec" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[47] -to "controller:controller_inst|rec_udp_00" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[48] -to "controller:controller_inst|rec_udp_01" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[49] -to "controller:controller_inst|rec_udp_02" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[50] -to "controller:controller_inst|rec_udp_03" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[51] -to "controller:controller_inst|rec_udp_04" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[52] -to "controller:controller_inst|rec_udp_05" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[53] -to "controller:controller_inst|rec_udp_06" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[54] -to "controller:controller_inst|rec_udp_07" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[55] -to "controller:controller_inst|tx_udp_00" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[56] -to "controller:controller_inst|tx_udp_01" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[57] -to "controller:controller_inst|tx_udp_02" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[58] -to "controller:controller_inst|tx_udp_03" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[59] -to "controller:controller_inst|tx_udp_05" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[60] -to "controller:controller_inst|tx_udp_06" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[61] -to "controller:controller_inst|tx_udp_07" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[62] -to "controller:controller_inst|tx_udp_08" -section_id auto_signaltap_0
+set_instance_assignment -name CONNECT_TO_SLD_NODE_ENTITY_PORT acq_data_in[63] -to "controller:controller_inst|udp_hdr_tx_finish" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_DATA_BITS=64" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_TRIGGER_BITS=64" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK=0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_INVERSION_MASK_LENGTH=214" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_LOWORD=20153" -section_id auto_signaltap_0
+set_global_assignment -name SLD_NODE_PARAMETER_ASSIGNMENT "SLD_NODE_CRC_HIWORD=56090" -section_id auto_signaltap_0
 set_instance_assignment -name PARTITION_HIERARCHY root_partition -to | -section_id Top
 set_global_assignment -name QIP_FILE IP/ether1.qip
 set_global_assignment -name QIP_FILE controller/inputram.qip

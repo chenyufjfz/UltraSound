@@ -22,7 +22,7 @@ entity pcm2udp is
         pcm_udp_tx_left : out    vl_logic_vector(23 downto 0);
         pcm_udp_tx_start: in     vl_logic;
         pcm_udp_tx_total: in     vl_logic_vector(23 downto 0);
-        pcm_udp_tx_th   : in     vl_logic_vector(7 downto 0);
+        pcm_udp_tx_th   : in     vl_logic_vector(9 downto 0);
         pcm_udp_channel_choose: in     vl_logic_vector(7 downto 0);
         pcm_udp_capture_sep: in     vl_logic_vector(7 downto 0)
     );

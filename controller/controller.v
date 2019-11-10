@@ -46,9 +46,11 @@ module controller (
     pcm_udp_source_port,
 
     //dac reg control
-    dac_signal_len,
-    dac_cic_rate,
-    dac_run,
+    dac_cos_sita,
+    dac_sin_sita,
+    dac_choose,
+    dac_err_clr,
+    dac_err,
 
     //ch gain control
     ch_gain_sel,
@@ -58,197 +60,353 @@ module controller (
     ch_gain_gain,
     ch_gain_buf,
     ch_gain_ldac,
-    ch_sel_419,
+    model_sel,
+    ch_emit_recv_en,
+    ch_filter_sel,
+
+    //syn control
+    syn_trigger_start,
+    syn_trigger_pulse,
+    slot_idx,
 
     //mix freq control
     mf_ipcm_acc_out,
     mf_qpcm_acc_out,
-    mf_pcm_out_shift,
+    mf_iq_read,
     mf_choose_lb,
-    mf_dec_rate,
-    mf_dec_rate2,
     mf_acc_shift,
-    mf_sin_length,
     mf_cycle_num,
-    mf_status,
-    mf_ctrl_resync,
+    mf_err_clr,
+    mf_err,
+
+    //iq buffer
+    sync_slot,
+    sync_encoder1,
+    sync_encoder2,
+    iq_buf_write,
+    iq_buf_read,
+    iq_buf_rst,
+    iq_buf_block_ov,
+    iq_buf_overflow,
+
+    //shadow dac sin cos
+    shadow_cos_sita,
+    shadow_sin_sita,
+    shadow_choose,
+    shadow_read_addr,
+    shadow_read_trigger,
+    
+    //sc_gen controle
+    sc_status,
+    sc_sin_length,
+    sc_resync,
+    sc_err,
+    sc_cic_rate,
+
+    //encoder control
+    encoder1_dir,
+    encoder1_start,
+    encoder1_div,
+    encoder1_cnt,
+    encoder1_total_a,
+    encoder1_total_b,
+    encoder2_dir,
+    encoder2_start,
+    encoder2_div,
+    encoder2_cnt,
+    encoder2_total_a,
+    encoder2_total_b,
+    encoder_pulse_width,
+    encoder1_err_status,
+    encoder2_err_status,
 
     //AXI reg access
     reg_addr,
     reg_writedata,
     reg_rd_udp_mac,
     reg_wr_udp_mac,
-    reg_rd_dac,
-    reg_wr_dac,
-    reg_rd_mf,
-    reg_wr_mf,
+    reg_rd_sc,
+    reg_wr_sc,
+    reg_rd_sdio,
+    reg_wr_sdio,
+    reg_wr_iq_buf,
+    reg_rd_iq_buf,
+    reg_rd_shadow_sc,
+    reg_wr_shadow_sc,
     reg_ready_udp_mac,
-    reg_ready_dac,
-    reg_ready_mf,
+    reg_ready_sc,
+    reg_ready_sdio,
+    reg_ready_iq_buf,
+    reg_ready_shadow_sc,
     reg_readdata_udp_mac,
-    reg_readdata_dac,
-    reg_readdata_mf
+    reg_readdata_sc,
+    reg_readdata_sdio,
+    reg_readdata_iq_buf,
+    reg_readdata_shadow_sc
 );
     parameter SIMULATION = 0;
     parameter AW=10;
     parameter DAC_CHANNEL = 3;
     parameter ADC_CHANNEL = 3;
+    parameter MIX_NUM = 3;
     parameter FREQ_NUM = 2;
-    parameter dac_pcmaw=10;
     parameter COMMAND_PACKET_TYPE = 8'he1;
+    parameter sita_w = 16;
     localparam CTRL_UDP_PORT = 16'h6789;
     localparam PCM_UDP_PORT = 16'h6789;
     localparam MAGIC_WORD = 16'hCBAE;
-    input                           clk;
-    input                           clk_2;
-    input                           rst;
-    input                           trigger_exec;
-    input                           ctrl_in_udp_hdr_valid;
-    output reg                      ctrl_in_udp_hdr_ready;
-    input [12:0]                    ctrl_in_ip_fragment_offset;
-    input [31:0]                    ctrl_in_ip_source_ip;
-    input [31:0]                    ctrl_in_ip_dest_ip;
-    input [15:0]                    ctrl_in_udp_source_port;
-    input [15:0]                    ctrl_in_udp_dest_port;
-    input [15:0]                    ctrl_in_udp_length;
-    input [7:0]                     ctrl_in_udp_payload_axis_tdata;
-    input                           ctrl_in_udp_payload_axis_tvalid;
-    output reg                      ctrl_in_udp_payload_axis_tready;
-    input                           ctrl_in_udp_payload_axis_tlast;
-    input                           ctrl_in_udp_err;
-    output reg                      ctrl_out_udp_hdr_valid;
-    input                           ctrl_out_udp_hdr_ready;
-    output reg [31:0]               ctrl_out_ip_dest_ip;
-    output reg [15:0]               ctrl_out_udp_source_port;
-    output reg [15:0]               ctrl_out_udp_dest_port;
-    output [15:0]                   ctrl_out_udp_length;
-    output [7:0]                    ctrl_out_udp_payload_axis_tdata;
-    output reg                      ctrl_out_udp_payload_axis_tvalid;
-    input                           ctrl_out_udp_payload_axis_tready;
-    output                          ctrl_out_udp_payload_axis_tlast;
-    input [31:0]                    local_ip;
-    input [23:0]                    pcm_udp_tx_left;
-    output                          pcm_udp_tx_start;
-    output reg [23:0]               pcm_udp_tx_total;
-    output reg [9:0]                pcm_udp_tx_th;
-    output reg [7:0]                pcm_udp_channel_choose;
-    output reg [7:0]                pcm_udp_capture_sep;
-    output reg [31:0]               pcm_udp_remote_ip;
-    output reg [15:0]               pcm_udp_remote_port;
-    output [15:0]                   pcm_udp_source_port;
-    output [DAC_CHANNEL*dac_pcmaw-1:0] dac_signal_len;
-    output [DAC_CHANNEL*4-1:0]      dac_cic_rate;
-    output reg                      dac_run;
-    output [2:0]                    ch_gain_sel;
-    output [11:0]                   ch_gain_da;
-    output                          ch_gain_wr;
-    output                          ch_gain_clr;
-    output                          ch_gain_gain;
-    output                          ch_gain_buf;
-    output                          ch_gain_ldac;
-    output                          ch_sel_419;
+    input                                   clk;
+    input                                   clk_2;
+    input                                   rst;
+    input                                   trigger_exec;
+    input                                   ctrl_in_udp_hdr_valid;
+    output reg                              ctrl_in_udp_hdr_ready;
+    input [12:0]                            ctrl_in_ip_fragment_offset;
+    input [31:0]                            ctrl_in_ip_source_ip;
+    input [31:0]                            ctrl_in_ip_dest_ip;
+    input [15:0]                            ctrl_in_udp_source_port;
+    input [15:0]                            ctrl_in_udp_dest_port;
+    input [15:0]                            ctrl_in_udp_length;
+    input [7:0]                             ctrl_in_udp_payload_axis_tdata;
+    input                                   ctrl_in_udp_payload_axis_tvalid;
+    output reg                              ctrl_in_udp_payload_axis_tready;
+    input                                   ctrl_in_udp_payload_axis_tlast;
+    input                                   ctrl_in_udp_err;
+    output reg                              ctrl_out_udp_hdr_valid;
+    input                                   ctrl_out_udp_hdr_ready;
+    output reg [31:0]                       ctrl_out_ip_dest_ip;
+    output reg [15:0]                       ctrl_out_udp_source_port;
+    output reg [15:0]                       ctrl_out_udp_dest_port;
+    output [15:0]                           ctrl_out_udp_length;
+    output [7:0]                            ctrl_out_udp_payload_axis_tdata;
+    output reg                              ctrl_out_udp_payload_axis_tvalid;
+    input                                   ctrl_out_udp_payload_axis_tready;
+    output                                  ctrl_out_udp_payload_axis_tlast;
+    input [31:0]                            local_ip;
+    input [23:0]                            pcm_udp_tx_left;
+    output                                  pcm_udp_tx_start;
+    output reg [23:0]                       pcm_udp_tx_total;
+    output reg [9:0]                        pcm_udp_tx_th;
+    output reg [7:0]                        pcm_udp_channel_choose;
+    output reg [7:0]                        pcm_udp_capture_sep;
+    output reg [31:0]                       pcm_udp_remote_ip;
+    output reg [15:0]                       pcm_udp_remote_port;
+    output [15:0]                           pcm_udp_source_port;
+    output [sita_w*MIX_NUM*DAC_CHANNEL-1:0] dac_cos_sita, dac_sin_sita;
+    output [4*MIX_NUM*DAC_CHANNEL-1:0]      dac_choose;
+    output [DAC_CHANNEL-1:0]                dac_err_clr;
+    input  [DAC_CHANNEL-1:0]                dac_err;
+    output [2:0]                            ch_gain_sel;
+    output [11:0]                           ch_gain_da;
+    output                                  ch_gain_wr;
+    output                                  ch_gain_clr;
+    output                                  ch_gain_gain;
+    output                                  ch_gain_buf;
+    output                                  ch_gain_ldac;
+    output [1:0]                            model_sel;
+    output [7:0]                            ch_emit_recv_en;
+    output                                  ch_filter_sel;
+    output reg                              syn_trigger_start;
+    output reg                              syn_trigger_pulse;
+    output reg [4:0]                        slot_idx;
     input [32*ADC_CHANNEL*FREQ_NUM-1:0]     mf_ipcm_acc_out;
     input [32*ADC_CHANNEL*FREQ_NUM-1:0]     mf_qpcm_acc_out;
-    output [4*FREQ_NUM-1:0]                 mf_pcm_out_shift;
+    output                                  mf_iq_read;
     output reg [FREQ_NUM-1:0]               mf_choose_lb;
-    output [8*FREQ_NUM-1:0]                 mf_dec_rate;
-    output [8*FREQ_NUM-1:0]                 mf_dec_rate2;
     output [4*FREQ_NUM-1:0]                 mf_acc_shift;
-    output [16*FREQ_NUM-1:0]                mf_sin_length;
     output [24*FREQ_NUM-1:0]                mf_cycle_num;
-    input [32*FREQ_NUM-1:0]                 mf_status;
-    output [FREQ_NUM-1:0]                   mf_ctrl_resync;
-    output [28:0]                   reg_addr;
-    output [31:0]                   reg_writedata;
-    output                          reg_rd_udp_mac;
-    output                          reg_wr_udp_mac;
-    output                          reg_rd_dac;
-    output                          reg_wr_dac;
-    output                          reg_rd_mf;
-    output                          reg_wr_mf;
-    input                           reg_ready_udp_mac;
-    input                           reg_ready_dac;
-    input                           reg_ready_mf;
-    input [31:0]                    reg_readdata_udp_mac;
-    input [31:0]                    reg_readdata_dac;
-    input [31:0]                    reg_readdata_mf;
-    wire                            exec_inram_re;
-    wire [15:0]                     exec_inram_q;
-    wire [AW-1:0]                   exec_inram_address;
-    wire [AW-1:0]                   exec_outram_address;
-    wire                            exec_outram_we;
-    wire [15:0]                     exec_outram_d;
-    wire                            reg_rd;
-    wire                            reg_wr;
-    wire                            reg_ready;
-    wire [31:0]                     reg_readdata;
-    reg                             start_exec;
-    wire                            exec_busy;
-    wire                            exec_err;
-    wire [AW-1:0]                   exec_out_len;
-    reg [15:0]                      exec_in_len;
-    wire                            ctrl_inram_we;
-    reg [AW-1:0]                    ctrl_inram_address;
-    reg [15:0]                      ctrl_inram_d;
-    wire                            ctrl_outram_re;
-    reg [AW-1:0]                    ctrl_outram_address;
-    wire [15:0]                     ctrl_outram_q;
-    reg [15:0]                      ctrl_outram_q1;
-    reg                             udp_hdr_tx_finish;
-    reg                             ctrl_in_udp_payload_lo;
-    reg                             ctrl_in_valid;
-    reg                             ctrl_out_udp_payload_lo;
-    wire                            check_invalid;
-    reg [23:0]                      bad_pkt_cnt;
-    reg [23:0]                      good_pkt_cnt;
-    reg [15:0]                      seq;
-    reg [15:0]                      addr_high;
-    wire [13:0]                     reg_addr_c2;
-    reg [15:0]                      dac_signal_len_reg[DAC_CHANNEL-1:0];
-    reg [3:0]                       dac_cic_rate_reg[DAC_CHANNEL-1:0];
-    wire [31:0]                     mf_ipcm_acc_out_w[ADC_CHANNEL*FREQ_NUM-1:0];
-    wire [31:0]                     mf_qpcm_acc_out_w[ADC_CHANNEL*FREQ_NUM-1:0];
-    wire [31:0]                     mf_status_w[FREQ_NUM-1:0];
-    reg [7:0]                       mf_dec_rate2_r[FREQ_NUM-1:0];
-    reg [7:0]                       mf_dec_rate_r[FREQ_NUM-1:0];
-    reg [3:0]                       mf_acc_shift_r[FREQ_NUM-1:0];
-    reg [3:0]                       mf_pcm_out_shift_r[FREQ_NUM-1:0];
-    reg [15:0]                      mf_sin_length_r[FREQ_NUM-1:0];
-    reg [23:0]                      mf_cycle_num_r[FREQ_NUM-1:0];
-    reg [2:0]                       cmd_udp_tx_idx;
-    reg [31:0]                      ch_gain;
+    output [FREQ_NUM-1:0]                   mf_err_clr;
+    input [FREQ_NUM-1:0]                    mf_err;
+    output reg [31:0]                       sync_encoder1;
+    output reg [31:0]                       sync_encoder2;
+    output reg [31:0]                       sync_slot;
+    input [15:0]                            iq_buf_write;
+    output reg [15:0]                       iq_buf_read;
+    output                                  iq_buf_rst;
+    output reg                              iq_buf_block_ov;
+    input                                   iq_buf_overflow;
+    input [16*MIX_NUM*DAC_CHANNEL-1:0]      shadow_cos_sita;
+    input [16*MIX_NUM*DAC_CHANNEL-1:0]      shadow_sin_sita;
+    input [4*MIX_NUM*DAC_CHANNEL-1:0]       shadow_choose;
+    output reg [15:0]                       shadow_read_addr;
+    output                                  shadow_read_trigger;
+    input [16*FREQ_NUM-1:0]                 sc_status;
+    output [16*FREQ_NUM-1:0]                sc_sin_length;
+    output                                  sc_resync;
+    input                                   sc_err;
+    output [FREQ_NUM*4-1:0]                 sc_cic_rate;
+    output reg                              encoder1_dir;
+    output reg                              encoder1_start;
+    output reg                              encoder1_div;
+    input [31:0]                            encoder1_cnt;
+    input [31:0]                            encoder1_total_a, encoder1_total_b;
+    output reg                              encoder2_dir;
+    output reg                              encoder2_start;
+    output reg                              encoder2_div;
+    input [31:0]                            encoder2_cnt;
+    input [31:0]                            encoder2_total_a, encoder2_total_b;
+    output reg [11:0]                       encoder_pulse_width;
+    input [2:0]                             encoder1_err_status, encoder2_err_status;
+    output [28:0]                           reg_addr;
+    output [31:0]                           reg_writedata;
+    output                                  reg_rd_udp_mac;
+    output                                  reg_wr_udp_mac;
+    input                                   reg_ready_udp_mac;
+    input [31:0]                            reg_readdata_udp_mac;
+    output                                  reg_rd_sc;
+    output                                  reg_wr_sc;
+    input                                   reg_ready_sc;
+    input [31:0]                            reg_readdata_sc;
+    output                                  reg_rd_sdio;
+    output                                  reg_wr_sdio;
+    input                                   reg_ready_sdio;
+    input [31:0]                            reg_readdata_sdio;
+    output                                  reg_wr_iq_buf;
+    output                                  reg_rd_iq_buf;
+    input                                   reg_ready_iq_buf;
+    input [31:0]                            reg_readdata_iq_buf;
+    output                                  reg_rd_shadow_sc;
+    output                                  reg_wr_shadow_sc;
+    input                                   reg_ready_shadow_sc;
+    input [31:0]                            reg_readdata_shadow_sc;
+    wire                                    exec_inram_re;
+    wire [15:0]                             exec_inram_q;
+    wire [AW-1:0]                           exec_inram_address;
+    wire [AW-1:0]                           exec_outram_address;
+    wire                                    exec_outram_we;
+    wire [15:0]                             exec_outram_d;
+    wire                                    reg_rd;
+    wire                                    reg_wr;
+    wire                                    reg_ready;
+    wire [31:0]                             reg_readdata;
+    reg                                     start_exec;
+    wire                                    exec_busy;
+    wire                                    exec_err;
+    wire [AW-1:0]                           exec_out_len;
+    reg [15:0]                              exec_in_len;
+    wire                                    ctrl_inram_we;
+    reg [AW-1:0]                            ctrl_inram_address;
+    reg [15:0]                              ctrl_inram_d;
+    wire                                    ctrl_outram_re;
+    reg [AW-1:0]                            ctrl_outram_address;
+    wire [15:0]                             ctrl_outram_q;
+    reg [15:0]                              ctrl_outram_q1;
+    reg                                     udp_hdr_tx_finish;
+    reg                                     ctrl_in_udp_payload_lo;
+    reg                                     ctrl_in_valid;
+    reg                                     ctrl_out_udp_payload_lo;
+    wire                                    check_invalid;
+    reg [23:0]                              bad_pkt_cnt;
+    reg [23:0]                              good_pkt_cnt;
+    reg [15:0]                              seq;
+    reg [15:0]                              addr_high;
+    wire [13:0]                             reg_addr_c2;
+    wire [31:0]                             mf_ipcm_acc_out_w[ADC_CHANNEL*FREQ_NUM-1:0];
+    wire [31:0]                             mf_qpcm_acc_out_w[ADC_CHANNEL*FREQ_NUM-1:0];
+    reg [3:0]                               mf_acc_shift_r[FREQ_NUM-1:0];
+    reg [3:0]                               sc_cic_rate_reg[FREQ_NUM-1:0];
+    wire [15:0]                             sc_status_w[FREQ_NUM-1:0];
+    reg [15:0]                              sc_sin_length_r[FREQ_NUM-1:0];
+    reg [23:0]                              mf_cycle_num_r[FREQ_NUM-1:0];
+    reg [sita_w-1:0]                        dac_cos_sita_r[MIX_NUM*DAC_CHANNEL-1:0];
+    reg [sita_w-1:0]                        dac_sin_sita_r[MIX_NUM*DAC_CHANNEL-1:0];
+    reg [3:0]                               dac_choose_r[MIX_NUM*DAC_CHANNEL-1:0];
+    wire [15:0]                             shadow_cos_sita_w[MIX_NUM*DAC_CHANNEL-1:0];
+    wire [15:0]                             shadow_sin_sita_w[MIX_NUM*DAC_CHANNEL-1:0];
+    wire [3:0]                              shadow_choose_w[MIX_NUM*DAC_CHANNEL-1:0];
+    reg [2:0]                               cmd_udp_tx_idx;
+    reg [31:0]                              ch_gain;
+    reg [15:0]                              model_reg;
+    reg [26:0]                              pulse_counter;
+    reg [26:0]                              slot_time;
+    reg [4:0]                               max_slot;
+    reg                                     reg_ready_default;
+    reg [31:0]                              reg_readdata3;
+    reg [31:0]                              reg_readdata4;
+    reg [31:0]                              reg_readdata5;
     assign reg_addr = reg_addr_c2[13] ? {addr_high, reg_addr_c2[12:0]} : {16'h0, reg_addr_c2[12:0]};
     assign reg_rd_udp_mac = (reg_rd && reg_addr[28:8] == 1);
     assign reg_wr_udp_mac = (reg_wr && reg_addr[28:8] == 1);
-    assign reg_rd_dac = (reg_rd && reg_addr[28:16] == 1);
-    assign reg_wr_dac = (reg_wr && reg_addr[28:16] == 1);
-    assign reg_rd_mf = (reg_rd && reg_addr[28:16] == 2);
-    assign reg_wr_mf = (reg_wr && reg_addr[28:16] == 2);
+    assign reg_rd_sdio = (reg_rd && reg_addr[28:8] == 6);
+    assign reg_wr_sdio = (reg_wr && reg_addr[28:8] == 6);
+    assign reg_rd_sc = (reg_rd && reg_addr[28:17] == 1);
+    assign reg_wr_sc = (reg_wr && reg_addr[28:17] == 1);
+    assign reg_wr_iq_buf = (reg_wr && reg_addr[28:16] == 4);
+    assign reg_rd_iq_buf = (reg_rd && reg_addr[28:16] == 4);
+    assign reg_rd_shadow_sc = (reg_rd && reg_addr[28:16] == 5);
+    assign reg_wr_shadow_sc = (reg_wr && reg_addr[28:16] == 5);
     assign reg_readdata =   (reg_addr[28:0] == 29'h1fe) ? good_pkt_cnt:
-                           ((reg_addr[28:0] == 29'h1ff) ? bad_pkt_cnt:
-                           ((reg_addr[28:0] == 29'h0200) ? pcm_udp_tx_total :
-                           ((reg_addr[28:0] == 29'h0201) ? pcm_udp_tx_th :
-                           ((reg_addr[28:0] == 29'h0202) ? {pcm_udp_capture_sep, pcm_udp_channel_choose} :
-                           ((reg_addr[28:0] == 29'h0204) ? pcm_udp_remote_ip :
-                           ((reg_addr[28:0] == 29'h0205) ? {pcm_udp_source_port, pcm_udp_remote_port} :
-                           ((reg_addr[28:0] == 29'h0206) ? pcm_udp_tx_left :
-                           ((reg_addr[28:4] == 25'h0030) ? {dac_cic_rate_reg[reg_addr[3:0]], dac_signal_len_reg[reg_addr[3:0]]} :
-                           ((reg_addr[28:0] == 29'h00310) ? dac_run :
-                           ((reg_addr[28:6] == 23'h0010) ? mf_ipcm_acc_out_w[reg_addr[5:0]] :
-                           ((reg_addr[28:6] == 23'h0011) ? mf_qpcm_acc_out_w[reg_addr[5:0]] :
-                           ((reg_addr[28:3] == 26'h0090) ? {mf_dec_rate2_r[reg_addr[2:0]], mf_dec_rate_r[reg_addr[2:0]]} :
-                           ((reg_addr[28:3] == 26'h0091) ? {mf_choose_lb[reg_addr[2:0]], 4'b0, mf_pcm_out_shift_r[reg_addr[2:0]], 4'b0, mf_acc_shift_r[reg_addr[2:0]]} :
-                           ((reg_addr[28:3] == 26'h0092) ? mf_sin_length_r[reg_addr[2:0]] :
-                           ((reg_addr[28:3] == 26'h0093) ? mf_cycle_num_r[reg_addr[2:0]] :
-                           ((reg_addr[28:3] == 29'h0094) ? mf_status_w[reg_addr[2:0]] :
-                           ((reg_addr[28:0] == 29'h00500) ? ch_gain :
-                           ((reg_addr[28:0] == 29'h0f03) ? {addr_high, addr_high} :
-                           ((reg_addr[28:8] == 1) ? reg_readdata_udp_mac :
-                           ((reg_addr[28:16]== 1) ? reg_readdata_dac :
-                           ((reg_addr[28:16]== 2) ? reg_readdata_mf : 32'h0BAD0BAD)))))))))))))))))))));
+                            (reg_addr[28:0] == 29'h1ff) ? bad_pkt_cnt:
+                            (reg_addr[28:0] == 29'h0200) ? pcm_udp_tx_total :
+                            (reg_addr[28:0] == 29'h0201) ? pcm_udp_tx_th :
+                            (reg_addr[28:0] == 29'h0202) ? {pcm_udp_capture_sep, pcm_udp_channel_choose} :
+                            (reg_addr[28:0] == 29'h0204) ? pcm_udp_remote_ip :
+                            (reg_addr[28:0] == 29'h0205) ? {pcm_udp_source_port, pcm_udp_remote_port} :
+                            (reg_addr[28:0] == 29'h0206) ? pcm_udp_tx_left :
+                            (reg_addr[28:8] == 1) ? reg_readdata_udp_mac :
+                            (reg_addr[28:8] == 3) ? reg_readdata3 :
+                            (reg_addr[28:8] == 4) ? reg_readdata4 :
+                            (reg_addr[28:8] == 5) ? reg_readdata5 :
+                            (reg_addr[28:8] == 6) ? reg_readdata_sdio :
+                            (reg_addr[28:17]== 1) ? reg_readdata_sc :
+                            (reg_addr[28:16]== 4) ? reg_readdata_iq_buf :
+                            (reg_addr[28:16]== 5) ? reg_readdata_shadow_sc :
+                            32'h0BAD0BAD;
     assign reg_ready = (reg_addr[28:8] == 1) ? reg_ready_udp_mac :
-                      ((reg_addr[28:16]== 1) ? reg_ready_dac :
-                      ((reg_addr[28:16]== 2) ? reg_ready_mf : 1'b1));
+                       (reg_addr[28:8] == 6) ? reg_ready_sdio :
+                       (reg_addr[28:17]== 1) ? reg_ready_sc :
+                       (reg_addr[28:16]== 4) ? reg_ready_iq_buf :
+                       (reg_addr[28:16]== 5) ? reg_ready_shadow_sc :
+                       reg_ready_default;
+    always @(posedge clk_2)
+    if (reg_addr[28:8]==3)
+        reg_readdata3 <= #1 (reg_addr[28:6] == 23'h000c) ? {dac_cos_sita_r[reg_addr[5:0]], dac_choose_r[reg_addr[5:0]]} :
+                            (reg_addr[28:6] == 23'h000d) ? {dac_sin_sita_r[reg_addr[5:0]], 3'd0, dac_err[reg_addr[5:0]]} :
+                            (reg_addr[28:6] == 23'h000e) ? {shadow_cos_sita_w[reg_addr[5:0]], shadow_choose_w[reg_addr[5:0]]} :
+                            (reg_addr[28:6] == 23'h000f) ? {shadow_sin_sita_w[reg_addr[5:0]]} :
+                            32'h0BAD0BAD;
+    always @(posedge clk_2)
+    if (reg_addr[28:8]==4)
+        reg_readdata4 <= #1 (reg_addr[28:6] == 23'h0010) ? mf_ipcm_acc_out_w[reg_addr[5:0]] :
+                            (reg_addr[28:6] == 23'h0011) ? mf_qpcm_acc_out_w[reg_addr[5:0]] :
+                            (reg_addr[28:3] == 26'h0091) ? {mf_choose_lb[reg_addr[2:0]], 7'd0, mf_err[reg_addr[2:0]], 4'd0, mf_acc_shift_r[reg_addr[2:0]]} :
+                            (reg_addr[28:3] == 26'h0092) ? {sc_cic_rate_reg[reg_addr[3:0]], sc_sin_length_r[reg_addr[2:0]]} :
+                            (reg_addr[28:3] == 26'h0093) ? mf_cycle_num_r[reg_addr[2:0]] :
+                            (reg_addr[28:3] == 29'h0094) ? sc_status_w[reg_addr[2:0]] :
+                            (reg_addr[28:0] == 29'h04e0) ? iq_buf_write :
+                            (reg_addr[28:0] == 29'h04e1) ? { sc_err, 1'b0} :
+                            (reg_addr[28:0] == 29'h04e2) ? {slot_idx, pulse_counter} :
+                            (reg_addr[28:0] == 29'h04e3) ? sync_slot :
+                            (reg_addr[28:0] == 29'h04e4) ? sync_encoder1 :
+                            (reg_addr[28:0] == 29'h04e5) ? sync_encoder2 :
+                            (reg_addr[28:0] == 29'h04e6) ? shadow_read_addr :
+                            (reg_addr[28:0] == 29'h04e7) ? {iq_buf_overflow, iq_buf_block_ov, iq_buf_read} :
+                            32'h0BAD0BAD;
+    always @(posedge clk_2)
+    if (reg_addr[28:8]==5)
+        reg_readdata5 <= #1 (reg_addr[28:0] == 29'h00500) ? ch_gain :
+                            (reg_addr[28:0] == 29'h00501) ? model_reg :
+                            (reg_addr[28:0] == 29'h00502) ? slot_time :
+                            (reg_addr[28:0] == 29'h00503) ? {3'd0, max_slot} :
+                            (reg_addr[28:0] == 29'h00504) ? {encoder1_err_status, encoder1_div, encoder1_dir, encoder1_start} :
+                            (reg_addr[28:0] == 29'h00505) ? encoder1_cnt :
+                            (reg_addr[28:0] == 29'h00506) ? {encoder2_err_status, encoder2_div, encoder2_dir, encoder2_start} :
+                            (reg_addr[28:0] == 29'h00507) ? encoder2_cnt :
+                            (reg_addr[28:0] == 29'h00508) ? encoder1_total_a :
+                            (reg_addr[28:0] == 29'h00509) ? encoder1_total_b :
+                            (reg_addr[28:0] == 29'h0050a) ? encoder2_total_a :
+                            (reg_addr[28:0] == 29'h0050b) ? encoder2_total_b :
+                            (reg_addr[28:0] == 29'h0050c) ? encoder_pulse_width :
+                            (reg_addr[28:0] == 29'h0f03) ? {addr_high, addr_high} :
+                             32'h0BAD0BAD;
+    always @(posedge clk_2)
+    if (rst)
+        reg_ready_default <= #1 0;
+    else
+        if (reg_rd | reg_wr)
+            reg_ready_default <= #1 !reg_ready_default;
+        else
+            reg_ready_default <= #1 0;
     assign ctrl_out_udp_length = ((exec_out_len + 8'd6) << 1) - cmd_udp_tx_idx;
     always @(posedge clk_2)
     if (rst)
@@ -280,7 +438,7 @@ module controller (
             pcm_udp_channel_choose <= #1 reg_writedata[7:0];
             pcm_udp_capture_sep <= #1 reg_writedata[15:8];
         end
-    assign pcm_udp_tx_start = (reg_addr[28:0] == 29'h0203 && reg_wr && reg_writedata[0]);
+    assign pcm_udp_tx_start = (reg_addr[28:0] == 29'h0203 && reg_wr && reg_writedata[0] && reg_ready_default);
     assign pcm_udp_source_port = PCM_UDP_PORT;
     always @(posedge clk_2)
     if (rst)
@@ -295,25 +453,57 @@ module controller (
         if (reg_addr[28:0] == 29'h0205 && reg_wr)
             pcm_udp_remote_port <= #1 reg_writedata[15:0];
     generate
-genvar k;
-    for (k=0; k<DAC_CHANNEL; k=k+1)
+genvar k, i;
+    for (k=0; k<DAC_CHANNEL * MIX_NUM; k=k+1)
     begin : dac_regs
+        assign dac_cos_sita[sita_w*k+sita_w-1:sita_w*k] = dac_cos_sita_r[k];
+        assign dac_sin_sita[sita_w*k+sita_w-1:sita_w*k] = dac_sin_sita_r[k];
+        assign dac_choose[4*k+3:4*k] = dac_choose_r[k];
+        assign shadow_cos_sita_w[k] = shadow_cos_sita[16*k+15:16*k];
+        assign shadow_sin_sita_w[k] = shadow_sin_sita[16*k+15:16*k];
+        assign shadow_choose_w[k] = shadow_choose[4*k+3:4*k];
+
         always @(posedge clk_2)
         if (rst)
         begin
-            dac_signal_len_reg[k] <= #1 0;
-            dac_cic_rate_reg[k] <= #1 0;
+            dac_cos_sita_r[k] <= #1 0;
+            dac_choose_r[k] <= #1 0;
         end
         else
-            if (reg_addr[28:4] == 25'h0030 && reg_wr && reg_addr[3:0] == k)
-            begin
-                dac_signal_len_reg[k] <= #1 reg_writedata[15:0];
-                dac_cic_rate_reg[k] <= #1 reg_writedata[19:16];
-            end
-        assign dac_signal_len[dac_pcmaw*k+dac_pcmaw-1:dac_pcmaw*k] = dac_signal_len_reg[k][dac_pcmaw-1:0];
-        assign dac_cic_rate[4*k+3:4*k] = dac_cic_rate_reg[k];
+        if (reg_addr[28:6] == 23'h000c && reg_addr[5:0] == k && reg_wr)
+        begin
+            dac_cos_sita_r[k] <= #1 reg_writedata[4+sita_w-1:4];
+            dac_choose_r[k] <= #1 reg_writedata[3:0];
+        end
+        else
+        if (pulse_counter==1 && (k<ADC_CHANNEL || slot_idx ==0))
+        begin
+            dac_cos_sita_r[k] <= #1 shadow_cos_sita_w[k];
+            dac_choose_r[k] <= #1 shadow_choose_w[k];
+        end
+
+        always @(posedge clk_2)
+        if (rst)
+            dac_sin_sita_r[k] <= #1 0;
+        else
+        if (reg_addr[28:6] == 23'h000d && reg_addr[5:0] == k && reg_wr)
+            dac_sin_sita_r[k] <= #1 reg_writedata[4+sita_w-1:4];
+        else
+        if (pulse_counter==1 && (k<ADC_CHANNEL || slot_idx ==0))
+            dac_sin_sita_r[k] <= #1 shadow_sin_sita_w[k];
     end
 endgenerate
+    always @(posedge clk_2)
+    if (rst)
+        shadow_read_addr <= #1 0;
+    else
+        if (reg_addr[28:0] == 29'h04e6 && reg_wr)
+            shadow_read_addr <= #1 reg_writedata[15:0];
+        else
+            if (pulse_counter >= slot_time)
+                shadow_read_addr <= #1 (slot_idx >= max_slot) ? 0 : shadow_read_addr + MIX_NUM*DAC_CHANNEL + 8;
+    assign shadow_read_trigger = (pulse_counter==1 || reg_addr[28:0] == 29'h04e6 && reg_wr && reg_writedata[16] && reg_ready_default);
+    assign dac_err_clr = (reg_addr[28:6] == 23'h000d && reg_wr && reg_ready_default) ? {DAC_CHANNEL{1'b1}} : {DAC_CHANNEL{1'b0}} ;
     generate
 genvar j, m;
     for (m=0; m<FREQ_NUM; m=m+1)
@@ -323,49 +513,39 @@ genvar j, m;
             assign mf_ipcm_acc_out_w[m*ADC_CHANNEL+j] = mf_ipcm_acc_out[32*(m*ADC_CHANNEL+j)+31 : 32*(m*ADC_CHANNEL+j)];
             assign mf_qpcm_acc_out_w[m*ADC_CHANNEL+j] = mf_qpcm_acc_out[32*(m*ADC_CHANNEL+j)+31 : 32*(m*ADC_CHANNEL+j)];
         end
-    
-    always @(posedge clk_2)
-    if (rst)
-    begin
-        mf_dec_rate_r[m] <= #1 0;
-        mf_dec_rate2_r[m] <= #1 0;
-    end
-    else
-        if (reg_addr[28:3] == 26'h0090 && reg_addr[2:0] ==m  && reg_wr)
-        begin
-            mf_dec_rate_r[m] <= #1 reg_writedata[7:0];
-            mf_dec_rate2_r[m] <= #1 reg_writedata[15:8];
-        end
-        
-    assign mf_dec_rate[8*m+7:8*m] = mf_dec_rate_r[m]; 
-    assign mf_dec_rate2[8*m+7:8*m] = mf_dec_rate2_r[m];
+
+    assign mf_err_clr[m] = (reg_addr[28:3] == 26'h0091 && reg_wr && reg_addr[2:0] == m && reg_ready_default);
 
     always @(posedge clk_2)
     if (rst)
     begin
         mf_acc_shift_r[m] <= #1 0;
-        mf_pcm_out_shift_r[m] <= #1 12;
         mf_choose_lb[m] <= #1 0;
     end
     else
         if (reg_addr[28:3] == 26'h0091 && reg_addr[2:0] ==m && reg_wr)
         begin
             mf_acc_shift_r[m] <= #1 reg_writedata[3:0];
-            mf_pcm_out_shift_r[m] <= #1 reg_writedata[11:8];
             mf_choose_lb[m] <= #1 reg_writedata[16];
         end
-    
+
     assign mf_acc_shift[4*m+3:4*m] = mf_acc_shift_r[m];
-    assign mf_pcm_out_shift[4*m+3:4*m] = mf_pcm_out_shift_r[m];
-    
+
     always @(posedge clk_2)
     if (rst)
-        mf_sin_length_r[m] <= #1 0;
+    begin
+        sc_sin_length_r[m] <= #1 0;
+        sc_cic_rate_reg[m] <= #1 0;
+    end
     else
         if (reg_addr[28:3] == 26'h0092 && reg_addr[2:0] ==m  && reg_wr)
-            mf_sin_length_r[m] <= #1 reg_writedata[15:0];
-    
-    assign mf_sin_length[16*m+15:16*m] = mf_sin_length_r[m];
+        begin
+            sc_sin_length_r[m] <= #1 reg_writedata[15:0];
+            sc_cic_rate_reg[m] <= #1 reg_writedata[19:16];
+        end
+
+    assign sc_sin_length[16*m+15:16*m] = sc_sin_length_r[m];
+    assign sc_cic_rate[4*m+3:4*m] = sc_cic_rate_reg[m];
 
     always @(posedge clk_2)
     if (rst)
@@ -373,17 +553,26 @@ genvar j, m;
     else
         if (reg_addr[28:3] == 26'h0093 && reg_addr[2:0] ==m  && reg_wr)
             mf_cycle_num_r[m] <= #1 reg_writedata[23:0];
-    
+
     assign mf_cycle_num[24*m+23:24*m] = mf_cycle_num_r[m];
-    assign mf_status_w[m] = mf_status[32*m+31:32*m];
+    assign sc_status_w[m] = sc_status[16*m+15:16*m];
     end
 endgenerate
+    assign mf_iq_read = (reg_addr[28:0] == 29'h04e2 && reg_wr && reg_ready_default || pulse_counter == 1 );
+    assign iq_buf_rst = (reg_addr[28:0] == 29'h04e0 && reg_wr && reg_ready_default);
+    always @(posedge clk_2)
+    if (mf_iq_read)
+    begin
+        sync_slot <= #1 {slot_idx, pulse_counter};
+        sync_encoder1 <= #1 encoder1_cnt;
+        sync_encoder2 <= #1 encoder2_cnt;
+    end
     always @(posedge clk_2)
     if (rst)
-        dac_run <= #1 1'b0;
+        {iq_buf_block_ov, iq_buf_read} <= #1 0;
     else
-        if (reg_addr[28:0] == 29'h0310 && reg_wr)
-            dac_run <= #1 reg_writedata[0];
+        if (reg_addr[28:0] == 29'h04e7 && reg_wr)
+            {iq_buf_block_ov, iq_buf_read} <= #1 reg_writedata;
     always @(posedge clk_2)
     if (rst)
         ch_gain <= #1 32'ha30000;
@@ -397,8 +586,73 @@ endgenerate
     assign ch_gain_clr = ch_gain[20];
     assign ch_gain_buf = ch_gain[21];
     assign ch_gain_gain = ch_gain[22];
-    assign ch_sel_419 = ch_gain[23];
-    assign mf_ctrl_resync = (reg_addr[28:0] == 29'h04e1 && reg_wr) ?  reg_writedata[FREQ_NUM-1:0] : 0;
+    always @(posedge clk_2)
+    if (rst)
+        model_reg <= #1 16'h07fb;
+    else
+        if (reg_addr[28:0] == 29'h0501 && reg_wr)
+            model_reg <= #1 reg_writedata[15:0];
+    assign model_sel = model_reg[2:1];
+    assign ch_filter_sel = model_reg[0];
+    assign ch_emit_recv_en = model_reg[10:3];
+    always @(posedge clk_2)
+    if (rst)
+        slot_time <= #1 0;
+    else
+        if (reg_addr[28:0] == 29'h0502 && reg_wr)
+            slot_time <= #1 reg_writedata;
+    always @(posedge clk_2)
+    if (rst)
+        max_slot <= #1 15;
+    else
+        if (reg_addr[28:0] == 29'h0503 && reg_wr)
+            max_slot <= #1 reg_writedata[4:0];
+    always @(posedge clk_2)
+    if (rst)
+        {encoder1_div, encoder1_dir, encoder1_start} <= #1 5;
+    else
+        if (reg_addr[28:0] == 29'h0504 && reg_wr)
+            {encoder1_div, encoder1_dir, encoder1_start} <= #1 reg_writedata;
+    always @(posedge clk_2)
+    if (rst)
+        {encoder2_div, encoder2_dir, encoder2_start} <= #1 5;
+    else
+        if (reg_addr[28:0] == 29'h0506 && reg_wr)
+            {encoder2_div, encoder2_dir, encoder2_start} <= #1 reg_writedata;
+    always @(posedge clk_2)
+    if (rst)
+        encoder_pulse_width <= #1 45;
+    else
+        if (reg_addr[28:0] == 29'h050c && reg_wr)
+            encoder_pulse_width <= #1 reg_writedata;
+    always @(posedge clk_2)
+    if (rst)
+        pulse_counter <= #1 0;
+    else
+        pulse_counter <= (pulse_counter >= slot_time) ? 0 : pulse_counter + 1;
+    always @(posedge clk_2)
+    if (rst)
+        slot_idx <= #1 0;
+    else
+        if (pulse_counter==1)
+            slot_idx <= #1 (slot_idx >= max_slot) ? 0 : slot_idx + 1;
+    always @(posedge clk_2)
+    if (rst)
+        syn_trigger_pulse <= #1 0;
+    else
+        if (pulse_counter==1)
+            syn_trigger_pulse <= #1 1'b1;
+        else
+            syn_trigger_pulse <= #1 1'b0;
+    always @(posedge clk_2)
+    if (rst)
+        syn_trigger_start <= #1 0;
+    else
+        if (pulse_counter==1 && slot_idx >= max_slot)
+            syn_trigger_start <= #1 1'b1;
+        else
+            syn_trigger_start <= #1 1'b0;
+    assign sc_resync = (reg_addr[28:0] == 29'h04e1 && reg_wr && reg_ready_default) ?  reg_writedata[0] : 0;
     execcmd #(AW) execcmd_inst(
     //input
     .clk                (clk),
